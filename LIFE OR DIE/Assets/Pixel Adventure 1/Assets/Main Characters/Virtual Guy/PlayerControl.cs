@@ -42,13 +42,21 @@ public class PlayerControl : MonoBehaviour
     void Update()
     {
       playerState?.Update();
+        
     }
     //物理效果写在FixedUpdate
     private void FixedUpdate()
     {
         playerState?.FixedUpdate();   
     }
-
+    public void SwitchStatus(PlayerStatus newStatus)
+    {
+        if (currentStatus == newStatus) return;
+        playerState?.Exit();    // 先离开当前状态
+        currentStatus = newStatus;
+        playerState = _states[newStatus];
+        playerState.Enter();    // 再进入新状态
+    }
 
     private float moveSpeed = 8f;
     private float jumpSpeed = 12f;
@@ -56,14 +64,8 @@ public class PlayerControl : MonoBehaviour
     private Rigidbody2D rb;
     private Vector2 moveInput;
 
-    public void SwitchStatus(PlayerStatus playerStatus)
-    {
-        if (currentStatus == playerStatus) return;
-        playerState?.Exit();    // 先离开当前状态
-        currentStatus = playerStatus;
-            playerState.Enter();    // 再进入新状态
-    }
-    
+  
+    protected bool isfacingleft = false;
 
 
 

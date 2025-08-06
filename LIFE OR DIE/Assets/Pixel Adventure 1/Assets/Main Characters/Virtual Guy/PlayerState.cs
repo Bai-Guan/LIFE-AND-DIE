@@ -51,7 +51,8 @@ public class RunState : PlayerState
     }
     public override void Update()
     {
-
+        float h = Input.GetAxisRaw("Horizontal");   // -1, 0, 1
+        float v = Input.GetAxisRaw("Vertical");
     }
     public override void FixedUpdate()
     {
