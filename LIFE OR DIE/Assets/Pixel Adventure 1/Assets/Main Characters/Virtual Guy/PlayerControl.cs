@@ -41,7 +41,13 @@ public class PlayerControl : MonoBehaviour
     
     void Update()
     {
-      playerState?.Update();
+        //更新
+        h = Input.GetAxisRaw("Horizontal");   // -1, 0, 1
+        v = Input.GetAxisRaw("Vertical");
+        moveInput.x = h; moveInput.y=v;
+
+
+        playerState?.Update();
         
     }
     //物理效果写在FixedUpdate
@@ -58,15 +64,20 @@ public class PlayerControl : MonoBehaviour
         playerState.Enter();    // 再进入新状态
     }
 
-    private float moveSpeed = 8f;
-    private float jumpSpeed = 12f;
+    public Rigidbody2D GetRigidbody() { return rb; }
+    public Vector2 GetVector2() { return moveInput; }
+
+
+    public readonly float moveSpeed = 8f;
+    public readonly float jumpSpeed = 12f;
 
     private Rigidbody2D rb;
-    private Vector2 moveInput;
+    protected Vector2 moveInput;
 
   
     protected bool isfacingleft = false;
-
+    public  float h;
+    public  float v;
 
 
 
