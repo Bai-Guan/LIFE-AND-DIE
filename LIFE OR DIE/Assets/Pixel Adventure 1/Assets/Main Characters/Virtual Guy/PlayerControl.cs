@@ -22,6 +22,7 @@ public class PlayerControl : MonoBehaviour
     private Dictionary<PlayerStatus, PlayerState> _states = new Dictionary<PlayerStatus, PlayerState>();
     private Player_checkGround player_CheckGround;
     private  SpriteRenderer spriteRenderer;
+    [HideInInspector] public PlayerAnimControl Anim;
     private void Awake()
     {
         _states[PlayerStatus.ldle] = new IdleState(this);
@@ -32,6 +33,7 @@ public class PlayerControl : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         player_CheckGround = GetComponentInChildren<Player_checkGround>();
         spriteRenderer=GetComponent<SpriteRenderer>();
+        Anim=GetComponent<PlayerAnimControl>();
     }
 
     void Start()
@@ -49,7 +51,15 @@ public class PlayerControl : MonoBehaviour
         v = Input.GetAxisRaw("Vertical");
         moveInput.x = h; moveInput.y = v;
 
-
+        //ÌøÔ¾¼ì²â
+        if (v>0.1f)
+        {
+            KeyDownJump = true;
+        }
+        else if (v<0.1f)
+        {
+            KeyDownJump = false;
+        }
         playerState?.Update();
 
     }
@@ -82,12 +92,12 @@ public class PlayerControl : MonoBehaviour
         player_CheckGround.SetIsGround(what);
     }
 
-    public void FacingLeft()
+    protected void FacingLeft()
     {
         spriteRenderer.flipX = true;
         isfacingleft = true;
     }
-    public void FacingRight()
+    protected void FacingRight()
     {
         spriteRenderer.flipX = false;
         isfacingleft = false;
@@ -111,8 +121,40 @@ public class PlayerControl : MonoBehaviour
         canDoubleJump = yesORno;
     }
 
+    public void CheckFill()
+    {
+
+        //¼ì²â³¯Ïò
+        if (h > 0.5f)
+        {
+           FacingRight();
+        }
+        if (h < -0.5f)
+        {
+            //Debug.LogWarning("Ïò×óÁË£¡");
+            FacingLeft();
+        }
+    }
+    public void XStop()
+    {
+        float temp = Mathf.MoveTowards(rb.velocity.x, 0, Time.fixedDeltaTime * groundFriction);
+        rb.velocity = new Vector2(temp, rb.velocity.y);
+    }
+    public void XMove()
+    {
+        float targetVelocityX =h * moveSpeed;
+       
+        float newVelocityX = Mathf.MoveTowards(
+            rb.velocity.x,
+            targetVelocityX,
+           groundFriction * Time.fixedDeltaTime*10
+        );
+
+        rb.velocity = new Vector2(newVelocityX, rb.velocity.y);
+    }
+
     public readonly float moveSpeed = 6f;
-    public readonly float jumpSpeed = 12f;
+    public readonly float jumpSpeed = 10f;
 
     private Rigidbody2D rb;
     protected Vector2 moveInput;
@@ -122,6 +164,7 @@ public class PlayerControl : MonoBehaviour
     //ÊÇ·ñ¿ÉÒÔÌøÔ¾ÓÉÅö×²¼ì²â½øÐÐÅÐ¶Ï
     private bool canJump = true;
     private bool canDoubleJump = true;
+    public bool KeyDownJump = false;
 
     public  float h;
     public  float v;

@@ -2,25 +2,29 @@
 using UnityEngine;
 
 
-    public abstract class PlayerState
+public abstract class PlayerState
+{
+
+    protected PlayerState(PlayerControl ctx)
     {
-       
-        protected PlayerState(PlayerControl ctx) 
-        { 
         _ctx = ctx;
-        this.gameObject=ctx.gameObject;
-        
-        }
+        this.gameObject = ctx.gameObject;
+
+    }
 
 
-        public virtual void Enter()
+    public virtual void Enter()
     {
         _rigidbody = _ctx.GetRigidbody();
         _vector = _ctx.GetVector2();
     }
-        public virtual void Update() { }
-        public virtual void FixedUpdate() { }
-        public virtual void Exit() { }
+    public virtual void Update() { }
+    public virtual void FixedUpdate() { }
+    public virtual void Exit() { }
+
+
+  
+
     protected readonly PlayerControl _ctx;
     protected GameObject gameObject;
     bool canDoubleJump = true;
@@ -40,6 +44,7 @@ public class IdleState:PlayerState
        base.Enter();
         //设置动画变量 重置状态 
         Debug.Log("进入待机状态");
+        _ctx.Anim.TriggerIdle();
     }
     public override void Update() 
     {
@@ -48,19 +53,19 @@ public class IdleState:PlayerState
             _ctx.SwitchStatus(PlayerControl.PlayerStatus.run);
             return;
         }
-        if (_ctx.IsGrounded()==false && _ctx.GetJump()==true)
+        if (_ctx.KeyDownJump==true && _ctx.GetJump()==true)
         {
             _ctx.SwitchStatus(PlayerControl.PlayerStatus.jump);
             return;
         }
+        
         //TODO:检测下落状态
 
        
     }
     public override void FixedUpdate()
     {
-        float temp = Mathf.MoveTowards(_rigidbody.velocity.x, 0, Time.fixedDeltaTime*_ctx.groundFriction);
-        _rigidbody.velocity = new Vector2(temp, _rigidbody.velocity.y);
+        _ctx.XStop();
        
     }
     public override void Exit() 
@@ -81,6 +86,7 @@ public class RunState : PlayerState
     {
         base.Enter();
         Debug.Log("进入跑步状态");
+        _ctx.Anim.TriggerRUN();
     }
     public override void Update()
     {
@@ -91,30 +97,22 @@ public class RunState : PlayerState
             return;
         }
         //进入跳跃状态的条件
-        if (_ctx.IsGrounded() == false && _ctx.GetJump() == true)
+        if (_ctx.KeyDownJump == true  && _ctx.GetJump() == true)
         {
             _ctx.SwitchStatus(PlayerControl.PlayerStatus.jump);
             return;
         }
         //检测朝向
-        if(_ctx.h >0.1f)
-        {
-            _ctx.FacingRight();
-        }
-        if (_ctx.h < 0.1f)
-        {
-            _ctx.FacingLeft();
-        }
+        _ctx.CheckFill();
 
 
     }
     public override void FixedUpdate()
     {
-        
+
         //进行了移动
-      
-            float newX = Mathf.MoveTowards(_rigidbody.velocity.x, _ctx.moveSpeed * _ctx.h, Time.fixedDeltaTime * _ctx.moveSpeed*80);
-            _rigidbody.velocity = new Vector2(newX, _rigidbody.velocity.y);
+
+        _ctx.XMove();
        
     }
     public override void Exit()
@@ -130,19 +128,27 @@ public class FallState : PlayerState
 {
     public FallState(PlayerControl ctx) : base(ctx)
     {
-
+        
     }
     public override void Enter()
     {
-
+        base.Enter();
+        Debug.Log("进入下坠状态");
+        _ctx.Anim.TriggerFall();
     }
     public override void Update()
     {
-
+        //速度y为0 且脚下为地面 则视为落地 进入待机状态
+        if(_rigidbody.velocity.y < 0.05f&&_ctx.IsGrounded()==true)
+        {
+            _ctx.SwitchStatus(PlayerControl.PlayerStatus.ldle);
+        }
+        //检测朝向
+        _ctx.CheckFill();
     }
     public override void FixedUpdate()
     {
-
+        _ctx.XMove();
     }
     public override void Exit()
     {
@@ -161,24 +167,58 @@ public class JumpState : PlayerState
     }
     public override void Enter()
     {
+        base.Enter();
         Debug.Log("进入跳跃状态");
+        _ctx.Anim.TriggerJump();
+        //进行角色跳跃操作
+        Jump();
         //使得普通跳跃次数消耗
-        _ctx.setJump(false);
+        _ctx.setJump(false);//恢复部分在碰撞实现
+
+        //跳跃前的水平速度清零
+        _rigidbody.velocity=new Vector2(0,_rigidbody.velocity.y);
+
+        
 
     }
     public override void Update()
     {
-   
+        //速度==0进入待机?
+
+   //速度<0则为下坠
+        if(_rigidbody.velocity.y<0)
+        {
+            _ctx.SwitchStatus(PlayerControl.PlayerStatus.fall);
+        }
+        //按键W二段跳
+
+        //检测朝向
+        _ctx.CheckFill();
     }
     public override void FixedUpdate()
     {
-    
+        //如果一直按住了跳跃 则y速度将一直加某一个小于重力的值 使得跳跃滞空时间变长
+    if(_ctx.KeyDownJump==true)
+        {
+            Vector2 up = new Vector2(0, 10f);
+            _rigidbody.AddForce(up);
+            
+        }
+        //进行了空中移动
+        _ctx.XMove();
     }
     public override void Exit()
     {
 
     }
-   
+   private void Jump()
+    {
+        if (_ctx.GetJump() == true)
+        {
+            float newY = _ctx.jumpSpeed;
+            _rigidbody.velocity = new Vector2(_rigidbody.velocity.x, newY);
+        }
+    }
 
 }
 
