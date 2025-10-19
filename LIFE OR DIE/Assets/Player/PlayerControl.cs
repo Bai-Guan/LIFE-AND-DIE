@@ -482,7 +482,7 @@ public class PlayerControl : MonoBehaviour
     public bool canJump = true;
    [SerializeField]  private  bool isground = true;
     protected bool isfacingleft = false;
-   public bool IsFacingLeft {  get { return isfacingleft; } }
+   public  bool IsFacingLeft {  get { return isfacingleft; } }
 
     public int MAXHP = 100;
    public int HP = 100;

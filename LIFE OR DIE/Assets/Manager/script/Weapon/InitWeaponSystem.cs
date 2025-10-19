@@ -21,13 +21,22 @@ public class InitWeaponSystem : MonoBehaviour
         get { return _weaponDataOS; }
     }
     [SerializeField] private WeaponData _weaponDataOS;
+
     private Transform Base;
+
     private Transform OptionalSprite;
+    public SpriteRenderer optionalSpriteRenderer { get { return OptionalSprite.GetComponent<SpriteRenderer>(); } private set { } }
+
     private Transform WeaponSprite;
+    public SpriteRenderer WeaponSpriteRenderer { get { return WeaponSprite.GetComponent<SpriteRenderer>(); } private set { } }
+
+    private Transform MainPlayer;
+    public SpriteRenderer PlayerSpriteRenderer { get { return MainPlayer.GetComponent<SpriteRenderer>(); } private set { } }
 
     private GameObject baseGameObject;
+    public GameObject BaseObject {  get { return baseGameObject; } private set { } }
+
     private Animator anim;
-    
     private AnimationEventHandler eventHandler;
     public AnimationEventHandler EventHandler {  get { return eventHandler; } }
 
@@ -37,8 +46,9 @@ public class InitWeaponSystem : MonoBehaviour
         {typeof(WeaponSpriteData),typeof(WeaponSprite) },
         { typeof(WeaponHitBoxData),typeof(WeaponHitBox)},
     };
-        
 
+    //用于通知其他组件正在退出攻击模式
+    public event Action ChildrenExit;
 
     private void Awake()
     {
@@ -47,10 +57,10 @@ public class InitWeaponSystem : MonoBehaviour
 
     private void InitName()
     {
-       Base = transform.Find("Base");
-       OptionalSprite = transform.Find("Base/OptionalSprite");
+        Base = transform.Find("Base");
+        OptionalSprite = transform.Find("Base/OptionalSprite");
         WeaponSprite = transform.Find("WeaponSprite");
-
+        MainPlayer = GameObject.Find("MainPlayer").transform;
         baseGameObject = Base.gameObject;
         anim = Base.GetComponent<Animator>();
         eventHandler = Base.GetComponent<AnimationEventHandler>();
@@ -77,11 +87,27 @@ public class InitWeaponSystem : MonoBehaviour
     public void Enter()
     {
         print($"{this.name} Enter");
+        //关闭player的角色贴图
+        PlayerSpriteRenderer.enabled = false;
+        // 确保Base对象激活
+        if (!baseGameObject.activeSelf)
+            baseGameObject.SetActive(true);
+        //调整动画图片朝向
+        CheckFildX();
+
+        // 重置动画状态确保从开始播放
+        anim.Rebind();
+        anim.Update(0f);
+
+        // 播放攻击动画
+        anim.SetBool("active", true);
     }
 
     public void Exit()
     {
-        
+        ChildrenExit?.Invoke();
+        anim.SetBool("active", false);
+        PlayerSpriteRenderer.enabled = true;
     }
 
     public void OnEnable()
@@ -92,6 +118,13 @@ public class InitWeaponSystem : MonoBehaviour
     public void OnDisable()
     {
         eventHandler.OnFinish -= Exit;
+    }
+
+    //更改base图片 和 武器图片 动画朝向
+    private void CheckFildX()
+    {
+        bool isLeft= MainPlayer.GetComponent<PlayerControl>().IsFacingLeft;
+        Base.GetComponent<SpriteRenderer>().flipX = isLeft;
     }
 
     //3.实现组件和玩家之间的逻辑

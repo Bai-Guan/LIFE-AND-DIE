@@ -33,6 +33,13 @@ public class TimeManager : MonoBehaviour
         var coroutine =  StartCoroutine(OneTimeCoroutine(delay, callback));
         activeCoroutines.Add(coroutine);
     }
+    //延迟一帧触发
+    public void LaterOneFrame(Action callback)
+    {
+        var coroutine = StartCoroutine(LaterOneFrameCoroutine(callback));
+        activeCoroutines.Add(coroutine);
+    }
+
 
     //一段时间内每帧持续触发
     public void FrameTime(float delay, Action callback)
@@ -55,7 +62,12 @@ public class TimeManager : MonoBehaviour
     {
         StartCoroutine(CameraShakeCoroutine(duration, pow));
     }
-
+    private IEnumerator LaterOneFrameCoroutine(Action callback)
+    {
+        yield return null;
+        callback?.Invoke();
+    }
+        
    private IEnumerator OneTimeCoroutine(float delay,Action callback)
     {
         yield return new WaitForSeconds(delay);
@@ -104,5 +116,11 @@ public class TimeManager : MonoBehaviour
         }
         CameraManager.Instance.gameObject.transform.position = temp;
     }
+
+    private void LateUpdate()
+    {
+        activeCoroutines.RemoveAll(c => c == null); // 每帧清理已结束
+    }
+
 
 }

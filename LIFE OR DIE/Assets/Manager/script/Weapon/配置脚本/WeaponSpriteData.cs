@@ -6,7 +6,7 @@ public class WeaponSpriteData : ComponentData
 {
     //[field: SerializeReference]
     //用于整个武器每个攻击动作所需的攻击组
-  
+    public int AttackTimes;
     public ComponentData Data;
     [SerializeField] public AttackSprite[] AttackData;
 }

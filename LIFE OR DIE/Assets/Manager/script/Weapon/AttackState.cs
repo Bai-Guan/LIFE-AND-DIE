@@ -7,6 +7,7 @@ public class AttackState : PlayerState
     private InitWeaponSystem weapon;
     PlayerControl playerControl;
     AnimationEventHandler eventHandler;
+    bool isExiting = false;
 
     public AttackState(PlayerControl ctx) : base(ctx)
     {
@@ -18,8 +19,8 @@ public class AttackState : PlayerState
         Debug.Log("进入攻击模式");
         weapon = playerControl.weapon;
         eventHandler = weapon.EventHandler;
-
-        
+        _ctx.SetRB_X(0);
+        isExiting = false;
         eventHandler.OnFinish += Exit;
 
         weapon.Enter();
@@ -35,10 +36,16 @@ public class AttackState : PlayerState
     }
     public override void Exit()
     {
+        if (isExiting) return;
+        isExiting = true;
+
         eventHandler.OnFinish -= Exit;
         playerControl.SwitchStatus(PlayerControl.PlayerStatus.ldle);
-    }
+        // playerControl.SwitchStatus(PlayerControl.PlayerStatus.ldle);
+        // TimeManager.Instance.LaterOneFrame(()=> playerControl.SwitchStatus(PlayerControl.PlayerStatus.ldle));
 
+    }
+ 
     private void Attack()
     {
 
