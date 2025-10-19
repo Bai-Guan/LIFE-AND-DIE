@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: RampTextureMat
-  m_Shader: {fileID: 4800000, guid: a72fabf06249b4872b384576ac83e6f1, type: 3}
+  m_Shader: {fileID: 4800000, guid: a9d1a21824e0e9f458d31afdc48ae870, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -60,7 +60,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _RampTex:
-        m_Texture: {fileID: 2800000, guid: 6e7b096b1db594c26985056637771fef, type: 3}
+        m_Texture: {fileID: 2800000, guid: dd3a92ed5cbeadd4687158baeaecd729, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []

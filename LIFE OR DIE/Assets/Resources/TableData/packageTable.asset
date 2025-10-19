@@ -16,18 +16,75 @@ MonoBehaviour:
   - id: 1
     type: 1
     name: Village Good Sword
-    description: 'This is an incredibly awesome village sword.  Special Effect: Gain
-      1 attack power for each enemy defeated  atk:20'
-    skillDescript: 
+    description: 'This is an incredibly awesome village sword.    '
+    skillDescript: 'Special Effect: Gain 1 attack power for each enemy defeated'
+    attribute: Base atk:20
+    atk: 20
+    defense: 0
+    hp: 0
+    skillName: 3
     imagePath: Assets/Cainos/Pixel Art Icon Pack - RPG/Texture/Weapon & Tool/Golden
       Sword.png
-    num: 1
+    itemImage: {fileID: 21300000, guid: 90e99a7fde056a4418b9fe16084adb5c, type: 3}
   - id: 2
     type: 1
     name: Hardened Knife
-    description: 'A magical sword tempered by lava, with its blade remaining at a
-      high temperature year-round.Description: A sword with very high base damage.atk:
-      80'
-    skillDescript: 
+    description: A magical sword tempered by lava, with its blade remaining at a
+      high temperature year-round.
+    skillDescript: Special Effect:The attack will have an additional fire burn effect.
+    attribute: Base atk:80
+    atk: 80
+    defense: 5
+    hp: 0
+    skillName: 1
     imagePath: Assets/Cainos/Pixel Art Icon Pack - RPG/Texture/Weapon & Tool/FireSword.png
-    num: 1
+    itemImage: {fileID: 21300000, guid: 8d8b2d76bc7cc8848a239d2ef662716d, type: 3}
+  - id: 3
+    type: 2
+    name: Steel Helmet
+    description: Helmet with high defense
+    skillDescript: 
+    attribute: Defense:50
+    atk: 0
+    defense: 50
+    hp: 0
+    skillName: 2
+    imagePath: Assets/Cainos/Pixel Art Icon Pack - RPG/Texture/Equipment/Helm.png
+    itemImage: {fileID: 21300000, guid: 6509adb73ba1de04d898264b898cdf2e, type: 3}
+  - id: 4
+    type: 2
+    name: Hardened Knife
+    description: Ordinary leather hat
+    skillDescript: 
+    attribute: Defense:10
+    atk: 0
+    defense: 10
+    hp: 0
+    skillName: 0
+    imagePath: Assets/Cainos/Pixel Art Icon Pack - RPG/Texture/Equipment/Leather
+      Helmet.png
+    itemImage: {fileID: 21300000, guid: 5ff9b869a12e70b4db7a137f84ed920b, type: 3}
+  - id: 5
+    type: 3
+    name: Green Apple
+    description: An apple a day keeps the doctor away.
+    skillDescript: 
+    attribute: HP:10
+    atk: 0
+    defense: 0
+    hp: 10
+    skillName: 0
+    imagePath: Assets/Cainos/Pixel Art Icon Pack - RPG/Texture/Food/Green Apple.png
+    itemImage: {fileID: 21300000, guid: c1d0e6764d9c5f8458571840fb1d57d3, type: 3}
+  - id: 6
+    type: 3
+    name: Ham
+    description: Fragrant
+    skillDescript: 
+    attribute: HP:50
+    atk: 0
+    defense: 0
+    hp: 50
+    skillName: 0
+    imagePath: Assets/Cainos/Pixel Art Icon Pack - RPG/Texture/Food/Ham.png
+    itemImage: {fileID: 21300000, guid: c1101a972f67d164db2754844fbeeda2, type: 3}

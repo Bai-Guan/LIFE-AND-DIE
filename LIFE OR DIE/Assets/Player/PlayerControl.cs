@@ -29,7 +29,7 @@ public class PlayerControl : MonoBehaviour
     private PlayerEvent playerEvent;
     private  SpriteRenderer spriteRenderer;
     private Material material;
-
+    public InitWeaponSystem weapon;
     public EdgeCheck Highcheck;
     public EdgeCheck Lowcheck;
 
@@ -50,6 +50,7 @@ public class PlayerControl : MonoBehaviour
         playerEvent = GetComponent<PlayerEvent>();
         spriteRenderer=GetComponent<SpriteRenderer>();
         Anim=GetComponent<PlayerAnimControl>();
+        weapon = transform.Find("Weapon").GetComponent<InitWeaponSystem>();
         material=spriteRenderer.material;
     }
 
@@ -465,6 +466,7 @@ public class PlayerControl : MonoBehaviour
 
 
 
+    
 
     private bool isKeyDownAttack = false;
     public bool IsKeyDownAttack { get { return isKeyDownAttack; } }

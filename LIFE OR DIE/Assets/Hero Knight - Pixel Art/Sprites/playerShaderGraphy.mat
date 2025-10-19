@@ -52,6 +52,14 @@ Material:
         m_Texture: {fileID: 2800000, guid: 7a20ca00579ee094fa71f9986f7c45a7, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Light1:
+        m_Texture: {fileID: 2800000, guid: 7a20ca00579ee094fa71f9986f7c45a7, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Light2:
+        m_Texture: {fileID: 2800000, guid: a84f5aa0d7fe84b48837df6073091919, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -79,8 +87,9 @@ Material:
     m_Ints: []
     m_Floats:
     - _EnableExternalAlpha: 0
+    - _LightPow: 0.51
     m_Colors:
-    - _BladeLightColor: {r: 0.51886785, g: 1, b: 0.9290656, a: 0}
+    - _BladeLightColor: {r: 0.35026285, g: 0.9685534, b: 0.9316999, a: 0}
     - _Color: {r: 0.22012573, g: 0.22012573, b: 0.22012573, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _InvincibleChange: {r: 0, g: 0, b: 0, a: 0}
