@@ -449,7 +449,7 @@ public class PlayerControl : MonoBehaviour
     bool FinallyAttackCheck()
     {
         //之后的检测用状态机去检查 而非bool
-        if (isKeyDownAttack == true && isAttacking != true&&isSprint!=true &&currentStatus!=PlayerStatus.hit)
+        if (isKeyDownAttack == true && isAttacking != true&&isSprint!=true &&currentStatus!=PlayerStatus.hit&&IsGrounded())
         {
             canAttack = true;
             SwitchStatus(PlayerStatus.attack);

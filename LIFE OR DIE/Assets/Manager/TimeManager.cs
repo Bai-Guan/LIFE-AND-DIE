@@ -22,9 +22,9 @@ public class TimeManager : MonoBehaviour
 
     }
 
+   
 
-    // Update is called once per frame
- 
+
 
    
     //过一段时间后只触发一次

@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cf6457c293c33943978d7843d151a07, type: 3}
   m_Name: swop_1
   m_EditorClassIdentifier: 
-  NumberOfAttacks: 0
-  WeaponName: 
+  NumberOfAttacks: 3
+  WeaponName: weapon_1
   PickUpSprit: {fileID: 0}
   WeaponAnimator: {fileID: 0}
   <componentDatas>k__BackingField:

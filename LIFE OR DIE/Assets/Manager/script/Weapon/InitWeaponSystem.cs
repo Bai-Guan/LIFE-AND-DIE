@@ -40,6 +40,14 @@ public class InitWeaponSystem : MonoBehaviour
     private AnimationEventHandler eventHandler;
     public AnimationEventHandler EventHandler {  get { return eventHandler; } }
 
+
+
+    //处理攻击重置的时间类
+    [SerializeField] private float attackCounterResetCooldown=2f;
+    EZTimer CounterResetTimer;
+    private void ResetAttackCountZero() => _currentNum = 0;
+  
+
     //映射表
     private Dictionary<Type, Type> MappingTable = new Dictionary<Type, Type>()
     {
@@ -50,9 +58,26 @@ public class InitWeaponSystem : MonoBehaviour
     //用于通知其他组件正在退出攻击模式
     public event Action ChildrenExit;
 
+
+    private int AttackTimes;
+    private int _currentNum = 0;
+    //---------可被组件共享的数据
+    public int CurrentNum //当前攻击段数
+    {
+        set
+        {
+            //_currentNum %= AttackTimes - 1;
+            _currentNum = value;
+            if (_currentNum >= AttackTimes) _currentNum = 0;
+        }
+        get => _currentNum;
+    }
+ 
+
     private void Awake()
     {
         InitName();
+        InitData();
     }
 
     private void InitName()
@@ -65,11 +90,16 @@ public class InitWeaponSystem : MonoBehaviour
         anim = Base.GetComponent<Animator>();
         eventHandler = Base.GetComponent<AnimationEventHandler>();
     }
-
+    private void InitData()
+    {
+        CounterResetTimer = new EZTimer(attackCounterResetCooldown);
+    }
     public void UpdateWeaponData(WeaponData weaponData)
     {
         if (weaponData == null) { Debug.Log("无效武器数据"); return; }
+        _currentNum = 0;
         _weaponDataOS = weaponData;
+        AttackTimes = _weaponDataOS.NumberOfAttacks;
         //1.由WeaponData数据先添加对应的Component 
         //2.再为相应的Compent赋予对应的Data
         foreach (var data in _weaponDataOS.componentDatas)
@@ -86,6 +116,10 @@ public class InitWeaponSystem : MonoBehaviour
 
     public void Enter()
     {
+        //先检测有无武器
+        if (_weaponDataOS == null) { Debug.LogWarning("当前没有武器装备！"); MainPlayer.GetComponent<PlayerControl>().SwitchStatus(PlayerControl.PlayerStatus.ldle); return; }
+
+
         print($"{this.name} Enter");
         //关闭player的角色贴图
         PlayerSpriteRenderer.enabled = false;
@@ -94,18 +128,29 @@ public class InitWeaponSystem : MonoBehaviour
             baseGameObject.SetActive(true);
         //调整动画图片朝向
         CheckFildX();
+        //停止计时器
+        CounterResetTimer.StopTime();
 
         // 重置动画状态确保从开始播放
         anim.Rebind();
         anim.Update(0f);
 
         // 播放攻击动画
+        anim.SetInteger("count",_currentNum);
         anim.SetBool("active", true);
     }
+
+    public void Update()
+    {
+        CounterResetTimer.Tick();
+    }
+
 
     public void Exit()
     {
         ChildrenExit?.Invoke();
+        CounterResetTimer.StartTimer();
+        CurrentNum = _currentNum + 1; Debug.Log("当前攻击段数(起始值为0)："+CurrentNum);
         anim.SetBool("active", false);
         PlayerSpriteRenderer.enabled = true;
     }
@@ -113,11 +158,13 @@ public class InitWeaponSystem : MonoBehaviour
     public void OnEnable()
     {
         eventHandler.OnFinish += Exit;
+        CounterResetTimer.OnTimerDone += ResetAttackCountZero;
     }
 
     public void OnDisable()
     {
         eventHandler.OnFinish -= Exit;
+        CounterResetTimer.OnTimerDone -= ResetAttackCountZero;
     }
 
     //更改base图片 和 武器图片 动画朝向
