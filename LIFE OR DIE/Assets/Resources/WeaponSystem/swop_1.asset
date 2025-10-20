@@ -26,4 +26,20 @@ MonoBehaviour:
       data:
         AttackData:
         - Sprites:
-          - {fileID: 0}
+          - {fileID: 2085697945, guid: c61cdb947c8d2104c84db87f56c2e1ab, type: 3}
+          - {fileID: -1926839736, guid: c61cdb947c8d2104c84db87f56c2e1ab, type: 3}
+          - {fileID: -1886609805, guid: c61cdb947c8d2104c84db87f56c2e1ab, type: 3}
+          - {fileID: 54146198, guid: c61cdb947c8d2104c84db87f56c2e1ab, type: 3}
+          - {fileID: -591361487, guid: c61cdb947c8d2104c84db87f56c2e1ab, type: 3}
+        - Sprites:
+          - {fileID: 1679630358, guid: c61cdb947c8d2104c84db87f56c2e1ab, type: 3}
+          - {fileID: -687774418, guid: c61cdb947c8d2104c84db87f56c2e1ab, type: 3}
+          - {fileID: -1629986574, guid: c61cdb947c8d2104c84db87f56c2e1ab, type: 3}
+          - {fileID: -1916375583, guid: c61cdb947c8d2104c84db87f56c2e1ab, type: 3}
+          - {fileID: -695095910, guid: c61cdb947c8d2104c84db87f56c2e1ab, type: 3}
+        - Sprites:
+          - {fileID: -358321926, guid: c61cdb947c8d2104c84db87f56c2e1ab, type: 3}
+          - {fileID: 504795176, guid: c61cdb947c8d2104c84db87f56c2e1ab, type: 3}
+          - {fileID: 1724746673, guid: c61cdb947c8d2104c84db87f56c2e1ab, type: 3}
+          - {fileID: -287475873, guid: c61cdb947c8d2104c84db87f56c2e1ab, type: 3}
+          - {fileID: -1929990014, guid: c61cdb947c8d2104c84db87f56c2e1ab, type: 3}

@@ -23,7 +23,7 @@ public class WeaponSprite : WeaponComponent
            
             Debug.Log("武器图片数据加载成功");
           
-            
+           
         }
     }
 
@@ -40,4 +40,6 @@ public class WeaponSprite : WeaponComponent
     {
         
     }
+    // BaseSpriteRenderer.RegisterSpriteChangeCallback()
+    //根据当前攻击段数 播放那个段数动画
 }
