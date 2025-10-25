@@ -71,6 +71,16 @@ public class GMcommnd
         temp.type= itemType.Weapon;
         EquipmentBar.Instance.EquipTheWeapon(temp);
     }
+    [MenuItem("CMCmd/调用EquipmentBar脚本中方法强制装备Weapon_2数据")]
+    public static void DebugEquipmentWeapon2()
+    {
+        PackageLocalItem temp = new PackageLocalItem();
+        temp.id = 2;
+        temp.uid = "测试武器2";
+        temp.count = 1;
+        temp.type = itemType.Weapon;
+        EquipmentBar.Instance.EquipTheWeapon(temp);
+    }
 
 
     //此方法仅用来测试

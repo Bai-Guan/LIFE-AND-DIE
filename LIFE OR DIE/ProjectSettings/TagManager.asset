@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Ground
   - Platform
+  - EnemyOrPhyitems
+  - EnemyOrPhyItems
   layers:
   - Default
   - TransparentFX
@@ -15,7 +17,7 @@ TagManager:
   - UI
   - GroundAndPlatform
   - Player
-  - 
+  - EnemyOrPhyItems
   - 
   - 
   - 

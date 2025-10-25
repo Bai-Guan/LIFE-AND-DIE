@@ -15,3 +15,5 @@ MonoBehaviour:
   ListIDToData:
   - id: 1
     weaponData: {fileID: 11400000, guid: 9acf3d54f1d58e74cbe0ab4fe0c0065a, type: 2}
+  - id: 2
+    weaponData: {fileID: 11400000, guid: 1cfc4f217d48d894e9eef6fecff3977a, type: 2}

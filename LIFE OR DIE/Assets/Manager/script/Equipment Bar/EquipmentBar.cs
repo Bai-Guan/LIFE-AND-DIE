@@ -49,7 +49,7 @@ public class EquipmentBar
 
     public WeaponData FromIDToWeaponData( int id)
     {
-       
+       if(_DicIDtoWeaponData == null) {Debug.LogWarning("未在ID转数据的SO文件中找到对应数据"); return null; }
         return _DicIDtoWeaponData[id];
     }
 

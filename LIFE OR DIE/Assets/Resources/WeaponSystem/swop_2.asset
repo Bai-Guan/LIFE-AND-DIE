@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cf6457c293c33943978d7843d151a07, type: 3}
+  m_Name: swop_2
+  m_EditorClassIdentifier: 
+  NumberOfAttacks: 3
+  WeaponName: fireSword
+  PickUpSprit: {fileID: 21300000, guid: 8d8b2d76bc7cc8848a239d2ef662716d, type: 3}
+  BaseAnimator: {fileID: 9100000, guid: be123bdd58458dc4a9dd5cc1122a06a9, type: 2}
+  <componentDatas>k__BackingField:
+  - rid: 2057526553767313409
+  - rid: 2057526553767313410
+  - rid: 2057526553767313411
+  references:
+    version: 2
+    RefIds:
+    - rid: 2057526553767313409
+      type: {class: WeaponHitBoxData, ns: , asm: Assembly-CSharp}
+      data:
+        <DetectableLayer>k__BackingField:
+          serializedVersion: 2
+          m_Bits: 0
+        <HitBoxSizeAndOffsets>k__BackingField:
+        - isDebug: 0
+          <HitBox>k__BackingField:
+            serializedVersion: 2
+            x: 0.21
+            y: -0.8
+            width: 1.32
+            height: 1.7
+        - isDebug: 0
+          <HitBox>k__BackingField:
+            serializedVersion: 2
+            x: 0.17
+            y: -0.76
+            width: 1.65
+            height: 1.71
+        - isDebug: 0
+          <HitBox>k__BackingField:
+            serializedVersion: 2
+            x: 0.23
+            y: -0.72
+            width: 1.37
+            height: 2.23
+    - rid: 2057526553767313410
+      type: {class: AttackMoveData, ns: , asm: Assembly-CSharp}
+      data:
+        AttackMoveDatas:
+        - MoveX: 0.3
+          MoveY: 0
+          SpeedMove: 4
+        - MoveX: 0.4
+          MoveY: 0
+          SpeedMove: 4
+        - MoveX: 1.2
+          MoveY: 0.2
+          SpeedMove: 8
+    - rid: 2057526553767313411
+      type: {class: WeaponSpriteData, ns: , asm: Assembly-CSharp}
+      data:
+        AttackData:
+        - Sprites:
+          - {fileID: -193029413, guid: db865c8c254984a41982f922e45d8bd6, type: 3}
+          - {fileID: -1148555428, guid: db865c8c254984a41982f922e45d8bd6, type: 3}
+          - {fileID: 778808300, guid: db865c8c254984a41982f922e45d8bd6, type: 3}
+          - {fileID: 841835556, guid: db865c8c254984a41982f922e45d8bd6, type: 3}
+          - {fileID: 1496242541, guid: db865c8c254984a41982f922e45d8bd6, type: 3}
+        - Sprites:
+          - {fileID: 471758521, guid: db865c8c254984a41982f922e45d8bd6, type: 3}
+          - {fileID: -342032631, guid: db865c8c254984a41982f922e45d8bd6, type: 3}
+          - {fileID: 61364098, guid: db865c8c254984a41982f922e45d8bd6, type: 3}
+          - {fileID: -1712437197, guid: db865c8c254984a41982f922e45d8bd6, type: 3}
+          - {fileID: -959965296, guid: db865c8c254984a41982f922e45d8bd6, type: 3}
+        - Sprites:
+          - {fileID: -1841681514, guid: db865c8c254984a41982f922e45d8bd6, type: 3}
+          - {fileID: 782629193, guid: db865c8c254984a41982f922e45d8bd6, type: 3}
+          - {fileID: 276564628, guid: db865c8c254984a41982f922e45d8bd6, type: 3}
+          - {fileID: -318745944, guid: db865c8c254984a41982f922e45d8bd6, type: 3}
+          - {fileID: 1249172, guid: db865c8c254984a41982f922e45d8bd6, type: 3}

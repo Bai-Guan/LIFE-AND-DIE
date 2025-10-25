@@ -14,10 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NumberOfAttacks: 3
   WeaponName: weapon_1
-  PickUpSprit: {fileID: 0}
-  WeaponAnimator: {fileID: 0}
+  PickUpSprit: {fileID: 21300000, guid: 90e99a7fde056a4418b9fe16084adb5c, type: 3}
+  BaseAnimator: {fileID: 9100000, guid: be123bdd58458dc4a9dd5cc1122a06a9, type: 2}
   <componentDatas>k__BackingField:
   - rid: 2057526426078019584
+  - rid: 2057526517926723586
+  - rid: 2057526530401370114
   references:
     version: 2
     RefIds:
@@ -43,3 +45,44 @@ MonoBehaviour:
           - {fileID: 1724746673, guid: c61cdb947c8d2104c84db87f56c2e1ab, type: 3}
           - {fileID: -287475873, guid: c61cdb947c8d2104c84db87f56c2e1ab, type: 3}
           - {fileID: -1929990014, guid: c61cdb947c8d2104c84db87f56c2e1ab, type: 3}
+    - rid: 2057526517926723586
+      type: {class: AttackMoveData, ns: , asm: Assembly-CSharp}
+      data:
+        AttackMoveDatas:
+        - MoveX: 0.5
+          MoveY: 0
+          SpeedMove: 5
+        - MoveX: 0.5
+          MoveY: 0
+          SpeedMove: 5
+        - MoveX: 1
+          MoveY: 0
+          SpeedMove: 8
+    - rid: 2057526530401370114
+      type: {class: WeaponHitBoxData, ns: , asm: Assembly-CSharp}
+      data:
+        <DetectableLayer>k__BackingField:
+          serializedVersion: 2
+          m_Bits: 384
+        <HitBoxSizeAndOffsets>k__BackingField:
+        - isDebug: 0
+          <HitBox>k__BackingField:
+            serializedVersion: 2
+            x: 0.21
+            y: -0.8
+            width: 1.32
+            height: 1.7
+        - isDebug: 0
+          <HitBox>k__BackingField:
+            serializedVersion: 2
+            x: 0.17
+            y: -0.76
+            width: 1.65
+            height: 1.71
+        - isDebug: 0
+          <HitBox>k__BackingField:
+            serializedVersion: 2
+            x: 0.23
+            y: -0.72
+            width: 1.37
+            height: 2.23

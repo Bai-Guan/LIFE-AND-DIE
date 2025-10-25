@@ -11,16 +11,3 @@ public class ComponentData
 
 }
 
-
-
-[System.Serializable]
-class AttackMovementData : ComponentData
-{
-
-}
-
-[System.Serializable]
-class KnockbackOnHitBoxActionData : ComponentData
-{
-
-}

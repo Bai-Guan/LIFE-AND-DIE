@@ -30,7 +30,11 @@ public class InitWeaponSystem : MonoBehaviour
     private Transform WeaponSprite;
     public SpriteRenderer WeaponSpriteRenderer { get { return WeaponSprite.GetComponent<SpriteRenderer>(); } private set { } }
 
+    
+
+
     private Transform MainPlayer;
+    public Rigidbody2D PlayerRB { get { return MainPlayer.GetComponent<Rigidbody2D>(); } private set { } }
     public SpriteRenderer PlayerSpriteRenderer { get { return MainPlayer.GetComponent<SpriteRenderer>(); } private set { } }
 
     private GameObject baseGameObject;
@@ -53,11 +57,13 @@ public class InitWeaponSystem : MonoBehaviour
     {
         {typeof(WeaponSpriteData),typeof(WeaponSprite) },
         { typeof(WeaponHitBoxData),typeof(WeaponHitBox)},
+        {typeof(AttackMoveData),typeof(AttackMoveCompent) },
+        {typeof(WeaponDamageData),typeof(WeaponAttackDamage) },
     };
 
     //用于通知其他组件正在退出攻击模式
     public event Action ChildrenExit;
-
+    public event Action ChildrenEnter;
 
     private int AttackTimes;
     private int _currentNum = 0;
@@ -72,7 +78,7 @@ public class InitWeaponSystem : MonoBehaviour
         }
         get => _currentNum;
     }
- 
+    public bool IsFacingLeft {  get { return MainPlayer.GetComponent<PlayerControl>().IsFacingLeft; } }
 
     private void Awake()
     {
@@ -126,10 +132,16 @@ public class InitWeaponSystem : MonoBehaviour
         // 确保Base对象激活
         if (!baseGameObject.activeSelf)
             baseGameObject.SetActive(true);
+        //装备武器的动画器
+        anim.runtimeAnimatorController = _weaponDataOS.BaseAnimator;
+      
         //调整动画图片朝向
         CheckFildX();
         //停止计时器
         CounterResetTimer.StopTime();
+
+        //通知子组件开始攻击
+        ChildrenEnter?.Invoke();
 
         // 重置动画状态确保从开始播放
         anim.Rebind();
@@ -170,8 +182,9 @@ public class InitWeaponSystem : MonoBehaviour
     //更改base图片 和 武器图片 动画朝向
     private void CheckFildX()
     {
-        bool isLeft= MainPlayer.GetComponent<PlayerControl>().IsFacingLeft;
-        Base.GetComponent<SpriteRenderer>().flipX = isLeft;
+        
+        Base.GetComponent<SpriteRenderer>().flipX = IsFacingLeft;
+        WeaponSpriteRenderer.flipX = IsFacingLeft;
     }
 
     //3.实现组件和玩家之间的逻辑

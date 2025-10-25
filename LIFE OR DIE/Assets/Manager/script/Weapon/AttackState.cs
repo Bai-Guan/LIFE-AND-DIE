@@ -7,7 +7,7 @@ public class AttackState : PlayerState
     private InitWeaponSystem weapon;
     PlayerControl playerControl;
     AnimationEventHandler eventHandler;
-    bool isExiting = false;
+    bool isExiting = true;
 
     public AttackState(PlayerControl ctx) : base(ctx)
     {
@@ -16,6 +16,8 @@ public class AttackState : PlayerState
 
     public override void Enter()
     {
+
+        if(isExiting==false) { playerControl.SwitchStatus(PlayerControl.PlayerStatus.ldle); return;}
         Debug.Log("进入攻击模式");
         weapon = playerControl.weapon;
         eventHandler = weapon.EventHandler;
@@ -40,7 +42,8 @@ public class AttackState : PlayerState
         isExiting = true;
 
         eventHandler.OnFinish -= Exit;
-        playerControl.SwitchStatus(PlayerControl.PlayerStatus.ldle);
+        TimeManager.Instance.OneTime(0.02f, ()=>playerControl.SwitchStatus(PlayerControl.PlayerStatus.ldle));
+       
         // playerControl.SwitchStatus(PlayerControl.PlayerStatus.ldle);
         // TimeManager.Instance.LaterOneFrame(()=> playerControl.SwitchStatus(PlayerControl.PlayerStatus.ldle));
 
