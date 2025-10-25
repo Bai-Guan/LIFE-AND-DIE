@@ -50,36 +50,58 @@ public class WeaponHitBox : WeaponComponent
     private void OnAttack()
     {
         offset.Set(
-            transform.position.x + Filp * Data.HitBoxSizeAndOffsets[weapon.CurrentNum].HitBox.center.x,
-            transform.position.y + Data.HitBoxSizeAndOffsets[weapon.CurrentNum].HitBox.center.y
-            );
-     Collider2D[] hit  = Physics2D.OverlapBoxAll(offset, Data.HitBoxSizeAndOffsets[weapon.CurrentNum].HitBox.size,
+      transform.position.x + Filp * Data.HitBoxSizeAndOffsets[weapon.CurrentNum].HitBox.center.x,
+      transform.position.y + Data.HitBoxSizeAndOffsets[weapon.CurrentNum].HitBox.center.y
+          );
+
+        Debug.DrawLine(offset - new Vector2(Data.HitBoxSizeAndOffsets[weapon.CurrentNum].HitBox.size.x * 0.5f,
+            Data.HitBoxSizeAndOffsets[weapon.CurrentNum].HitBox.size.y * 0.5f),
+                offset + new Vector2(Data.HitBoxSizeAndOffsets[weapon.CurrentNum].HitBox.size.x * 0.5f,
+                Data.HitBoxSizeAndOffsets[weapon.CurrentNum].HitBox.size.y * 0.5f),
+                Color.red, 2f);
+
+        Collider2D[] hit = Physics2D.OverlapBoxAll(offset, Data.HitBoxSizeAndOffsets[weapon.CurrentNum].HitBox.size,
             0f, Data.DetectableLayer);
 
-        if (hit != null) { 
+        Debug.Log($"检测到的碰撞体数量: {hit?.Length ?? 0}"); // 添加这行
+
+        if (hit != null && hit.Length > 0)
+        {
             HashSet<GameObject> Enemylist = new HashSet<GameObject>();
+            int layerMaskCount = 0;
+
             foreach (var col in hit)
             {
-                Debug.LogWarning(col.gameObject.name+ col.gameObject.ToString());
-                // 用层判断
+                //Debug.Log($"碰撞体: {col.gameObject.name}, 层级: {col.gameObject.layer}");
+
                 int mask = (1 << 9) | (1 << 10);
                 if ((mask & (1 << col.gameObject.layer)) != 0)
-                    Enemylist.Add(col.attachedRigidbody ? col.attachedRigidbody.gameObject
-                                                   : col.gameObject);
+                {
+                    layerMaskCount++;
+                    GameObject target = col.attachedRigidbody ? col.attachedRigidbody.gameObject : col.gameObject;
+                    Enemylist.Add(target);
+                  //  Debug.Log($"添加到敌人列表: {target.name}");
+                }
             }
-            //int mask = (1 << 9) | (1 << 10);   // 9 和 10 两层
-            //if (((1 << obj.gameObject.layer) & mask) != 0)
-            //{
-            //    Enemylist.Add(obj.gameObject);
-            //}
-        
+
+         //   Debug.Log($"通过层级过滤的敌人数量: {layerMaskCount}");
+          //  Debug.Log($"去重后的敌人数量: {Enemylist.Count}");
+
             GameObject[] enemiesHit = new GameObject[Enemylist.Count];
             Enemylist.CopyTo(enemiesHit);
 
-            AttackColliderEvent?.Invoke(enemiesHit);
+            // 检查事件是否有订阅者
+            if (AttackColliderEvent != null)
+            {
+               // Debug.Log($"触发事件，传递敌人数量: {enemiesHit.Length}");
+                AttackColliderEvent(enemiesHit);
+            }
+            else
+            {
+               // Debug.LogError("AttackColliderEvent 没有订阅者！");
+            }
         }
-        else 
-        { Debug.Log("OverlapBoxAll未检测到"); }
+       
     }
 
     private void OnEnable()

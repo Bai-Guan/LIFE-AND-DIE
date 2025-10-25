@@ -47,29 +47,48 @@ public class WeaponAttackDamage : WeaponComponent
     }
     private void DamageAttack(GameObject[] obj)
     {
-        if(obj.Length == 0) { Debug.Log("攻击挥空");return; }
+       // Debug.Log($"DamageAttack 被调用，参数长度: {obj?.Length ?? -1}");
+
+        if (obj == null || obj.Length == 0)
+        {
+           // Debug.Log("攻击挥空 - 数组为null或空");
+            return;
+        }
+
+        Debug.Log($"开始处理 {obj.Length} 个敌人");
+
         foreach (GameObject go in obj)
         {
+           // Debug.Log($"处理敌人: {go.name}");
             IBeDamaged rec = null;
             Transform cur = go.transform;
+
             while (cur != null)
             {
-                rec=cur.GetComponent<IBeDamaged>();
-                if (rec != null) break;
-               cur=cur.parent;
+                rec = cur.GetComponent<IBeDamaged>();
+                if (rec != null)
+                {
+                  //  Debug.Log($"找到 IBeDamaged 接口在: {cur.name}");
+                    break;
+                }
+                cur = cur.parent;
             }
-            if (rec == null) continue;
+
+            if (rec == null)
+            {
+              //  Debug.LogWarning($"在 {go.name} 及其父对象中未找到 IBeDamaged 接口");
+                continue;
+            }
 
             rec.OnHurt(Data.damageDatas[weapon.CurrentNum], this.gameObject);
-
+            Debug.Log($"对 {go.name} 造成伤害");
         }
-        
 
 
-            //InitEnemySystem temp = go.GetComponent<InitEnemySystem>();
-            //if (temp == null) { continue; }
-            //temp.BeAttacked(Data.damageDatas[weapon.CurrentNum],this.gameObject);
-        
+        //InitEnemySystem temp = go.GetComponent<InitEnemySystem>();
+        //if (temp == null) { continue; }
+        //temp.BeAttacked(Data.damageDatas[weapon.CurrentNum],this.gameObject);
+
     }
 
     private void OnEnable()
