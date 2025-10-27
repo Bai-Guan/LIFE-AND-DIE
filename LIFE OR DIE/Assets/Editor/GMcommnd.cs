@@ -57,10 +57,20 @@ public class GMcommnd
     public static void DebugAddSomeItem()
     {
         Debug.Log("增加物品");
-        PackageInventoryService.Instance.AddItem(PackageInventoryService.Instance.GetItemById(1));
-        PackageInventoryService.Instance.AddItem(PackageInventoryService.Instance.GetItemById(3));
-        PackageInventoryService.Instance.AddItem(PackageInventoryService.Instance.GetItemById(5));
+        PackageInventoryService.Instance.AddItem(PackageInventoryService.Instance.GetNewItemById(1));
+        PackageInventoryService.Instance.AddItem(PackageInventoryService.Instance.GetNewItemById(3));
+        PackageInventoryService.Instance.AddItem(PackageInventoryService.Instance.GetNewItemById(5));
     }
+    [MenuItem("CMCmd/Debug减去ID为1的物品")]
+    public static void Debug减去ID为1的物品()
+    {
+        PackageLocalItem temp = PackageInventoryService.Instance.由ID得到背包物品的引用(1);
+        //temp.count = 1;
+        Debug.Log("删除了物品" + temp.uid);
+        PackageInventoryService.Instance.RemoveItem(temp);
+        //立刻刷新
+    }
+
     [MenuItem("CMCmd/调用EquipmentBar脚本中方法强制装备Weapon_1数据")]
     public static void DebugEquipmentWeapon()
     {
@@ -83,11 +93,11 @@ public class GMcommnd
     }
 
 
-    //此方法仅用来测试
-    [MenuItem("CMCmd/输入物品id以为背包增添此物品")]
-    public static void DebugAddItemToPackage(int id)
-    {
-        PackageInventoryService.Instance.AddItem(PackageInventoryService.Instance.GetItemById(id));
-    }
+    ////此方法仅用来测试
+    //[MenuItem("CMCmd/输入物品id以为背包增添此物品")]
+    //public static void DebugAddItemToPackage(int id)
+    //{
+    //    PackageInventoryService.Instance.AddItem(PackageInventoryService.Instance.GetItemById(id));
+    //}
     
 }

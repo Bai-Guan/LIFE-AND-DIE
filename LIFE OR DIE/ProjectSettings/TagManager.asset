@@ -7,7 +7,8 @@ TagManager:
   - Ground
   - Platform
   - EnemyOrPhyitems
-  - EnemyOrPhyItems
+  - EnemyHurtBox
+  - Phyitem
   layers:
   - Default
   - TransparentFX
@@ -17,9 +18,9 @@ TagManager:
   - UI
   - GroundAndPlatform
   - Player
-  - EnemyOrPhyItems
-  - 
-  - 
+  - Enemy
+  - EnemyHurtBox
+  - Phyitem
   - 
   - 
   - 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,14 +24,21 @@ public class EquipmentBar
 
     private bool isInitDic = false;
     private PackageLocalItem _weapon;
-    public PackageLocalItem Weapon { private set { } get { return _weapon; } }
+    public PackageLocalItem Weapon {  set => _weapon = value; get { return _weapon; } }
     private PackageLocalItem _armor;
-    public PackageLocalItem Armor { private set { } get { return _armor; } }
+    public PackageLocalItem Armor {  set { _armor = value; } get { return _armor; } }
 
     private GameObject Player;
 
     private Dictionary<int, WeaponData> _DicIDtoWeaponData = new Dictionary<int, WeaponData>();
     private IDToDataSO _dataSO;
+
+    public  event Action<itemType,Sprite> WeaponEquipmentEvent;
+
+
+
+
+
     private void InitDic()
     {
       _dataSO =  Resources.Load("OS/武器ID到数据集合") as IDToDataSO;
@@ -59,8 +67,11 @@ public class EquipmentBar
 
         if(weapon.type!=itemType.Weapon)
         { Debug.Log("尝试在武器栏装备非武器物品");return; }
+        //更新装备栏武器
         _weapon = weapon;
-        //发送广播 更新UI武器栏
+        //发送广播 更新UI武器栏显示
+        WeaponEquipmentEvent?.Invoke(_weapon.type,PackageInventoryService.Instance.FromIDToSprite(_weapon.id));
+        //发送广播 更新背包数据
 
         //发送广播 为武器脚本更新数据
         if (Player == null)

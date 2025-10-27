@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro.EditorUtilities;
+using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 using static UnityEditor.Progress;
 
@@ -26,7 +27,8 @@ public class PackageInventoryService
     private string path = "TableData/packageTable";
     public Dictionary<int, PackageTableItem> _itemDataCache;
 
-
+    public event Action<itemType> 刷新事件;
+    public event Action<int> Packagecell数字刷新;
     //初始化背包 并缓存
     public void InitPackage()
     {
@@ -60,7 +62,7 @@ public class PackageInventoryService
        BuildItemDictionaryFromLocalData();
         Debug.Log("背包初始化完成");
     }
-    public PackageLocalItem GetItemById(int id)
+    public PackageLocalItem GetNewItemById(int id)
     {
         PackageLocalItem item = new PackageLocalItem();
         item.id= _itemDataCache[id].id;
@@ -69,6 +71,21 @@ public class PackageInventoryService
         item.count = 1;
         return item;
 
+    }
+    public PackageLocalItem 由ID得到背包物品的引用(int id)
+    {
+        // 从实际数据中查找物品，而不是创建新对象
+        var item = _localData.saveData.localAllItems.FirstOrDefault(x => x.id == id);
+        if (item != null)
+        {
+            return item;
+        }
+        else
+        {
+            // 如果背包中没有该物品，返回null或创建一个新的（取决于你的需求）
+            Debug.LogWarning("背包中没有找到 id 为 " + id + " 的物品");
+            return null;
+        }
     }
 
 
@@ -147,55 +164,46 @@ public class PackageInventoryService
         {
             DicListPackageItem[newItem.type].Add(newItem);
         }
+
+        刷新事件?.Invoke(newItem.type);
     }
     //一定是先存在才能移除
     public void RemoveItem(PackageLocalItem Removeitem) 
     {
         if(Removeitem==null) return;
-        if(Removeitem.type == itemType.Food)
-        {
-            var temp = _localData.saveData.localAllItems.FirstOrDefault(x => x.id == Removeitem.id);
-            if (temp != null)
+        var temp = _localData.saveData.localAllItems.FirstOrDefault(x => x.id == Removeitem.id);
+        if (temp == null) {Debug.LogWarning("试图在背包中除去不存在的物品"); return; }
+            if (Removeitem.type == itemType.Food)
             {
+           
                 temp.count -= 1;
+            Packagecell数字刷新?.Invoke(temp.count);
+           // PackageCell.CurrentCellObjNumDecrementByOne(temp.count);
                 if (temp.count <= 0)
                 {
 
-                    _localData.saveData.localAllItems.Remove(Removeitem);
-                }
-            }
-        }
-        else
-        {
-            _localData.saveData.localAllItems.Remove(Removeitem);
-        }
-       
+                    _localData.saveData.localAllItems.Remove(temp);
+                    DicListPackageItem[temp.type].Remove(temp);
+                    
 
-        if (Removeitem.type == itemType.Food)
-        {
-           RemoveStackableItem(Removeitem);
-        }
+                 }
+          
+            
+             }
         else
         {
-            RemoveNonStackableItem(Removeitem);
+            _localData.saveData.localAllItems.Remove(temp);
+            DicListPackageItem[temp.type].Remove(temp);
         }
+
+        刷新事件?.Invoke(Removeitem.type);
 
     }
 
-    private void RemoveNonStackableItem(PackageLocalItem removeitem)
+
+    public Sprite FromIDToSprite(int id)
     {
-      var temp =  DicListPackageItem[removeitem.type].FirstOrDefault(x=>x.id == removeitem.id);
-        if (temp != null)
-        {
-            temp.count -= 1;
-            if (temp.count <= 0)
-            {
-                
-                DicListPackageItem[removeitem.type].Remove(removeitem);
-            }
-        }
-        else { Debug.LogWarning("试图移除一个空物体！"); }
-      
+        return _itemDataCache[id].itemImage;
     }
 
     private void RemoveStackableItem(PackageLocalItem removeitem)
@@ -208,6 +216,40 @@ public class PackageInventoryService
     {
         return DicListPackageItem[type];
     }
+
+    //背包武器与物品栏武器交互 由传入的单元格进行索引
+    public void PackageEquipmentWeapon(PackageCell weaponCell)
+    {
+        //根据id找到背包中的索引
+        var temp = _localData.saveData.localAllItems.FirstOrDefault(x => x.id == weaponCell.ID);
+        if (temp == null) { Debug.LogWarning("本地背包数据未有此装备");return; }
+        //将此物品从背包中挤出去
+        _localData.saveData.localAllItems.Remove(temp);
+        DicListPackageItem[temp.type].Remove(temp);
+        //检测装备栏是否有装备，若没有则装备此物品
+        //若有则进行替换操作
+        if (EquipmentBar.Instance.Weapon==null)
+        {
+            //为挤出去的Weapon赋予新的位置->装备栏中
+            EquipmentBar.Instance.EquipTheWeapon(temp);
+            
+        }
+        else
+        {
+            //先得到被替换的物品引用，将其添加进 本地背包 中
+            var temp2 = EquipmentBar.Instance.Weapon;
+            EquipmentBar.Instance.Weapon = null;
+            _localData.saveData.localAllItems.Add(temp2);
+
+            //再为挤出去的Weapon赋予新的位置->装备栏中
+            EquipmentBar.Instance.EquipTheWeapon(temp);
+           
+        }
+        刷新事件?.Invoke(temp.type);
+
+    }
+
+
 
     public void Save()
     {

@@ -91,9 +91,16 @@ public class PoolManager : MonoBehaviour
         GameObject temp = _DicUIPackagePool[type].Find(x => x.gameObject.name == obj.name);
         if (temp == null) { Debug.LogWarning("要移除的物品在对象池的list列表中不存在！");return; }
         _DicUIPackagePool[type].Remove(temp);
+        Debug.Log("对象池移除了"+temp.GetComponent<PackageCell>().Name);
+        Destroy(temp);
+    
     }
     public void UISpanItem(int id, int num, string name, Sprite sprite, Transform father, itemType type)
     {
+        //查看背包是否有这个id
+    PackageLocalItem temp2 =     PackageInventoryService.Instance.由ID得到背包物品的引用(id);
+        if (temp2 == null) { return; }
+
         GameObject temp = _DicUIPackagePool[type].Find(x => x != null && !x.activeInHierarchy);
 
 
@@ -109,7 +116,7 @@ public class PoolManager : MonoBehaviour
         PackageCell cell = temp.GetComponent<PackageCell>();
         if (cell != null && sprite != null)
         {
-            cell.Set(id, num, name, sprite);
+            cell.Set(id, num, name, sprite,type);
         }
         else
         {

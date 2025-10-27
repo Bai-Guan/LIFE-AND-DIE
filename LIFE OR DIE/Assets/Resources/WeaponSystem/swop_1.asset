@@ -20,6 +20,7 @@ MonoBehaviour:
   - rid: 2057526426078019584
   - rid: 2057526517926723586
   - rid: 2057526530401370114
+  - rid: 2057526586560217088
   references:
     version: 2
     RefIds:
@@ -63,26 +64,48 @@ MonoBehaviour:
       data:
         <DetectableLayer>k__BackingField:
           serializedVersion: 2
-          m_Bits: 384
+          m_Bits: 1536
         <HitBoxSizeAndOffsets>k__BackingField:
         - isDebug: 0
           <HitBox>k__BackingField:
             serializedVersion: 2
-            x: 0.21
+            x: 0.22
             y: -0.8
-            width: 1.32
+            width: 1.82
             height: 1.7
         - isDebug: 0
           <HitBox>k__BackingField:
             serializedVersion: 2
-            x: 0.17
+            x: 0.39
             y: -0.76
-            width: 1.65
+            width: 1.75
             height: 1.71
         - isDebug: 0
           <HitBox>k__BackingField:
             serializedVersion: 2
-            x: 0.23
+            x: 0.35
             y: -0.72
-            width: 1.37
+            width: 1.53
             height: 2.23
+    - rid: 2057526586560217088
+      type: {class: WeaponDamageData, ns: , asm: Assembly-CSharp}
+      data:
+        damageDatas:
+        - atk: 20
+          type: 0
+          RepellingXDistance: 0.2
+          RepellingYDistance: 0
+          RepellingXSpeed: 2
+          RepellingYSpeed: 0
+        - atk: 20
+          type: 0
+          RepellingXDistance: 0.2
+          RepellingYDistance: 0
+          RepellingXSpeed: 2
+          RepellingYSpeed: 0
+        - atk: 40
+          type: 0
+          RepellingXDistance: 0.1
+          RepellingYDistance: 0.3
+          RepellingXSpeed: 1
+          RepellingYSpeed: 4
