@@ -60,7 +60,8 @@ public class InitWeaponSystem : MonoBehaviour
         {typeof(AttackMoveData),typeof(AttackMoveCompent) },
         {typeof(WeaponDamageData),typeof(WeaponAttackDamage) },
         {typeof(WeaponEffectData),typeof(WeaponEffectComponent) },
-        {typeof(WeaponAfterEffectData),typeof(AfterComponent) }
+        {typeof(WeaponAfterEffectData),typeof(AfterComponent) },
+        {typeof(WeaponAudioData),typeof(WeaponAudioComponent)},
     };
 
     //用于通知其他组件正在退出攻击模式

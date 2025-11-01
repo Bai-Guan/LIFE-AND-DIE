@@ -109,6 +109,8 @@ public class Explodable : MonoBehaviour
         {
             frag.transform.parent = transform;
             frag.SetActive(false);
+            //简单修改
+            frag.AddComponent<ExploadbleTimer>();
         }
     }
     public void deleteFragments()

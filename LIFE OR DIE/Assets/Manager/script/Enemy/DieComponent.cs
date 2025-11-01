@@ -7,7 +7,7 @@ public class DieComponent : MonoBehaviour
 {
     private InitEnemySystem body;
     private Explodable explodable;
-
+    [SerializeField] public string DieAudioName;
     private bool CanExploable=true;
     private bool FirstTime=true;
     private void Awake()
@@ -42,7 +42,8 @@ public class DieComponent : MonoBehaviour
         //-----------------ÏÂÃæ¿ªÆôËéÆ¬ËÀÍö-----
         if (CanExploable)
         {
-            print("ËÀÍöËéÆ¬");
+           if(DieAudioName != null) AudioManager.Instance.PlaySFX(DieAudioName);
+            
             explodable.explode(body.LastDamage,body.LastDir);
         }
     }

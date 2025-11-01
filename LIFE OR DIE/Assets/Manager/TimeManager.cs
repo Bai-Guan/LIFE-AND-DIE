@@ -58,10 +58,7 @@ public class TimeManager : MonoBehaviour
         activeCoroutines.Add(coroutine);
     }
 
-    public void CameraShake(float duration,float pow)
-    {
-        StartCoroutine(CameraShakeCoroutine(duration, pow));
-    }
+
     private IEnumerator LaterOneFrameCoroutine(Action callback)
     {
         yield return null;
@@ -72,7 +69,7 @@ public class TimeManager : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         callback?.Invoke();
-        //协程未处理
+       
         
     }
     private IEnumerator FrameTimeCoroutine(float duration,Action callback)
@@ -98,28 +95,11 @@ public class TimeManager : MonoBehaviour
         OnComplete?.Invoke();
     }
 
-    private IEnumerator CameraShakeCoroutine(float duration,float pow)
-    {
-        Vector3 temp = CameraManager.Instance.gameObject.transform.position;
-        Vector3 pos;
-        float time = 0;
-        while (time < duration)
-        {
-            pos = CameraManager.Instance.gameObject.transform.position;
-            pos = new Vector3(
-              UnityEngine.Random.Range(-pow, pow)+ pos.x,
-               UnityEngine.Random.Range(-pow, pow) + pos.y,
-                pos.z
-                );
-            time += Time.deltaTime;
-            yield return null;
-        }
-        CameraManager.Instance.gameObject.transform.position = temp;
-    }
+ 
 
     private void LateUpdate()
     {
-        activeCoroutines.RemoveAll(c => c == null); // 每帧清理已结束
+        activeCoroutines.RemoveAll(c => c == null); 
     }
 
 

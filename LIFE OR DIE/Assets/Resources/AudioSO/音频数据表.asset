@@ -19,3 +19,7 @@ MonoBehaviour:
     audioClip: {fileID: 8300000, guid: 287a31503ffaf2d42a7ac996f6556deb, type: 3}
   - Name: BeHittedClip_blood_1
     audioClip: {fileID: 8300000, guid: da157c1ba700fd448ba600ac3cfec717, type: 3}
+  - Name: SwingSword_1
+    audioClip: {fileID: 8300000, guid: 47a3bb5139c587340868a9f74fb630dc, type: 3}
+  - Name: HeavykillBlood_1
+    audioClip: {fileID: 8300000, guid: 41f2f883621530649831217f0d3b0826, type: 3}
