@@ -67,6 +67,9 @@ public class DamagedComponent : MonoBehaviour, IBeDamaged
         float dirY = attackerPos.y - victimPos.y > verticalThreshold ? -1f   // 从上方攻击 → 向下击飞
                                                                      : 1f;  // 否则默认向上
 
+        // 得到方向
+        Vector2 dir2= new Vector2(dirX, dirY);
+
         // 4. 最终速度
         float vx = data.RepellingXSpeed * scale * dirX;
         float vy = data.RepellingYSpeed * scale * dirY;
@@ -81,8 +84,9 @@ public class DamagedComponent : MonoBehaviour, IBeDamaged
      
         body.MinusHP(damage);
         body.SetRBvelcoity(v);
+        body.SetLastDamageData(data, dir2);
         //6.播放特效 音效
-        Debug.Log(this.name + "被攻击了");
+        // Debug.Log(this.name + "被攻击了");
         AudioManager.Instance.PlaySFX(AudioManager._肉受击音效);
         //测试 攻击特效由攻击物体决定 此代码写在weapon附件下
         //  EffectManager.Instance.SpeicalEffectKnife(this.transform, 0.8f, 5f);

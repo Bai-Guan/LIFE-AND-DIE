@@ -9,13 +9,18 @@ public class InitEnemySystem : MonoBehaviour
   [SerializeField]private EnemyBaseData baseData;
     private Rigidbody2D rb;
 
-    private int currentHP=1;
+    [SerializeField] private int currentHP=1;
+  public int CurrentHP {  get { return currentHP; } private set { } }
     private int defense=0;
     public int Defenese { get { return defense; } private set { } }
     private int knocked=0;
     public int Knocked { get { return defense; } private set { } }
     public event Action<DamageData,GameObject> beAttacked;
+    public event Action AfterDamagedMath;
+    public event Action Die;
 
+    public DamageData LastDamage = new DamageData();
+    public Vector2 LastDir;
 
     private void Awake()
     {
@@ -49,6 +54,16 @@ public class InitEnemySystem : MonoBehaviour
     {
         beAttacked?.Invoke(damage,obj);
     }
+    public void AfterDamage()
+    {
+        AfterDamagedMath?.Invoke();
+    }
+
+    private void BeDied()
+    {
+        Die?.Invoke();
+    }
+
 
     public void MinusHP(int hp)
     {
@@ -58,9 +73,14 @@ public class InitEnemySystem : MonoBehaviour
     {
         rb.velocity=new Vector2(vector2.x,vector2.y);
     }
-    
+    public void SetLastDamageData(DamageData data,Vector2 Dir2)
+    {
+        LastDamage=data;
+        LastDir = Dir2;
+    }
    private void Update()
     {
-        
+        //¡Ÿ ±¥˙¬Î
+        if(currentHP <= 0)BeDied();
     }
 }
