@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Resources;
 using TMPro;
+using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -65,6 +67,114 @@ public class CameraManager : MonoBehaviour
         
     }
 
+    public void CameraShake(float durTime, float power)
+    {
+        if (mainCamera == null) return;
+        switch (_currentCameraState)
+        {
+            case CameraState.FollowPlayer:
+                DeadAreaShake(durTime, power);
+            break;
+              
+            case CameraState.FixedPosition:
+                FixedAreaShake(durTime, power);
+            break;
+        }
+    }
+    //基于死区移动摄像机的抖动
+    public void DeadAreaShake(float durTime, float power)
+    {
+        if (Player == null) return;
+
+        float timer = 0;
+
+        float PlayerZ = Player.transform.position.z;
+        float CameraZ = mainCamera.transform.position.z;
+
+        Vector2 startCameraPos = mainCamera.transform.position; // 记录震动的摄像机位置
+        Vector2 targetPlayerPos = Player.transform.position; // 记录目标玩家位置
+
+        TimeManager.Instance.FrameTime(durTime,
+            () =>
+            {
+                timer += Time.deltaTime;
+                float progress = timer / durTime;
+                startCameraPos = mainCamera.transform.position;
+                targetPlayerPos = Player.transform.position;
+                // 计算当前帧的抖动强度（随时间衰减）
+                float currentPower = power * (1f - progress);
+
+                // 计算向玩家移动的进度（可以使用线性或缓动函数）
+                float moveProgress = progress; // 线性移动
+                                               // 或者使用缓动函数：float moveProgress = EaseOutCubic(progress);
+
+                // 计算当前帧的摄像机目标位置（从起始位置向玩家位置移动）
+                Vector2 currentTargetPos = Vector2.Lerp(startCameraPos, targetPlayerPos, moveProgress);
+
+                // 生成随机偏移（Vector2）
+                float x = UnityEngine.Random.Range(-1f, 1f) * currentPower;
+                float y = UnityEngine.Random.Range(-1f, 1f) * currentPower;
+                Vector2 shakeOffset = new Vector2(x, y);
+
+                // 在移动目标位置上应用抖动
+                mainCamera.transform.position = new Vector3(
+                    currentTargetPos.x + shakeOffset.x,
+                    currentTargetPos.y + shakeOffset.y,
+                    CameraZ
+                );
+            },
+            () =>
+            {
+                // 震动结束后，确保摄像机到达玩家位置
+                Vector3 finalPlayerPos = Player.transform.position;
+                mainCamera.transform.position = new Vector3(
+                    finalPlayerPos.x,
+                    finalPlayerPos.y,
+                    CameraZ
+                );
+
+                // 重置移动偏移
+                _cameraState[_currentCameraState].Reset();
+            }
+        );
+    }
+
+    //基于固定摄像机的抖动
+    public void FixedAreaShake( float durTime, float power)
+    {
+        float timer = 0;
+        Vector3 originalPos = mainCamera.transform.position; // 记录震动开始时的摄像机位置
+
+        TimeManager.Instance.FrameTime(durTime,
+            () =>
+            {
+                timer += Time.deltaTime;
+                float progress = timer / durTime;
+
+                // 计算当前帧的抖动强度（随时间衰减）
+                float currentPower = power * (1f - progress);
+
+                // 生成随机偏移（Vector2）
+                float x = UnityEngine.Random.Range(-1f, 1f) * currentPower;
+                float y = UnityEngine.Random.Range(-1f, 1f) * currentPower;
+                Vector2 shakeOffset = new Vector2(x, y);
+
+                // 以原始摄像机位置为中心应用抖动
+                mainCamera.transform.position = new Vector3(
+                    originalPos.x + shakeOffset.x,
+                    originalPos.y + shakeOffset.y,
+                    originalPos.z
+                );
+            },
+            () =>
+            {
+                // 震动结束后，回到原始位置
+                mainCamera.transform.position = originalPos;
+
+               
+            }
+        );
+    }
 
     void SwitchFollowCamera()
     {
@@ -106,7 +216,8 @@ public class CameraManager : MonoBehaviour
         public virtual void Enter(Action action) { }
 
         public virtual void Update() { }
-       
+
+        public virtual void Reset() { }
 
         public virtual void Quit(){ }
 
@@ -173,6 +284,11 @@ public class CameraManager : MonoBehaviour
 
             //记录上一帧位置
             PlayerLastPos = PlayerTransform.position;
+        }
+
+        public override void Reset()
+        {
+            moveX=0; moveY=0;
         }
 
         public override void Quit()

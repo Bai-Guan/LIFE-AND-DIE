@@ -21,6 +21,8 @@ MonoBehaviour:
   - rid: 2057526517926723586
   - rid: 2057526530401370114
   - rid: 2057526586560217088
+  - rid: 2057526676410073088
+  - rid: 2057526714760691712
   references:
     version: 2
     RefIds:
@@ -106,6 +108,53 @@ MonoBehaviour:
         - atk: 40
           type: 0
           RepellingXDistance: 0.1
-          RepellingYDistance: 0.3
+          RepellingYDistance: 2
           RepellingXSpeed: 1
-          RepellingYSpeed: 4
+          RepellingYSpeed: 10
+    - rid: 2057526676410073088
+      type: {class: WeaponEffectData, ns: , asm: Assembly-CSharp}
+      data:
+        ListEffectDatas:
+        - preEffect: {fileID: 0}
+          durTime: 0.5
+          size: 5
+          range: 0
+          isRandom: 1
+        - preEffect: {fileID: 0}
+          durTime: 0.6
+          size: 5
+          range: 0
+          isRandom: 1
+        - preEffect: {fileID: 0}
+          durTime: 0.8
+          size: 1
+          range: 70
+          isRandom: 0
+    - rid: 2057526714760691712
+      type: {class: WeaponAfterEffectData, ns: , asm: Assembly-CSharp}
+      data:
+        _AfterEffectsdata:
+        - "\u662F\u5426\u5F84\u5411\u6A21\u7CCA": 0
+          BlurTime: 0
+          BlurPow: 0
+          "\u662F\u5426\u8272\u5DEE": 0
+          ColorTime: 0
+          "\u662F\u5426\u9707\u52A8": 0
+          shakeTime: 0
+          shakePow: 0
+        - "\u662F\u5426\u5F84\u5411\u6A21\u7CCA": 0
+          BlurTime: 0
+          BlurPow: 0
+          "\u662F\u5426\u8272\u5DEE": 0
+          ColorTime: 0
+          "\u662F\u5426\u9707\u52A8": 1
+          shakeTime: 1
+          shakePow: 0.05
+        - "\u662F\u5426\u5F84\u5411\u6A21\u7CCA": 1
+          BlurTime: 0.4
+          BlurPow: 0.6
+          "\u662F\u5426\u8272\u5DEE": 1
+          ColorTime: 0.3
+          "\u662F\u5426\u9707\u52A8": 1
+          shakeTime: 1
+          shakePow: 0.4

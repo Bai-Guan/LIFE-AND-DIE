@@ -13,6 +13,10 @@ public class DamageData
     [Header("击退速度")]
     [SerializeField] public float RepellingXSpeed;
     [SerializeField] public float RepellingYSpeed;
+    //[Header("打击音效")]
+    //[SerializeField] public string AudioName;
+   // [Header("打击特效")]
+    //TODO;
 
 
 }

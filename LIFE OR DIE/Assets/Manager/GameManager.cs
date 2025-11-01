@@ -12,4 +12,10 @@ public class GameManager : MonoBehaviour
     {
         PackageInventoryService.Instance.InitPackage();
     }
+
+
+    private void Start()
+    {
+        AudioManager.Instance.PlayMusic(AudioManager._1999±≥æ∞“Ù¿÷);
+    }
 }

@@ -83,6 +83,13 @@ public class DamagedComponent : MonoBehaviour, IBeDamaged
         body.SetRBvelcoity(v);
         //6.播放特效 音效
         Debug.Log(this.name + "被攻击了");
+        AudioManager.Instance.PlaySFX(AudioManager._肉受击音效);
+        //测试 攻击特效由攻击物体决定 此代码写在weapon附件下
+        //  EffectManager.Instance.SpeicalEffectKnife(this.transform, 0.8f, 5f);
+        // EffectManager.Instance.ChromaticAberrationSet(0.8f, 1f);
+        //  EffectManager.Instance.VerticalBlur(0.8f, 0.9f);
+        //InvincibleRendered(0.8f);
+        //CameraManager.Instance.CameraShake(2f, 1f);
     }
     //被攻击白色闪烁
     public void InvincibleRendered(float t)

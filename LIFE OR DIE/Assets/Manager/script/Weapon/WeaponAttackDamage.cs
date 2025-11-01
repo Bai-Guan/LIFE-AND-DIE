@@ -20,7 +20,18 @@ public class WeaponAttackDamage : WeaponComponent
 
     private void OnEnter()
     {
-       
+        if (hitBoxCallBack == null)
+        {
+
+            hitBoxCallBack = GetComponent<WeaponHitBox>();
+            hitBoxCallBack.AttackColliderEvent += DamageAttack;
+            if (hitBoxCallBack == null)
+            {
+                Debug.LogWarning("当前伤害组件未匹配到伤害碰撞箱组件"); this.enabled = false;
+
+            }
+            return; 
+        }
     }
 
 
@@ -29,7 +40,7 @@ public class WeaponAttackDamage : WeaponComponent
         weapon = GetComponent<InitWeaponSystem>();
         hitBoxCallBack = GetComponent<WeaponHitBox>();
 
-        if (hitBoxCallBack == null) { Debug.LogWarning("当前伤害组件未匹配到伤害碰撞箱组件");this.enabled = false;return; }
+       
 
         weapon.ChildrenEnter += OnEnter;
       
@@ -43,7 +54,7 @@ public class WeaponAttackDamage : WeaponComponent
     }
     private void OnExit()
     {
-
+        
     }
     private void DamageAttack(GameObject[] obj)
     {

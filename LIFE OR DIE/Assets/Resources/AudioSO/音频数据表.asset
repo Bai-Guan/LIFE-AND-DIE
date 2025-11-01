@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a06d940b44d5a4439de544ec67d7471, type: 3}
+  m_Name: "\u97F3\u9891\u6570\u636E\u8868"
+  m_EditorClassIdentifier: 
+  Audiodata:
+  - Name: BackGround_1999
+    audioClip: {fileID: 8300000, guid: 9224b7e963577cd45803c7d90f1063cc, type: 3}
+  - Name: HitClip_heavy_1
+    audioClip: {fileID: 8300000, guid: 287a31503ffaf2d42a7ac996f6556deb, type: 3}
+  - Name: BeHittedClip_blood_1
+    audioClip: {fileID: 8300000, guid: da157c1ba700fd448ba600ac3cfec717, type: 3}

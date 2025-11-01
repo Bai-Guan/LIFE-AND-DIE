@@ -127,6 +127,7 @@ public class PackageCell : MonoBehaviour,IPointerEnterHandler,IPointerExitHandle
         _type = type;
         if (obj == null) { Debug.LogError("OBJÎª¿Õ£¡");return;}
         obj.GetComponent<Image>().sprite= sprite;
+        _Textnum.text = objNum.ToString();
         showData();
     }
 

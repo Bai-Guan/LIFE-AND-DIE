@@ -44,7 +44,7 @@ public class InitWeaponSystem : MonoBehaviour
     private AnimationEventHandler eventHandler;
     public AnimationEventHandler EventHandler {  get { return eventHandler; } }
 
-
+    private List<WeaponComponent> HaveListWeaponComponents = new List<WeaponComponent>();
 
     //处理攻击重置的时间类
     [SerializeField] private float attackCounterResetCooldown=2f;
@@ -59,6 +59,8 @@ public class InitWeaponSystem : MonoBehaviour
         { typeof(WeaponHitBoxData),typeof(WeaponHitBox)},
         {typeof(AttackMoveData),typeof(AttackMoveCompent) },
         {typeof(WeaponDamageData),typeof(WeaponAttackDamage) },
+        {typeof(WeaponEffectData),typeof(WeaponEffectComponent) },
+        {typeof(WeaponAfterEffectData),typeof(AfterComponent) }
     };
 
     //用于通知其他组件正在退出攻击模式
@@ -102,6 +104,7 @@ public class InitWeaponSystem : MonoBehaviour
     }
     public void UpdateWeaponData(WeaponData weaponData)
     {
+        ClearTheComponent();
         if (weaponData == null) { Debug.Log("无效武器数据"); return; }
         _currentNum = 0;
         _weaponDataOS = weaponData;
@@ -113,10 +116,22 @@ public class InitWeaponSystem : MonoBehaviour
             if (MappingTable.TryGetValue(data.GetType(),out Type component))
             {
               WeaponComponent com =  this.gameObject.AddComponent(component) as WeaponComponent;
+                HaveListWeaponComponents.Add(com);
                Debug.Log("增添的脚本名字:"+component.Name);
                 com.InitData(data);
                
             }
+        }
+    }
+    private void ClearTheComponent()
+    {
+        if (HaveListWeaponComponents.Count > 0)
+        {
+            foreach(var data in HaveListWeaponComponents)
+            {
+                Destroy(data);
+            }
+            HaveListWeaponComponents.Clear();
         }
     }
 
