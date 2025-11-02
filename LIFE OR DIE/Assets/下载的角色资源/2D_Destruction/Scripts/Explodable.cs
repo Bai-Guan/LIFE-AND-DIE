@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
+using System;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class Explodable : MonoBehaviour
@@ -11,10 +12,12 @@ public class Explodable : MonoBehaviour
     public bool allowRuntimeFragmentation = false;
     public int extraPoints = 0;
     public int subshatterSteps = 0;
-
+    
     public string fragmentLayer = "Default";
     public string sortingLayerName = "Default";
     public int orderInLayer = 0;
+
+    public Material mat;
 
     public enum ShatterType
     {
@@ -82,7 +85,7 @@ public class Explodable : MonoBehaviour
         Rigidbody2D rb = fragment.GetComponent<Rigidbody2D>();
         if (rb == null) return;
 
-        float Rd = Random.Range(0.8f, 1.2f);
+        float Rd = UnityEngine. Random.Range(0.8f, 1.2f);
         // 计算基于攻击方向和碎片位置的力
            float XSpeed=damageData.RepellingXSpeed*SpeedMulX*Rd*dir.x;
            float YSpeed=damageData.RepellingYSpeed*SpeedMulY*Rd*dir.y;
@@ -109,8 +112,10 @@ public class Explodable : MonoBehaviour
         {
             frag.transform.parent = transform;
             frag.SetActive(false);
-            //简单修改
+            //简单修改 增加脚本和材质
             frag.AddComponent<ExploadbleTimer>();
+           mat=  Resources.Load<Material>("shaderMater/溶解") ;
+            frag.GetComponent<Renderer>().material= mat;
         }
     }
     public void deleteFragments()
@@ -155,6 +160,8 @@ public class Explodable : MonoBehaviour
                 p.layer = LayerMask.NameToLayer(fragmentLayer);
                 p.GetComponent<Renderer>().sortingLayerName = sortingLayerName;
                 p.GetComponent<Renderer>().sortingOrder = orderInLayer;
+
+
             }
         }
 

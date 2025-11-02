@@ -6,12 +6,18 @@ public class ExploadbleTimer : MonoBehaviour
 {
     private float timer = 0;
     private float random;
-
+    
     private float percentage = 1;
+    MaterialPropertyBlock mpb;
+    private Renderer ma;
+    private const string 溶解值 = "_DissolveValue";
     private void Awake()
     {
-      random=  Random.Range(3f, 4f);
+      random=  Random.Range(4f, 6f);
         percentage=1f-(timer/random);
+        ma = GetComponent<Renderer>();
+         mpb = new MaterialPropertyBlock();
+     
     }
 
 
@@ -20,8 +26,11 @@ public class ExploadbleTimer : MonoBehaviour
     {
        timer+=Time.deltaTime;
         percentage = 1f - (timer / random);
+        float dissolve = 1f - percentage;     // 0→1
 
-        if(timer>=random)
+        mpb.SetFloat(溶解值, dissolve);
+        ma.SetPropertyBlock(mpb);
+        if (timer>=random)
         {
             Destroy(this.gameObject);
         }
