@@ -23,6 +23,11 @@ public class AttackMoveCompent : WeaponComponent
         {
             attackMoveData = moveData;
         }
+        else
+        {
+            Debug.LogWarning("¹¥»÷ÒÆ¶¯Ä£¿éÊ§Ð§");
+            this.enabled = false;
+        }
      
     }
     private void Start()

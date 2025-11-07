@@ -28,6 +28,12 @@ public class EZTimer
     {
         isActive = false;
     }
+
+    public void ResetTime()
+    {
+        startTime = Time.time;
+        targetTime = startTime + duration;
+    }
     public void Tick()
     {
         if (!isActive) return;

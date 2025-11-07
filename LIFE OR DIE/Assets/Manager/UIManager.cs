@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     private static UIManager _instance;
-    public static UIManager Instance {  get { return _instance; } }
+    public static UIManager Instance { get { return _instance; } }
 
     public Image HP;
     private Dictionary<string, string> pathDict;
@@ -21,35 +21,48 @@ public class UIManager : MonoBehaviour
     {
         get
         {
-            if(_uiRoot == null)
+            if (_uiRoot == null)
             {
                 _uiRoot = GameObject.Find("Canvas").transform;
             }
             return _uiRoot;
         }
     }
-
-    UIManager() 
+    private RectTransform _rect;
+    public RectTransform RectUIRoot
     {
-    InitDicts();
+        get
+        {
+            if (_rect == null)
+            {
+                _rect = GameObject.Find("Canvas").transform.GetComponent<RectTransform>();
+            }
+            return _rect;
+        }
+    }
+
+    UIManager()
+    {
+        InitDicts();
     }
     void InitDicts()
     {
-        perfabDict = new Dictionary<string,GameObject >();
+        perfabDict = new Dictionary<string, GameObject>();
         panelDict = new Dictionary<string, BasePanel>();
 
         pathDict = new Dictionary<string, string>()
         {
             {UIConst.BackPack,"uiPrefab/BackPack" },
-            {UIConst.TreasureChest,"uiPrefab/TreasureChest" }
-           
+            {UIConst.TreasureChest,"uiPrefab/TreasureChest" },
+           {UIConst.PopUpBox,"uiPrefab/PopUpBox" },
+            {UIConst.DialogBox,"uiPrefab/DialogBox" }
         };
     }
 
 
     private void Awake()
     {
-        if(_instance != null&&_instance!=this)
+        if (_instance != null && _instance != this)
         {
             Destroy(gameObject);
             return;
@@ -57,18 +70,22 @@ public class UIManager : MonoBehaviour
         _instance = this;
     }
 
-   public class UIConst
+    public class UIConst
     {
         public const string BackPack = "BackPack";
 
         public const string TreasureChest = "TreasureChest";
+
+        public const string PopUpBox = "PopUpBox";
+
+        public const string DialogBox = "DialogBox";
     }
 
     public BasePanel OpenPanel(string name)
     {
         BasePanel panel = null;
         //检测窗口是否打开
-        if(panelDict.TryGetValue(name,out  panel))
+        if (panelDict.TryGetValue(name, out panel))
         {
             Debug.Log("窗口已打开" + panel.name);
             //已经打开该窗口 返回
@@ -76,17 +93,17 @@ public class UIManager : MonoBehaviour
         }
         string path = "";
         //检测路径是否有配置
-        if(!pathDict.TryGetValue(name,out  path))
+        if (!pathDict.TryGetValue(name, out path))
         {
             Debug.Log("该路径不存在" + path);
             return null;
         }
         GameObject obj = null;
         //检测该预制件是否被加载过
-        if (!perfabDict.TryGetValue(name, out  obj))
+        if (!perfabDict.TryGetValue(name, out obj))
         {
             string realPath = path;
-          GameObject  panelper = Resources.Load<GameObject>(realPath) as GameObject;
+            GameObject panelper = Resources.Load<GameObject>(realPath) as GameObject;
 
             if (panelper == null)
             {
@@ -98,29 +115,71 @@ public class UIManager : MonoBehaviour
             obj = panelper;
         }
 
-        GameObject prefebPanel = GameObject.Instantiate(obj,uiRoot,false);
+        GameObject prefebPanel = GameObject.Instantiate(obj, uiRoot, false);
         BasePanel bp = prefebPanel.GetComponent<BasePanel>();
 
         panelDict.Add(name, bp);
         return bp;
     }
-    
+
     public bool ClosePanel(string name)
     {
         BasePanel basePanel = null;
-        if(!panelDict.TryGetValue(name,out basePanel))
+        if (!panelDict.TryGetValue(name, out basePanel))
         {
-            Debug.Log("当前panel并未被打开"+name);
+            Debug.Log("当前panel并未被打开" + name);
             return false;
         }
         panelDict.Remove(name);
         basePanel.ClosePanel(name);
         return true;
     }
-    public void ChangeHPUI(int hp,int MAXhp)
+    public void ChangeHPUI(int hp, int MAXhp)
     {
-        if(hp<=MAXhp) 
-        HP.fillAmount =(float) hp/MAXhp;
-        else if(hp>MAXhp)HP.fillAmount = 1;
+        if (hp <= MAXhp)
+            HP.fillAmount = (float)hp / MAXhp;
+        else if (hp > MAXhp) HP.fillAmount = 1;
+    }
+
+    public BasePanel OpenPopBox(string name)
+    {
+
+        string path = "";
+        //检测路径是否有配置
+        if (!pathDict.TryGetValue(name, out path))
+        {
+            Debug.Log("该路径不存在" + path);
+            return null;
+        }
+        GameObject obj = null;
+        //检测该预制件是否被加载过
+        if (!perfabDict.TryGetValue(name, out obj))
+        {
+            string realPath = path;
+            GameObject panelper = Resources.Load<GameObject>(realPath) as GameObject;
+
+            if (panelper == null)
+            {
+                Debug.LogError($"加载预制体失败，路径: {realPath}");
+                return null; // 或者处理错误
+            }
+
+            perfabDict.Add(name, panelper);
+            obj = panelper;
+        }
+
+        BasePanel panel = null;
+        //检测窗口是否打开
+        if (panelDict.TryGetValue(name, out panel))
+        {
+           //若打开则直接返回那个窗口
+            return panel;
+        }
+        //如果没打开则 实例生成一个
+        GameObject prefebPanel = GameObject.Instantiate(obj, uiRoot, false);
+        BasePanel bp = prefebPanel.GetComponent<BasePanel>();
+
+        panelDict.Add(name, bp);
+        return bp;
     }
 }

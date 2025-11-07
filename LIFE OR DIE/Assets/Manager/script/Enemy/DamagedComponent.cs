@@ -89,6 +89,7 @@ public class DamagedComponent : MonoBehaviour, IBeDamaged
         // Debug.Log(this.name + "被攻击了");
         if(body.CurrentHP>0)
         AudioManager.Instance.PlaySFX(AudioManager._肉受击音效);
+        body.BeAttacked();
         //测试 攻击特效由攻击物体决定 此代码写在weapon附件下
         //  EffectManager.Instance.SpeicalEffectKnife(this.transform, 0.8f, 5f);
         // EffectManager.Instance.ChromaticAberrationSet(0.8f, 1f);

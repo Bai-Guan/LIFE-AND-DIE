@@ -16,6 +16,7 @@ public class InitEnemySystem : MonoBehaviour
     private int knocked=0;
     public int Knocked { get { return defense; } private set { } }
     public event Action<DamageData,GameObject> beAttacked;
+    public event Action BeAttack;
     public event Action AfterDamagedMath;
     public event Action Die;
 
@@ -53,6 +54,11 @@ public class InitEnemySystem : MonoBehaviour
     public void BeAttacked(DamageData damage,GameObject obj)
     {
         beAttacked?.Invoke(damage,obj);
+    }
+    //此方法目前只在受伤组件中调用 
+    public void BeAttacked()
+    {
+        BeAttack?.Invoke();
     }
     public void AfterDamage()
     {

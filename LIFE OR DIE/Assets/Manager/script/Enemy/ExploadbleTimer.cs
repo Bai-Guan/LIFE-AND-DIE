@@ -13,7 +13,7 @@ public class ExploadbleTimer : MonoBehaviour
     private const string »‹Ω‚÷µ = "_DissolveValue";
     private void Awake()
     {
-      random=  Random.Range(4f, 6f);
+      random=  Random.Range(5f, 8f);
         percentage=1f-(timer/random);
         ma = GetComponent<Renderer>();
          mpb = new MaterialPropertyBlock();
