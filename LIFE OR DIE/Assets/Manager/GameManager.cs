@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
     private void InitData()
     {
         PackageInventoryService.Instance.InitPackage();
+        TaskManager.Instance.InitData();
     }
     public void ChangeGameState(��Ϸ״̬ ״̬)
     {

@@ -44,7 +44,7 @@ return _input;
     
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E)) Input_Key_E?.Invoke();
+     //   if (Input.GetKeyDown(KeyCode.E)) Input_Key_E?.Invoke();
 
     }
 }

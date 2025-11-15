@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "Dialogue_", menuName = "对话系统/对话节点")]
 [System.Serializable]
 public class DiaglugueNode :ScriptableObject
 {
@@ -15,7 +16,8 @@ public class DiaglugueNode :ScriptableObject
     //[SerializeField] public Vector2 range;
     //[SerializeField] public Color color;
     //[SerializeField] public string effect;
-
+    [Header("下一个节点ID")]
+    [SerializeField] public string NextNodeId;
     [Header("分支选项")]
     [SerializeField] public  List<DialugueOption> options;
 

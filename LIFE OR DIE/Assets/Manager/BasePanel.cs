@@ -23,13 +23,13 @@ public class BasePanel : MonoBehaviour
         gameObject.SetActive(true);
     }
 
-    public virtual void ClosePanel(string name) 
+    public virtual void ClosePanel(string name,bool 是否为默认淡出) 
     {
         if (isRemove == true) return;
       isRemove = true;
         float timer = 0;
         //淡出
-        if (rectTrans != null)
+        if (rectTrans != null&&是否为默认淡出)
         {
             TimeManager.Instance.FrameTime(0.2f,
                 () =>
@@ -51,6 +51,7 @@ public class BasePanel : MonoBehaviour
             gameObject.SetActive(false);
             Destroy(gameObject);
         }
+    
 
        
     }

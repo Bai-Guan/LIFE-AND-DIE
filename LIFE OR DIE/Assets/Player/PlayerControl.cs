@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 
@@ -63,42 +64,62 @@ public class PlayerControl : MonoBehaviour
         SwitchStatus(PlayerStatus.ldle);
 
     }
-
-
-    void Update()
+    //-------------------改造计划------------------
+    //移动
+    public void Movenment(InputAction.CallbackContext context)
     {
-        //更新
-        h = Input.GetAxisRaw("Horizontal");   // -1, 0, 1
-        v = Input.GetAxisRaw("Vertical");
-        moveInput.x = h; moveInput.y = v;
+        h = context.ReadValue<Vector2>().x;
+        moveInput.x = h;
+        //print("move");
+    }
 
-        //跳跃检测
-        if (v>0.1f)
+    public void Jump(InputAction.CallbackContext context) 
+    {
+      
+      if(context.performed)
         {
+   
+         moveInput.y = v;
             KeyDownJump = true;
         }
-        else if (v<0.1f)
+     if(context.canceled)
         {
             KeyDownJump = false;
         }
-        //冲刺检测
-        if(Input.GetKeyDown(KeyCode.L))
-        {
+       
+       
+    }
+    //战斗
+    public void Fight(InputAction.CallbackContext context) 
+    {
+    if(context.performed)
+            isKeyDownAttack = true;
+    if(context.canceled)
+            isKeyDownAttack = false;
+    }
+    //闪避
+    public void Dodge(InputAction.CallbackContext context)
+    {
+        if(context.performed)
             KeyDownSprint = true;
-            
-        }
-        else if(Input.GetKeyUp(KeyCode.L)) KeyDownSprint = false;
+        if (context.canceled)
+            KeyDownSprint = false;
+    }
+    //打开背包
+    public void OpenPackage(InputAction.CallbackContext context)
+    {
 
-        //攻击检测
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            isKeyDownAttack= true;
+    }
+    //对话/交互
+    public void Interaction(InputAction.CallbackContext context)
+    {
 
-        }
-        else if (Input.GetKeyUp(KeyCode.J)) isKeyDownAttack = false;
+    }
 
+    //--------------改造计划---------------
 
-
+    void Update()
+    {
         if(currentStatus==PlayerStatus.died)//todo
             return;
 

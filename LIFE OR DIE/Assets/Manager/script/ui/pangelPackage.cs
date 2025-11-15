@@ -229,7 +229,7 @@ public class pangelPackage :BasePanel
     {
         Debug.Log("¹Ø±Õ±³°üui");
         DetailShowParent.gameObject.SetActive(false);
-        UIManager.Instance.ClosePanel(UIManager.UIConst.BackPack);
+        UIManager.Instance.ClosePanel(UIManager.UIConst.BackPack,true);
     }
 
    

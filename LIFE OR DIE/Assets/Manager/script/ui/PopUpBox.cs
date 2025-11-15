@@ -133,7 +133,7 @@ public class PopUpBox : BasePanel
     {
         if(currentTop == null||currentNum<=0)
         {
-            UIManager.Instance.ClosePanel(UIConst.PopUpBox);
+            UIManager.Instance.ClosePanel(UIConst.PopUpBox, true);
             return;
         }
         _inside = currentTop.GetComponent<ObjShowUI>();

@@ -23,7 +23,7 @@ public class ObjInteraction : MonoBehaviour
         {
             if (ID < 0) { Debug.LogWarning("要拾取的物品未配对ID"); return; }
             //弹出该物品
-            GameObject pickUpObject=    StackInteraction.Instance.PopSomeOne(this.gameObject);
+            GameObject pickUpObject=   StackInteraction.Instance.PopSomeOne(this.gameObject);
             if(pickUpObject==null) return;
         //销毁该物品 为背包增加物品
         

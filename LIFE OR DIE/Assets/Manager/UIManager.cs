@@ -55,7 +55,8 @@ public class UIManager : MonoBehaviour
             {UIConst.BackPack,"uiPrefab/BackPack" },
             {UIConst.TreasureChest,"uiPrefab/TreasureChest" },
            {UIConst.PopUpBox,"uiPrefab/PopUpBox" },
-            {UIConst.DialogBox,"uiPrefab/DialogBox" }
+            {UIConst.DialogBox,"uiPrefab/DialogBox" },
+            {UIConst.TaskBox,"uiPrefab/TaskInterface" }
         };
     }
 
@@ -79,6 +80,8 @@ public class UIManager : MonoBehaviour
         public const string PopUpBox = "PopUpBox";
 
         public const string DialogBox = "DialogBox";
+
+        public const string TaskBox = "TaskInterface";
     }
 
     public BasePanel OpenPanel(string name)
@@ -107,7 +110,7 @@ public class UIManager : MonoBehaviour
 
             if (panelper == null)
             {
-                Debug.LogError($"加载预制体失败，路径: {realPath}");
+                Debug.LogError($"加载预制体失败（请检查），路径: {realPath}");
                 return null; // 或者处理错误
             }
 
@@ -122,7 +125,7 @@ public class UIManager : MonoBehaviour
         return bp;
     }
 
-    public bool ClosePanel(string name)
+    public bool ClosePanel(string name,bool 是否为默认淡出)
     {
         BasePanel basePanel = null;
         if (!panelDict.TryGetValue(name, out basePanel))
@@ -131,7 +134,7 @@ public class UIManager : MonoBehaviour
             return false;
         }
         panelDict.Remove(name);
-        basePanel.ClosePanel(name);
+        basePanel.ClosePanel(name,是否为默认淡出);
         return true;
     }
     public void ChangeHPUI(int hp, int MAXhp)
