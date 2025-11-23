@@ -600,7 +600,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2176204114056040258
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4213,9 +4213,21 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
+    - target: {fileID: 6903969628093416949, guid: 3257802e7d0d7d441af7357963328ffe, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6910965938190076390, guid: 3257802e7d0d7d441af7357963328ffe, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7020573114049942022, guid: 3257802e7d0d7d441af7357963328ffe, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8038056134315273412, guid: 3257802e7d0d7d441af7357963328ffe, type: 3}
+      propertyPath: m_Color.a
+      value: 0.49019608
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4071864192716938471, guid: 3257802e7d0d7d441af7357963328ffe, type: 3}

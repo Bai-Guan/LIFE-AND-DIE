@@ -15,7 +15,7 @@ public class DialogManager : MonoBehaviour
     public bool isInDialogue = false;
     public bool isWaitingOption;
     private DialogueUI currentDialogUI;
-    [SerializeField] private PlayerInput playerInput;
+   [SerializeField] private PlayerInput playerInput;
 
     public event Action OnClick;
 
@@ -77,6 +77,19 @@ public class DialogManager : MonoBehaviour
         //将文本传入UI数据层
         bool hasOption = currentNode.options.Count>0?true:false;
         currentDialogUI.SetAndStartText(currentNode.speaker, currentNode.text,hasOption);
+
+        //如果有任务的数据
+        if (currentNode.Taskso != null)
+        {
+            TaskManager.Instance.AddTask(currentNode.Taskso);
+            UIManager.Instance.OpenPanel(UIManager.UIConst.addTask);
+            TimeManager.Instance.OneTime(4f,
+         () =>
+         {
+             UIManager.Instance.ClosePanel(UIManager.UIConst.addTask, true);
+         }
+         );
+        }
 
         //检查是否有选项 并创建交互
         if (hasOption)

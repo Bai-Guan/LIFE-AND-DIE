@@ -2,6 +2,9 @@ using UnityEngine;
 [CreateAssetMenu(menuName ="敌人SO数据",fileName ="基础数据")]
 public class EnemyBaseData : ScriptableObject
 {
+    [Header("敌人名字")]
+    [SerializeField] public string Name;
+
     [Header("敌人最大生命")]
     [SerializeField] public int MaxHP;
 

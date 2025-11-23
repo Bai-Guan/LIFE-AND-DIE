@@ -58,6 +58,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "TaskUI",
+                    "type": "Button",
+                    "id": "c89fb270-f48d-44f5-90d2-2a9a2bd522eb",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Lifeforce",
+                    "type": "Button",
+                    "id": "72d21f7a-d7df-4a3e-b9dc-221b7d7ab56d",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -170,6 +188,28 @@
                     "action": "Movement",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "1765e2fe-d76d-48c4-a747-a817ba357d82",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keybord",
+                    "action": "TaskUI",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "46d450d2-cb19-4ae7-90ec-1ea7a4040548",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keybord",
+                    "action": "Lifeforce",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -234,9 +274,18 @@
             "id": "00bf601a-b206-4051-83bc-000fcbd637ee",
             "actions": [
                 {
-                    "name": "New action",
+                    "name": "close",
                     "type": "Button",
                     "id": "0ac0705a-42f7-40d2-9c21-1c31f255d4fb",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "click",
+                    "type": "Button",
+                    "id": "b3ab79d7-e07a-47f6-b321-1718356a554e",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -247,11 +296,22 @@
                 {
                     "name": "",
                     "id": "e3f2e3cd-f665-44aa-a36d-521a632ea076",
-                    "path": "",
+                    "path": "<Keyboard>/b",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "New action",
+                    "action": "close",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f6ed83b4-b0ec-45c7-bb57-a4102e19f1af",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keybord",
+                    "action": "click",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -291,6 +351,54 @@
                     "processors": "",
                     "groups": "Keybord",
                     "action": "Click",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "TaskUI",
+            "id": "c0da912e-2e25-490b-8619-c9109dc807cc",
+            "actions": [
+                {
+                    "name": "Click",
+                    "type": "Button",
+                    "id": "24f1c0de-8410-4b3f-a8c2-d62d6f137a0f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "close",
+                    "type": "Button",
+                    "id": "78ae8113-19ec-4aff-8d3b-5ddcfffbcd84",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "e17dc5d3-2d1c-4c0a-ace6-909f4f0b3f0e",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keybord",
+                    "action": "Click",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "90375158-b854-498b-b823-b22d18e0ffd7",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keybord",
+                    "action": "close",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

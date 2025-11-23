@@ -21,17 +21,17 @@ public class PlayerAnimControl : MonoBehaviour
     bool noBlood = false;
 
     bool isRun = false;
-
+    int AnimState;
 
     [Header("References")]
-    [SerializeField] private PlayerControl playerControl;
+    [SerializeField] private NewPlayerControll playerControl;
     [SerializeField] private Animator _anim;
     [SerializeField] private SpriteRenderer spriteRenderer;
 
     private void Awake()
     {
        _anim = GetComponent<Animator>();
-        playerControl = GetComponent<PlayerControl>();
+        playerControl = GetComponent<NewPlayerControll>();
         spriteRenderer = GetComponent<SpriteRenderer>();
        
     }
@@ -48,15 +48,18 @@ public class PlayerAnimControl : MonoBehaviour
 
     private void UpdateDate()
     {
-        Grounded = playerControl.IsGrounded();
+        Grounded = playerControl.DataMan.isGround;
         _anim.SetBool("Grounded", Grounded);
 
-        speedY = playerControl.GetRigidbody2D().velocity.y;
+        speedY = playerControl.rb.velocity.y;
         _anim.SetFloat("AirSpeedY", speedY);
 
-        if(playerControl.h!=0)isRun = true;
+        if(playerControl.InputX!=0)isRun = true;
         else isRun = false;
         _anim.SetBool("IsRun",isRun);
+
+        AnimState=playerControl.currentstate;
+        _anim.SetInteger("AnimState", AnimState);
     }
 
     public void TriggerJump()

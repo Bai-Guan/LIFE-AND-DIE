@@ -9,6 +9,7 @@ public class DamagedComponent : MonoBehaviour, IBeDamaged
     private bool isMinusHP =true;
     private bool isCanRepel = true;
     private SpriteRenderer spriteRenderer;
+ 
 
     private void Awake()
     {
@@ -81,12 +82,12 @@ public class DamagedComponent : MonoBehaviour, IBeDamaged
 
         //5.改变数据
         Debug.Log("造成" + damage + "伤害");
-     
+        body.SetLastAttacker(attacker);
         body.MinusHP(damage);
         body.SetRBvelcoity(v);
         body.SetLastDamageData(data, dir2);
         //6.播放特效 音效
-        // Debug.Log(this.name + "被攻击了");
+        // Debug.Log(this.Name + "被攻击了");
         if(body.CurrentHP>0)
         AudioManager.Instance.PlaySFX(AudioManager._肉受击音效);
         body.BeAttacked();

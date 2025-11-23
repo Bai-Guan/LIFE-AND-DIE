@@ -16,8 +16,38 @@ public interface ITaskCondition
 public struct 传入杀戮委托的数据
 {
     public string 被杀生物的ID;
-
+    public GameObject 凶手;
 }
+public class PlayerAddHPCondition : ITaskCondition
+{
+    private PlayerDataManager data;
+  public  PlayerAddHPCondition( PlayerDataManager d )
+    {
+        data = d;
+    }
+
+  
+
+    public void StartListen()
+    {
+        EventBus.Add<传入杀戮委托的数据>(AddHP);
+    }
+
+    public void StopListen()
+    {
+        EventBus.Remove<传入杀戮委托的数据>(AddHP);
+    }
+
+    public void AddHP(传入杀戮委托的数据 e)
+    {
+        if (e.凶手 == data.gameObject)
+        {
+            data.AddHP();
+            Debug.Log("hp:" + data.currentHP);
+        }
+    }
+}
+
 
 public class KillCondition : ITaskCondition
 {
@@ -60,7 +90,13 @@ public class KillCondition : ITaskCondition
             string temp = "已完成<color=#BE0000>杀戮</color>";
                 StopListen();
                TaskManager.Instance.SaveTaskProcess(任务状态.成功, temp, TaskID);
-            TaskManager.Instance.KillFinishTask(TaskID);
+            TimeManager.Instance.OneTime(5f, () =>
+            {
+                TaskManager.Instance.KillFinishTask(TaskID);
+                InputManager.Instance.ChangeInputMap("TaskUI");
+            }
+            );
+            
         }
     }
 }

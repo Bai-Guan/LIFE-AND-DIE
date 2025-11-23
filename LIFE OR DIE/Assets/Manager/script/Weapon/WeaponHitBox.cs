@@ -54,11 +54,11 @@ public class WeaponHitBox : WeaponComponent
       transform.position.y + Data.HitBoxSizeAndOffsets[weapon.CurrentNum].HitBox.center.y
           );
 
-        Debug.DrawLine(offset - new Vector2(Data.HitBoxSizeAndOffsets[weapon.CurrentNum].HitBox.size.x * 0.5f,
-            Data.HitBoxSizeAndOffsets[weapon.CurrentNum].HitBox.size.y * 0.5f),
-                offset + new Vector2(Data.HitBoxSizeAndOffsets[weapon.CurrentNum].HitBox.size.x * 0.5f,
-                Data.HitBoxSizeAndOffsets[weapon.CurrentNum].HitBox.size.y * 0.5f),
-                Color.red, 2f);
+        //Debug.DrawLine(offset - new Vector2(Data.HitBoxSizeAndOffsets[weapon.CurrentNum].HitBox.size.x * 0.5f,
+        //    Data.HitBoxSizeAndOffsets[weapon.CurrentNum].HitBox.size.y * 0.5f),
+        //        offset + new Vector2(Data.HitBoxSizeAndOffsets[weapon.CurrentNum].HitBox.size.x * 0.5f,
+        //        Data.HitBoxSizeAndOffsets[weapon.CurrentNum].HitBox.size.y * 0.5f),
+        //        Color.red, 2f);
 
         Collider2D[] hit = Physics2D.OverlapBoxAll(offset, Data.HitBoxSizeAndOffsets[weapon.CurrentNum].HitBox.size,
             0f, Data.DetectableLayer);
@@ -72,7 +72,7 @@ public class WeaponHitBox : WeaponComponent
 
             foreach (var col in hit)
             {
-                //Debug.Log($"碰撞体: {col.gameObject.name}, 层级: {col.gameObject.layer}");
+                //Debug.Log($"碰撞体: {col.gameObject.Name}, 层级: {col.gameObject.layer}");
 
                 int mask = (1 << 9) | (1 << 10);
                 if ((mask & (1 << col.gameObject.layer)) != 0)
@@ -80,7 +80,7 @@ public class WeaponHitBox : WeaponComponent
                     layerMaskCount++;
                     GameObject target = col.attachedRigidbody ? col.attachedRigidbody.gameObject : col.gameObject;
                     Enemylist.Add(target);
-                  //  Debug.Log($"添加到敌人列表: {target.name}");
+                  //  Debug.Log($"添加到敌人列表: {target.Name}");
                 }
             }
 

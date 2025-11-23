@@ -2,56 +2,75 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AttackState : PlayerState
+public class AttackState : IPlayerState
 {
     private InitWeaponSystem weapon;
-    PlayerControl playerControl;
+   NewPlayerControll _ctx;
     AnimationEventHandler eventHandler;
     bool isExiting = true;
 
-    public AttackState(PlayerControl ctx) : base(ctx)
+    public AttackState(NewPlayerControll ctx) 
     {
-        playerControl = ctx;
+        _ctx=ctx;
     }
 
-    public override void Enter()
+    public  void Enter()
     {
 
-        if(isExiting==false) { playerControl.SwitchStatus(PlayerControl.PlayerStatus.ldle); return;}
+        if(isExiting==false) 
+        {
+            _ctx.SwitchState(TypeState.ldle);
+            return;
+        }
         Debug.Log("进入攻击模式");
-        weapon = playerControl.weapon;
+        weapon = _ctx.weapon;
         eventHandler = weapon.EventHandler;
-        _ctx.SetRB_X(0);
+        _ctx.rb.velocity=new Vector2(0,0);
         isExiting = false;
         eventHandler.OnFinish += Exit;
 
         weapon.Enter();
 
     }
-    public override void Update()
+    public  void Update()
     {
 
     }
-    public override void FixedUpdate()
+    public  void FixedUpdate()
     {
 
     }
-    public override void Exit()
+    public void Exit()
     {
         if (isExiting) return;
         isExiting = true;
 
         eventHandler.OnFinish -= Exit;
-        TimeManager.Instance.OneTime(0.02f, ()=>playerControl.SwitchStatus(PlayerControl.PlayerStatus.ldle));
+        _ctx.SwitchState(TypeState.ldle);
+       // TimeManager.Instance.OneTime(0.02f, ()=>playerControl.SwitchStatus(PlayerControl.PlayerStatus.ldle));
        
-        // playerControl.SwitchStatus(PlayerControl.PlayerStatus.ldle);
-        // TimeManager.Instance.LaterOneFrame(()=> playerControl.SwitchStatus(PlayerControl.PlayerStatus.ldle));
+        // playerControl.SwitchStatus(PlayerControl.TypeState.ldle);
+        // TimeManager.Instance.LaterOneFrame(()=> playerControl.SwitchStatus(PlayerControl.TypeState.ldle));
 
     }
  
-    private void Attack()
-    {
 
+
+
+
+    public void Dodge()
+    {
+        
+    }
+
+    public void ContractPower()
+    {
+        
+    }
+
+    public void Attack()
+    {
+       
     }
 }
 //public class AttackState : PlayerState
@@ -125,11 +144,11 @@ public class AttackState : PlayerState
 //        //_ctx.CheckFill();
 //        //if (timer >waitTime1&&attackTimes<2)
 //        //{
-//        //    _ctx.SwitchStatus(PlayerControl.PlayerStatus.ldle);
+//        //    _ctx.SwitchStatus(PlayerControl.TypeState.ldle);
 //        //}
 //        //else if (timer > waitTime2 && attackTimes >= 2)
 //        //{
-//        //    _ctx.SwitchStatus(PlayerControl.PlayerStatus.ldle);
+//        //    _ctx.SwitchStatus(PlayerControl.TypeState.ldle);
 //        //}
 
 //    }

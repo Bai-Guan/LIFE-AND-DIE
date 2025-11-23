@@ -31,6 +31,11 @@ public class CameraManager : MonoBehaviour
      StateCameraSwitch _CameraSwitch;
     public Camera mainCamera;
     public GameObject Player;
+
+    // 添加边界变量
+    [Header("相机边界设置")]
+  [SerializeField]  public Rect currentBounds = new Rect(0, 0, 10, 10); // 默认边界
+
     // Start is called before the first frame update
     private void Awake()
     { 
@@ -59,14 +64,32 @@ public class CameraManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //TODO:抖动效果
+     
         _CameraSwitch.Update();
     }
     private void FixedUpdate()
     {
         
     }
+    // 设置边界的方法
+    public void SetCameraBounds(Rect newBounds)
+    {
+        currentBounds = newBounds;
+        // 立即应用新的边界限制
+        if (_currentCameraState == CameraState.FollowPlayer)
+        {
+            ClampCameraToBounds();
+        }
+    }
 
+    // 边界限制的公共方法，可供外部调用
+    public void ClampCameraToBounds()
+    {
+        if (_cameraState.ContainsKey(_currentCameraState))
+        {
+            _cameraState[_currentCameraState].ClampToBounds(currentBounds);
+        }
+    }
     public void CameraShake(float durTime, float power)
     {
         if (mainCamera == null) return;
@@ -182,6 +205,7 @@ public class CameraManager : MonoBehaviour
         _CameraSwitch?.Quit();
         _currentCameraState= CameraState.FollowPlayer;
         _CameraSwitch=_cameraState[CameraState.FollowPlayer];
+        _CameraSwitch.ClampToBounds(currentBounds);
         _CameraSwitch.Enter();
     }
     void SwitchFixedCamera(Transform vector3)
@@ -221,69 +245,132 @@ public class CameraManager : MonoBehaviour
 
         public virtual void Quit(){ }
 
+        // 添加虚方法用于边界限制
+        public virtual void ClampToBounds(Rect bounds) { }
+
+        // 计算相机视口边界的方法
+        protected Rect GetCameraViewportWorldBounds()
+        {
+            if (mainCamera == null) return new Rect();
+
+            Vector3 bottomLeft = mainCamera.ViewportToWorldPoint(new Vector3(0, 0, -CameraZ));
+            Vector3 topRight = mainCamera.ViewportToWorldPoint(new Vector3(1, 1, -CameraZ));
+
+            return new Rect(bottomLeft.x, bottomLeft.y, topRight.x - bottomLeft.x, topRight.y - bottomLeft.y);
+        }
+
         public float CameraZ = -10f;
         protected Camera mainCamera;
         protected Transform PlayerTransform;
+        // 添加边界相关的保护字段
+        protected Rect _currentBounds;
+        protected bool _hasBounds = false;
     }
      class FollowCamera : StateCameraSwitch
     {
         private float range = 1.3f;
         Vector3 PlayerLastPos = new Vector3();
-        float moveX=0; float t_moveX;
-        float moveY=0; float t_moveY;
+        float moveX = 0; float t_moveX;
+        float moveY = 0; float t_moveY;
         bool HaveOneTime = true;
-        public FollowCamera(Camera camera,GameObject player):base(camera,player)
-        {
+
+        // 边界限制相关
         
+
+        public FollowCamera(Camera camera, GameObject player) : base(camera, player)
+        {
         }
-      
+
         public override void Enter()
         {
             Debug.Log("进入跟随模式");
             PlayerLastPos = PlayerTransform.position;
 
-            //先设置摄像头位置
-            Vector3 targetPosition = new Vector3(PlayerTransform.transform.position.x, PlayerTransform.transform.position.y,0) ;
+            // 先设置摄像头位置
+            Vector3 targetPosition = new Vector3(PlayerTransform.transform.position.x, PlayerTransform.transform.position.y, 0);
             targetPosition.z = CameraZ;
             mainCamera.transform.position = targetPosition;
+
+            // 应用边界限制
+            if (_hasBounds)
+            {
+                ClampCameraPosition();
+            }
+
             HaveOneTime = true;
-
-
-            Debug.Log("玩家位置"+PlayerTransform.position);
-            Debug.Log("主摄像机位置" + mainCamera.transform.position);
         }
+
         public override void Update()
         {
-           
-            //基于死区 若超过框的范围则丝滑跟随
-            //先求出x y与上一帧相比的偏移量
+            // 基于死区 若超过框的范围则丝滑跟随
             float tempX = PlayerTransform.position.x - PlayerLastPos.x;
             float tempY = PlayerTransform.position.y - PlayerLastPos.y;
-            t_moveX=moveX; 
-            t_moveY=moveY;
-            moveX += tempX;  
+            t_moveX = moveX;
+            t_moveY = moveY;
+            moveX += tempX;
             moveY += tempY;
-            
+
             if (moveX > range || moveX < -range)
             {
                 mainCamera.transform.position += new Vector3(tempX, 0, 0);
-                moveX=t_moveX;
+                moveX = t_moveX;
             }
             if (moveY > range || moveY < -range)
             {
-                mainCamera.transform.position += new Vector3(0,tempY, 0);
-                moveY=t_moveY;
+                mainCamera.transform.position += new Vector3(0, tempY, 0);
+                moveY = t_moveY;
             }
 
+            // 应用边界限制
+            if (_hasBounds)
+            {
+                ClampCameraPosition();
+            }
 
-
-            
-
-
-
-
-            //记录上一帧位置
+            // 记录上一帧位置
             PlayerLastPos = PlayerTransform.position;
+        }
+
+        // 实现边界限制方法
+        public override void ClampToBounds(Rect bounds)
+        {
+            _currentBounds = bounds;
+            _hasBounds = true;
+            ClampCameraPosition(); // 立即应用新的边界
+        }
+
+        // 限制相机位置在边界内
+        private void ClampCameraPosition()
+        {
+            if (mainCamera == null) return;
+
+            // 获取相机视口的世界坐标边界
+            Rect cameraViewport = GetCameraViewportWorldBounds();
+            float cameraWidth = cameraViewport.width;
+            float cameraHeight = cameraViewport.height;
+
+            // 计算相机允许移动的范围
+            float minX = _currentBounds.x + cameraWidth * 0.5f;
+            float maxX = _currentBounds.x + _currentBounds.width - cameraWidth * 0.5f;
+            float minY = _currentBounds.y + cameraHeight * 0.5f;
+            float maxY = _currentBounds.y + _currentBounds.height - cameraHeight * 0.5f;
+
+            // 如果房间比相机视口小，就让相机居中
+            if (_currentBounds.width < cameraWidth)
+            {
+                minX = maxX = _currentBounds.x + _currentBounds.width * 0.5f;
+            }
+            if (_currentBounds.height < cameraHeight)
+            {
+                minY = maxY = _currentBounds.y + _currentBounds.height * 0.5f;
+            }
+
+            // 钳制相机位置
+            Vector3 currentPos = mainCamera.transform.position;
+            float clampedX = Mathf.Clamp(currentPos.x, minX, maxX);
+            float clampedY = Mathf.Clamp(currentPos.y, minY, maxY);
+
+            mainCamera.transform.position = new Vector3(clampedX, clampedY, currentPos.z);
         }
 
         public override void Reset()
@@ -342,4 +429,87 @@ public class CameraManager : MonoBehaviour
             Debug.Log("退出自定义模式");
         }
     }
+
+    //----------------------------
+    [Header("边界可视化")]
+    public bool showBoundsInScene = true;
+    public Color boundsColor = Color.green;
+    public Color cameraViewColor = Color.cyan;
+
+    // 添加调试绘制
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        if (!showBoundsInScene) return;
+
+        // 绘制当前边界
+        DrawBoundsGizmo(currentBounds, boundsColor);
+
+        // 绘制相机视口
+        DrawCameraViewportGizmo();
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (!showBoundsInScene) return;
+
+        // 选中时绘制更明显的边界
+        DrawBoundsGizmo(currentBounds, Color.yellow, 3f);
+    }
+
+    private void DrawBoundsGizmo(Rect bounds, Color color, float thickness = 2f)
+    {
+        Gizmos.color = color;
+
+        Vector3 bottomLeft = new Vector3(bounds.x, bounds.y, 0);
+        Vector3 bottomRight = new Vector3(bounds.x + bounds.width, bounds.y, 0);
+        Vector3 topLeft = new Vector3(bounds.x, bounds.y + bounds.height, 0);
+        Vector3 topRight = new Vector3(bounds.x + bounds.width, bounds.y + bounds.height, 0);
+
+        // 绘制边界框
+        Gizmos.DrawLine(bottomLeft, bottomRight);
+        Gizmos.DrawLine(bottomRight, topRight);
+        Gizmos.DrawLine(topRight, topLeft);
+        Gizmos.DrawLine(topLeft, bottomLeft);
+
+        // 绘制对角线（可选，帮助看清中心）
+        Gizmos.DrawLine(bottomLeft, topRight);
+        Gizmos.DrawLine(bottomRight, topLeft);
+
+        // 绘制中心点
+        Vector3 center = new Vector3(bounds.center.x, bounds.center.y, 0);
+        Gizmos.DrawWireSphere(center, 0.5f);
+    }
+
+    private void DrawCameraViewportGizmo()
+    {
+        if (mainCamera == null) return;
+
+        Gizmos.color = cameraViewColor;
+
+        // 获取相机视口的世界坐标边界
+        Rect viewportBounds = GetCurrentCameraViewportBounds();
+
+        Vector3 bottomLeft = new Vector3(viewportBounds.x, viewportBounds.y, 0);
+        Vector3 bottomRight = new Vector3(viewportBounds.x + viewportBounds.width, viewportBounds.y, 0);
+        Vector3 topLeft = new Vector3(viewportBounds.x, viewportBounds.y + viewportBounds.height, 0);
+        Vector3 topRight = new Vector3(viewportBounds.x + viewportBounds.width, viewportBounds.y + viewportBounds.height, 0);
+
+        // 绘制相机视口框
+        Gizmos.DrawLine(bottomLeft, bottomRight);
+        Gizmos.DrawLine(bottomRight, topRight);
+        Gizmos.DrawLine(topRight, topLeft);
+        Gizmos.DrawLine(topLeft, bottomLeft);
+    }
+
+    private Rect GetCurrentCameraViewportBounds()
+    {
+        if (mainCamera == null) return new Rect();
+
+        Vector3 bottomLeft = mainCamera.ViewportToWorldPoint(new Vector3(0, 0, -mainCamera.transform.position.z));
+        Vector3 topRight = mainCamera.ViewportToWorldPoint(new Vector3(1, 1, -mainCamera.transform.position.z));
+
+        return new Rect(bottomLeft.x, bottomLeft.y, topRight.x - bottomLeft.x, topRight.y - bottomLeft.y);
+    }
+#endif
 }

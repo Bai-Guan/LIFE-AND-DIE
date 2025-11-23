@@ -7,6 +7,7 @@ using UnityEngine;
 public class InitEnemySystem : MonoBehaviour
 {
   [SerializeField]private EnemyBaseData baseData;
+    public string BiologicalName { get { return baseData.Name; } }
     private Rigidbody2D rb;
 
     [SerializeField] private int currentHP=1;
@@ -18,9 +19,10 @@ public class InitEnemySystem : MonoBehaviour
     public event Action<DamageData,GameObject> beAttacked;
     public event Action BeAttack;
     public event Action AfterDamagedMath;
-    public event Action Die;
+    public event Action<GameObject> Die;
 
     public DamageData LastDamage = new DamageData();
+    public GameObject LastAttacker;
     public Vector2 LastDir;
 
     private void Awake()
@@ -67,7 +69,7 @@ public class InitEnemySystem : MonoBehaviour
 
     private void BeDied()
     {
-        Die?.Invoke();
+        Die?.Invoke(LastAttacker);
     }
 
 
@@ -83,6 +85,10 @@ public class InitEnemySystem : MonoBehaviour
     {
         LastDamage=data;
         LastDir = Dir2;
+    }
+    public void SetLastAttacker(GameObject Object)
+    {
+        LastAttacker=Object;
     }
    private void Update()
     {

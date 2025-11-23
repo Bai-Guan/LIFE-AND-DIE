@@ -70,7 +70,7 @@ public class WeaponAttackDamage : WeaponComponent
 
         foreach (GameObject go in obj)
         {
-           // Debug.Log($"处理敌人: {go.name}");
+           // Debug.Log($"处理敌人: {go.Name}");
             IBeDamaged rec = null;
             Transform cur = go.transform;
 
@@ -79,7 +79,7 @@ public class WeaponAttackDamage : WeaponComponent
                 rec = cur.GetComponent<IBeDamaged>();
                 if (rec != null)
                 {
-                  //  Debug.Log($"找到 IBeDamaged 接口在: {cur.name}");
+                  //  Debug.Log($"找到 IBeDamaged 接口在: {cur.Name}");
                     break;
                 }
                 cur = cur.parent;
@@ -87,7 +87,7 @@ public class WeaponAttackDamage : WeaponComponent
 
             if (rec == null)
             {
-              //  Debug.LogWarning($"在 {go.name} 及其父对象中未找到 IBeDamaged 接口");
+              //  Debug.LogWarning($"在 {go.Name} 及其父对象中未找到 IBeDamaged 接口");
                 continue;
             }
 

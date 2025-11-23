@@ -298,7 +298,7 @@ public static class SpriteExploder {
     /// <summary>
     /// generates a list of points from a box collider
     /// </summary>
-    /// <param name="collider">source box collider</param>
+    /// <param Name="collider">source box collider</param>
     /// <returns>list of points</returns>
     private static List<Vector2> getPoints(BoxCollider2D collider)
     {
@@ -320,7 +320,7 @@ public static class SpriteExploder {
     /// <summary>
     /// generates a list of points from a polygon collider
     /// </summary>
-    /// <param name="collider">source polygon collider</param>
+    /// <param Name="collider">source polygon collider</param>
     /// <returns>list of points</returns>
     private static List<Vector2> getPoints(PolygonCollider2D collider)
     {
@@ -347,7 +347,7 @@ public static class SpriteExploder {
     /// <summary>
     /// generates a rectangle based on the rendering bounds of the object
     /// </summary>
-    /// <param name="source">gameobject to get the rectangle from</param>
+    /// <param Name="source">gameobject to get the rectangle from</param>
     /// <returns>a Rectangle representing the rendering bounds of the object</returns>
     private static Rect getRect(GameObject source)
     {
@@ -390,9 +390,9 @@ public static class SpriteExploder {
     /// <summary>
     /// calculates the UV coordinates for the given vertices based on the provided Sprite
     /// </summary>
-    /// <param name="vertices">vertices to generate the UV coordinates for</param>
-    /// <param name="sRend">Sprite Renderer of original object</param>
-    /// <param name="sTransform">Transform of the original object</param>
+    /// <param Name="vertices">vertices to generate the UV coordinates for</param>
+    /// <param Name="sRend">Sprite Renderer of original object</param>
+    /// <param Name="sTransform">Transform of the original object</param>
     /// <returns>array of UV coordinates for the mesh</returns>
     private static Vector2[] calcUV(Vector3[] vertices, SpriteRenderer sRend, Transform sTransform)
     {
@@ -509,7 +509,7 @@ public static class SpriteExploder {
     /// <summary>
     /// calculates the distance between the targets pivot and it's actual center
     /// </summary>
-    /// <param name="target">target gameobject to do the calculation on</param>
+    /// <param Name="target">target gameobject to do the calculation on</param>
     /// <returns>distance between center and pivot</returns>
     private static Vector3 calcPivotCenterDiff(GameObject target)
     {
@@ -529,8 +529,8 @@ public static class SpriteExploder {
     /// <summary>
     /// Sets the pivot of the target object to it's center
     /// </summary>
-    /// <param name="target">Target Gameobject</param>
-    /// <param name="diff">the distance from pivot to center</param>
+    /// <param Name="target">Target Gameobject</param>
+    /// <param Name="diff">the distance from pivot to center</param>
     private static void centerMeshPivot(GameObject target, Vector3 diff)
     {
         //initialize mesh and vertices variables from source
@@ -554,8 +554,8 @@ public static class SpriteExploder {
     /// <summary>
     /// assigns a new material for a fragment
     /// </summary>
-    /// <param name="newSprite">sprite of the fragment</param>
-    /// <param name="source">original gameobject that was shattered</param>
+    /// <param Name="newSprite">sprite of the fragment</param>
+    /// <param Name="source">original gameobject that was shattered</param>
     private static void setFragmentMaterial(GameObject newSprite, GameObject source)
     {
         

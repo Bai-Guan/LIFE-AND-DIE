@@ -81,7 +81,7 @@ public class InitWeaponSystem : MonoBehaviour
         }
         get => _currentNum;
     }
-    public bool IsFacingLeft {  get { return MainPlayer.GetComponent<PlayerControl>().IsFacingLeft; } }
+    public bool IsFacingLeft {  get { return MainPlayer.GetComponent<NewPlayerControll>().isFacingLeft; } }
 
     private void Awake()
     {
@@ -139,7 +139,14 @@ public class InitWeaponSystem : MonoBehaviour
     public void Enter()
     {
         //先检测有无武器
-        if (_weaponDataOS == null) { Debug.LogWarning("当前没有武器装备！"); MainPlayer.GetComponent<PlayerControl>().SwitchStatus(PlayerControl.PlayerStatus.ldle); return; }
+        if (_weaponDataOS == null)
+        { 
+            Debug.LogWarning("当前没有武器装备！");
+
+            MainPlayer.GetComponent<NewPlayerControll>().SwitchState(TypeState.ldle);
+
+            return;
+        }
 
 
         print($"{this.name} Enter");

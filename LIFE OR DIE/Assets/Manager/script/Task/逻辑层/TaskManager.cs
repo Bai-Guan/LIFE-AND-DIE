@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class TaskManager
 {
@@ -22,7 +23,7 @@ public class TaskManager
         new Dictionary<string, TaskRuntime>();
 
     private List<TaskSaveData> _saveData;   // 身份证列表
-
+    private bool _running = false;
     //这个方法用于读取任务的进度数据 并且根据这些数据初始化
    public void InitData()
     {
@@ -62,6 +63,8 @@ public class TaskManager
 
   public  void NormalOpenTaskUI()
     {
+        if(_running==true) return;
+        _running = true;
         if (UIManager.Instance.OpenPanel(UIManager.UIConst.TaskBox) is TaskUI ui)
         {
             currentTaskUI = ui;
@@ -92,6 +95,12 @@ public class TaskManager
     //添加任务 并且保存
    public void AddTask(TaskSO SO)
     {
+        if (_runtimeDict.ContainsKey(SO.TaskID))
+        {
+            Debug.LogWarning($"任务 {SO.TaskID} 已存在，跳过添加。");
+            return;
+        }
+
         ITaskCondition condition = SO.CreateCondition();
         //创建保存数据
         TaskRuntime runtime = new TaskRuntime();
@@ -196,5 +205,7 @@ public class TaskManager
     public void closePanelCallBack()
     {
         UIManager.Instance.ClosePanel(UIManager.UIConst.TaskBox, false);
+        _running = false;
+        // playerInput.SwitchCurrentActionMap("GamePlay");
     }
 }

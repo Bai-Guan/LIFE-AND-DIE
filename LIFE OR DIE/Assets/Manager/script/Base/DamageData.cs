@@ -7,6 +7,7 @@ public class DamageData
 {
     [SerializeField] public int atk;
     [SerializeField] public DamageType type;
+  //  [SerializeField] public GameObject attacker;
     [Header("»÷ÍËÖµÎª»÷ÍË¾àÀë")]
     [SerializeField] public float RepellingXDistance;
     [SerializeField] public float RepellingYDistance;

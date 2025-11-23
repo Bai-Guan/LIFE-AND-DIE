@@ -41,361 +41,517 @@ public abstract class PlayerState
     protected Vector2 _vector;
 }
 
-public class IdleState:PlayerState 
+
+
+
+
+public class IdleState:IPlayerState
 {
-    public IdleState(PlayerControl ctx):base(ctx) 
+    private NewPlayerControll _ctx;
+   public IdleState(NewPlayerControll playerControll)
     {
-        
+        _ctx= playerControll;
     }
-    public override void Enter() 
+
+    public void Enter() 
     {
-       base.Enter();
+     
         //设置动画变量 重置状态 
         Debug.Log("进入待机状态");
+        _ctx.rb.velocity=new Vector2(0,0);  
        
     }
-    public override void Update() 
+    public void Update() 
     {
         //速度==0进入待机 极端情况下跳跃转默认
-        
-        if (Mathf.Abs(_ctx.h) > 0.1f && _ctx.IsGrounded())
+
+        if (Mathf.Abs(_ctx.InputX) > 0.1f && _ctx.DataMan.isGround)
         {
-            _ctx.SwitchStatus(PlayerControl.PlayerStatus.run);
+            _ctx.SwitchState(TypeState.run);
             return;
         }
-        if (_ctx.KeyDownJump&& _ctx.canJump)
+        if (_ctx.InputY>0&&_ctx.DataMan.canJump)
         {
-            _ctx.SwitchStatus(PlayerControl.PlayerStatus.jump);
+            _ctx.SwitchState(TypeState.jump);
             return;
         }
         //检测下落状态
-        if (_rigidbody.velocity.y < -0.1f && (_ctx.IsGrounded() == false))
+        if (_ctx.rb.velocity.y < -0.1f && _ctx.DataMan.isGround == false)
         {
-            _ctx.SwitchStatus(PlayerControl.PlayerStatus.fall);
-        }
-        if(_ctx.FinallyPrintCheck())
-        {
-            _ctx.SwitchStatus(PlayerControl.PlayerStatus.sprint);
+            _ctx.SwitchState(TypeState.fall);
         }
 
-       
+
     }
-    public override void FixedUpdate()
+    public  void FixedUpdate()
     {
-        _ctx.XMove();
+       MoveX();
        
     }
-    public override void Exit() 
+    public void Exit() 
     {
     
     }
-   
+
+    public void Attack()
+    {
+       _ctx.SwitchState(TypeState.attack);
+    }
+
+    public void Dodge()
+    {
+        if (_ctx.DataMan.isDodgeTimeReady(Time.time))
+        {
+            _ctx.SwitchState(TypeState.sprint);
+        }
+    }
+
+    public void ContractPower()
+    {
+        
+    }
+
+    private void MoveX()
+    {
+        // 正常移动
+        float targetVelocityX = _ctx.InputX * _ctx.DataMan.moveSpeed;
+        float newVelocityX = Mathf.MoveTowards(
+            _ctx.rb.velocity.x,
+            targetVelocityX,
+             Time.fixedDeltaTime * 10
+        );
+        _ctx.rb.velocity = new Vector2(newVelocityX, _ctx.rb.velocity.y);
+    }
 }
 
-public class RunState : PlayerState
+public class RunState : IPlayerState
 {
-    public RunState(PlayerControl ctx) : base(ctx)
+    private NewPlayerControll _ctx;
+    private float timer = 0;
+    public RunState(NewPlayerControll playerControll)
     {
-        _rigidbody = _ctx.GetRigidbody();
-        _vector = _ctx.GetVector2();
+        _ctx = playerControll;
     }
-    public override void Enter()
+
+    public void Enter()
     {
-        base.Enter();
+     
         Debug.Log("进入跑步状态");
-       
+        timer = 0;
+
+
     }
-    public override void Update()
+    public  void Update()
     {
-        if (_ctx.FinallyPrintCheck())
-        {
-            _ctx.SwitchStatus(PlayerControl.PlayerStatus.sprint);
-        }
+    
         //检测下落状态
-        if (_rigidbody.velocity.y < -0.1f&&_ctx.IsGrounded()==false)
+        if (_ctx.rb.velocity.y < -0.1f && _ctx.DataMan.isGround == false)
         {
-            _ctx.SwitchStatus(PlayerControl.PlayerStatus.fall);
+            _ctx.SwitchState(TypeState.fall);
             return;
         }
         //进入默认状态的条件
-        if (Mathf.Abs(_ctx.h) <=0.1 && _ctx.IsGrounded() == true)
+        if (Mathf.Abs(_ctx.InputX) <= 0.1 && _ctx.DataMan.isGround == true)
         {
-            _ctx.SwitchStatus(PlayerControl.PlayerStatus.ldle);
+            _ctx.SwitchState(TypeState.ldle);
             return;
         }
         //进入跳跃状态的条件
-        if (_ctx.KeyDownJump && _ctx.canJump)
+        if (_ctx.InputY>0 && _ctx.DataMan.canJump)
         {
-            _ctx.SwitchStatus(PlayerControl.PlayerStatus.jump);
+            _ctx.SwitchState(TypeState.jump);
             return;
         }
 
-        
-       
 
+
+        timer += Time.deltaTime;
         //检测朝向
         _ctx.CheckFill();
 
 
     }
-    public override void FixedUpdate()
+    public  void FixedUpdate()
     {
-
+       
         //进行了移动
 
-        _ctx.XMove();
+        MoveX();
        
     }
-    public override void Exit()
+    public  void Exit()
     {
 
     }
-   
 
+    public void Attack()
+    {
+        _ctx.SwitchState(TypeState.attack);
+    }
 
+    public void Dodge()
+    {
+        if (_ctx.DataMan.isDodgeTimeReady(Time.time))
+        {
+            _ctx.SwitchState(TypeState.sprint);
+        }
+    }
 
-}
-public class FallState : PlayerState
-{
-    public FallState(PlayerControl ctx) : base(ctx)
+    public void ContractPower()
     {
         
     }
-    public override void Enter()
+    private void MoveX()
     {
-        base.Enter();
-        Debug.Log("进入下坠状态");
-      
+        float scale;
+        if(timer/0.25f>0)
+        {
+            scale=1;
+        }
+        else
+        {
+            scale = timer / 0.25f;
+        }
+       
+        // 正常移动
+        float targetVelocityX = _ctx.InputX * _ctx.DataMan.moveSpeed;
+        float newVelocityX = Mathf.Lerp(
+            _ctx.rb.velocity.x,
+            targetVelocityX,
+             scale
+        );
+        _ctx.rb.velocity = new Vector2(newVelocityX, _ctx.rb.velocity.y);
     }
-    public override void Update()
+}
+public class FallState : IPlayerState
+{
+    private NewPlayerControll _ctx;
+    private float timer=0;
+    public FallState(NewPlayerControll playerControll)
     {
-        if (_ctx.FinallyPrintCheck())
-        {
-            _ctx.SwitchStatus(PlayerControl.PlayerStatus.sprint);
-        }
+        _ctx = playerControll;
+    }
+    public  void Enter()
+    {
+       
+        Debug.Log("进入下坠状态");
+        timer = 0;
+    }
+    public  void Update()
+    {
+       
         //脚下为地面 则视为落地 进入待机状态
-        if ( _ctx.IsGrounded()==true)
+        if (_ctx.DataMan.isGround)
         {
-            _ctx.SwitchStatus(PlayerControl.PlayerStatus.ldle);
+            _ctx.SwitchState(TypeState.ldle);
         }
-        if(_ctx.KeyDownJump && _ctx.FinallyJumpCheck())
+        if (_ctx.InputY>0 && _ctx.DataMan.canJump)
         {
-            _ctx.SwitchStatus(PlayerControl.PlayerStatus.jump);
+            _ctx.SwitchState(TypeState.jump);
         }
         //检测朝向
         _ctx.CheckFill();
+        timer += Time.deltaTime;
     }
-    public override void FixedUpdate()
+    public  void FixedUpdate()
     {
-        _ctx.XMove();
+       
+      MoveX();
     }
-    public override void Exit()
+    public void Exit()
     {
 
     }
 
+    public void Attack()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Dodge()
+    {
+     
+            if (_ctx.DataMan.isDodgeTimeReady(Time.time))
+            {
+                _ctx.SwitchState(TypeState.sprint);
+            }
+        
+    }
+
+    public void ContractPower()
+    {
+        //TODO:特殊效果 坠落
+        _ctx.SwitchState(TypeState.collision);
+    }
 
 
+
+    private void MoveX()
+    {
+        float scale;
+        if (timer / 0.05f > 0)
+        {
+            scale = 1;
+        }
+        else
+        {
+            scale = timer / 0.25f;
+        }
+        // 正常移动
+        float targetVelocityX = _ctx.InputX * _ctx.DataMan.moveSpeed;
+        float newVelocityX = Mathf.Lerp(
+            _ctx.rb.velocity.x,
+            targetVelocityX,
+             scale
+        );
+        _ctx.rb.velocity = new Vector2(newVelocityX, _ctx.rb.velocity.y);
+    }
 }
 //只要人在往上 就是上升状态
-public class JumpState : PlayerState
+public class JumpState : IPlayerState
 {
-    public JumpState(PlayerControl ctx) : base(ctx)
+    private NewPlayerControll _ctx;
+    private float timer = 0;
+    public JumpState(NewPlayerControll playerControll)
     {
-        //
+        _ctx = playerControll;
     }
-    public override void Enter()
+    public void Enter()
     {
-        base.Enter();
+        
         Debug.Log("进入跳跃状态");
         _ctx.Anim.TriggerJump();
         //进行角色跳跃操作
         Jump();
         //使得普通跳跃次数消耗
-        _ctx.setJump(false);//恢复部分在碰撞实现
+        // _ctx.setJump(false);//恢复部分在碰撞实现
 
         //跳跃前的水平速度清零
-        _rigidbody.velocity=new Vector2(0,_rigidbody.velocity.y);
+        timer = 0;
+       _ctx.rb.velocity=new Vector2(0, _ctx.rb.velocity.y);
 
         
 
     }
-    public override void Update()
+    public void Update()
     {
-        if (_ctx.FinallyPrintCheck())
-        {
-            _ctx.SwitchStatus(PlayerControl.PlayerStatus.sprint);
-        }
+    
 
 
         //速度<0则为下坠
-        if (_rigidbody.velocity.y<0)
+        if (_ctx.rb.velocity.y < 0)
         {
-            _ctx.SwitchStatus(PlayerControl.PlayerStatus.fall);
+            _ctx.SwitchState(TypeState.fall);
         }
-        //按键W二段跳
-
+       // timer += Time.deltaTime;
         //检测朝向
         _ctx.CheckFill();
     }
-    public override void FixedUpdate()
+    public  void FixedUpdate()
     {
         //如果一直按住了跳跃 则y速度将一直加某一个小于重力的值 使得跳跃滞空时间变长
-    if(_ctx.KeyDownJump==true)
+    if(_ctx.InputY>0)
         {
             Vector2 up = new Vector2(0, 10f);
-            _rigidbody.AddForce(up);
+           _ctx.rb.AddForce(up);
             
         }
+        
         //进行了空中移动
-        _ctx.XMove();
+        MoveX();
     }
-    public override void Exit()
+    public  void Exit()
     {
 
     }
    private void Jump()
     {
-        if (_ctx.GetJump() == true)
+        if (_ctx.InputY >0)
         {
-            float newY = _ctx.jumpSpeed;
-            _rigidbody.velocity = new Vector2(_rigidbody.velocity.x, newY);
+            float newY = _ctx.DataMan.jumpSpeed;
+           _ctx.rb.velocity = new Vector2(_ctx.rb.velocity.x, newY);
         }
     }
 
+    public void Attack()
+    {
+      
+    }
+
+    public void Dodge()
+    {
+        if (_ctx.DataMan.isDodgeTimeReady(Time.time))
+        {
+            _ctx.SwitchState(TypeState.sprint);
+        }
+    }
+
+    public void ContractPower()
+    {
+        //TODO:特殊效果 坠落
+        _ctx.SwitchState(TypeState.collision);
+    }
+
+
+    private void MoveX()
+    {
+        //float scale;
+        //if (timer / 0.05f > 0)
+        //{
+        //    scale = 1;
+        //}
+        //else
+        //{
+        //    scale = timer / 0.25f;
+        //}
+        // 正常移动
+        float targetVelocityX = _ctx.InputX * _ctx.DataMan.moveSpeed;
+    
+        _ctx.rb.velocity = new Vector2(targetVelocityX, _ctx.rb.velocity.y);
+    }
 }
 
 //任意状态下，被攻击时进入此状态
-public class HitState : PlayerState
+public class UnexpectedState : IPlayerState
 {
-    public HitState(PlayerControl ctx) : base(ctx)
+    private NewPlayerControll _ctx;
+    public UnexpectedState(NewPlayerControll playerControll)
     {
-
+        _ctx = playerControll;
     }
-    public override void Enter()
+    public  void Enter()
     {
-        Debug.Log("进入受伤状态 ");
-        _ctx.Anim.TriggerHurt();
+    //    Debug.Log("进入奇招状态 ");
+    //    //_ctx.Anim.TriggerHurt();
         
-        IsFirst = true;
-        Timer = 0;
-        
+    //    IsFirst = true;
+    //    Timer = 0;
+    
+      
+    //     //增加事件的监听
+    //     _ctx.PlayerInput.currentActionMap
 
-        //收到一个力使得角色被击退 目前 期间无法做任何事情
 
-        //Debug 
-        _spriteRenderer.color=Color.red;
 
-        //无敌帧1.2s
-        _ctx.SetInvincible(true);
-        TimeManager.Instance.OneTime(_ctx.InvincibleFrameTime,
-            () =>
-            {
-                Debug.Log("无敌帧结束！");
-                _ctx.SetInvincible(false);
-            });
+
+
+    //    //Debug 
+    //    _spriteRenderer.color=Color.red;
+
+    //    //无敌帧1.2s
+    //    _ctx.SetInvincible(true);
+    //    TimeManager.Instance.OneTime(_ctx.InvincibleFrameTime,
+    //        () =>
+    //        {
+    //            Debug.Log("无敌帧结束！");
+    //            _ctx.SetInvincible(false);
+    //        });
     }
-    public override void Update()
+    public  void Update()
     {
-        if(IsFirst==true)
-        {
-            Debug.DrawRay(_ctx.gameObject.transform.position, hitDir, Color.blue, 2f);
-            _ctx.SetRB_X(hitDir.x * hitX); _ctx.SetRB_Y(hitDir.y * hitY);
-            IsFirst = false;
-        }
+        //监听是否按攻击键 
+
+
+        //if (IsFirst==true)
+        //{
+        //    Debug.DrawRay(_ctx.gameObject.transform.position, hitDir, Color.blue, 2f);
+        //    _ctx.SetRB_X(hitDir.x * hitX); _ctx.SetRB_Y(hitDir.y * hitY);
+        //    IsFirst = false;
+        //}
 
 
 
-        Timer += Time.deltaTime;
-        if (Timer > hitStun)
-        {
-            _ctx.SwitchStatus(PlayerControl.PlayerStatus.ldle);
-        }
+        //Timer += Time.deltaTime;
+        //if (Timer > hitStun)
+        //{
+        //    _ctx.SwitchStatus(PlayerControl.PlayerStatus.ldle);
+        //}
     }
-    public override void FixedUpdate()
+    public void FixedUpdate()
     {
-        _ctx.SetRB_X(_ctx.GetRigidbody2D().velocity.x);
-        _ctx.SetRB_Y(_ctx.GetRigidbody2D().velocity.y);
+        //_ctx.SetRB_X(_ctx.GetRigidbody2D().velocity.x);
+        //_ctx.SetRB_Y(_ctx.GetRigidbody2D().velocity.y);
     }
-    public override void Exit()
+    public void Exit()
     {
         //Debug
-        _spriteRenderer.color = Color.white;
+        //_spriteRenderer.color = Color.white;
 
-        hitDir = Vector3.zero;
-        Timer = 0;
+        //hitDir = Vector3.zero;
+        //Timer = 0;
 
-        IsFirst = false;
+        //IsFirst = false;
     }
 
    
-    public override void Other(Transform dir)
-    {
-        Vector3 pos = this.gameObject.transform.position;
-       Vector3 Temp = new Vector3(
-           pos.x-dir.position.x,
-           pos.y-dir.position.y,
-           0   
-           );
-        hitDir = Vector3.Normalize(Temp);
-        Debug.Log("受伤向量"+ hitDir);
-    }
-   Vector2 hitDir = Vector2.zero;
-    private float Timer = 0;
-    public float hitStun =0.3f;
-    private float hitX = 5f;
-    private float hitY = 5f;
+    //public override void Other(Transform dir)
+    //{
+    //    Vector3 pos = this.gameObject.transform.position;
+    //   Vector3 Temp = new Vector3(
+    //       pos.x-dir.position.x,
+    //       pos.y-dir.position.y,
+    //       0   
+    //       );
+    //    hitDir = Vector3.Normalize(Temp);
+    //    Debug.Log("受伤向量"+ hitDir);
+    //}
 
-    bool IsFirst = true;
+    public void Attack()
+    {
+       
+    }
+
+    public void Dodge()
+    {
+       
+    }
+
+    public void ContractPower()
+    {
+        
+    }
+
+    //Vector2 hitDir = Vector2.zero;
+    //private float Timer = 0;
+    //public float hitStun =0.3f;
+    //private float hitX = 5f;
+    //private float hitY = 5f;
+
+    //bool IsFirst = true;
 }
 
-public class SprintState : PlayerState
+public class SprintState : IPlayerState
 {
-    //冲刺目前设定为仅限水平方向 此期间不受移动 重力影响
-    public SprintState(PlayerControl ctx) : base(ctx)
+    private NewPlayerControll _ctx;
+    public SprintState(NewPlayerControll playerControll)
     {
-
+        _ctx = playerControll;
     }
-    public override void Enter()
+    public  void Enter()
     {
         _ctx.Anim.TriggerSprint();
-        _ctx.isSprint = true;
+        //_ctx.isSprint = true;
 
         //1.水平速度先设为0，速度分为 加速 恒速 减速 三个阶段，其中加速阶段为凸函数 减速阶段为凹函数
-        _ctx.GetRigidbody2D().velocity = Vector2.zero;
+        _ctx.rb.velocity = Vector2.zero;
         //记录按下冲刺键时的时间 记录冲刺方向
         PressSprintTime = Time.time;
        
-        sprintDir = _ctx.IsFacingLeft ? -1 : 1;
-        _currentSpeed =_ctx.moveSpeed;
-
-        //设置不能冲刺 协程0.4秒后才能冲
-        _ctx.CDcanSprint=false;
-        TimeManager.Instance.OneTime(_ctx.sprintCD,
-            () =>
-            {
-                _ctx.CDcanSprint = true;
-            }
-            );
+        sprintDir = _ctx.isFacingLeft ? -1 : 1;
+        _currentSpeed = _ctx.DataMan.sprintSpeed;
 
 
 
-        //无敌帧0.4秒
-        _ctx.SetInvincible(true);
-        TimeManager.Instance.OneTime(AccelerationTime+ConstantTime,
-            () =>
-            {
-                _ctx.SetInvincible(false);
-            });
-        _ctx.InvincibleRendered(AccelerationTime + ConstantTime);
+        //无敌帧
+        _ctx.DataMan.SetInvencibleAndStart(0.2f);
     }
-    public override void Update()
+    public  void Update()
     {
-      _currentTime = Time.time-PressSprintTime;
-        //如果撞墙 速度x为0 浮空继续
-        if (_ctx._isTouchingWall == true && _currentTime < AccelerationTime + ConstantTime + DecelerationTime) _currentSpeed = 0;
-        else
-        {
+        _currentTime = Time.time - PressSprintTime;
+      
+       
+       
+        
 
 
 
@@ -404,40 +560,37 @@ public class SprintState : PlayerState
 
             if (_currentTime <= AccelerationTime)
             {
-                _currentSpeed = EaseInExpo(_ctx.sprintSpeed, AccelerationTime, _currentTime);
-                
+                _currentSpeed = EaseInExpo(_ctx.DataMan.sprintSpeed, AccelerationTime, _currentTime);
+
             }
             else if (_currentTime <= AccelerationTime + ConstantTime && _currentTime > AccelerationTime)
             {
-                _currentSpeed = _ctx.sprintSpeed;
+                _currentSpeed = _ctx.DataMan.sprintSpeed;
             }
             else if (_currentTime > AccelerationTime + ConstantTime && _currentTime <= AccelerationTime + ConstantTime + DecelerationTime)
             {
-                _currentSpeed = EaseOutExpo(_currentTime, _ctx.sprintSpeed, DecelerationTime);
-                
+                _currentSpeed = EaseOutExpo(_currentTime, _ctx.DataMan.sprintSpeed, DecelerationTime);
+
             }
             else
             {
-                _ctx.SetRB_X(0);
-                _ctx.SetSprintZeroTimes();
-                _ctx.SwitchStatus(PlayerControl.PlayerStatus.run);
+                _ctx.rb.velocity = new Vector2(0, 0);
+                _ctx.SwitchState(TypeState.run);
             }
-        }
+        
     }
-    public override void FixedUpdate()
+    public void FixedUpdate()
     {
         
         //不受重力影响
-        _ctx.SetRB_Y(0);
-        _ctx.SetRB_X(_currentSpeed*sprintDir);
+        _ctx.rb.velocity = new Vector2(_currentSpeed * sprintDir, 0); 
         
 
     }
-    public override void Exit()
+    public  void Exit()
     {
         _currentSpeed = 0;
-        _ctx.isSprint = false;
-        _ctx.SetInvincible(false);
+       
     }
     //定义加速减速时间 0.08s内加速 0.1秒内完成减速 0.32s内恒速运动
     private int sprintDir;
@@ -462,6 +615,20 @@ public class SprintState : PlayerState
         return start * (-Mathf.Pow(2, -10 * temp) + 1);
     }
 
+    public void Attack()
+    {
+       
+    }
+
+    public void Dodge()
+    {
+       
+    }
+
+    public void ContractPower()
+    {
+       
+    }
 }
 
 
@@ -490,29 +657,49 @@ public class BlockState : PlayerState
 
     }
 }
-public class DieState : PlayerState
+public class DieState : IPlayerState
 {
-    //弹反时候无击退 格挡时候击退分为弱击退 强击退 和自定义击退
-    public DieState(PlayerControl ctx) : base(ctx)
+    private NewPlayerControll _ctx;
+    public DieState(NewPlayerControll playerControll)
     {
-
+        _ctx = playerControll;
     }
-    public override void Enter()
+    public  void Enter()
     {
         Debug.Log("死了");
         _ctx.Anim.TriggerDie();
+
+        //判断还有没有命 没命就真的死了
     }
-    public override void Update()
+    public  void Update()
     {
 
     }
-    public override void FixedUpdate()
+    public  void FixedUpdate()
     {
 
     }
-    public override void Exit()
+    public  void Exit()
     {
 
+    }
+
+    public void Attack()
+    {
+        
+    }
+
+    public void Dodge()
+    {
+       
+    }
+
+    public void ContractPower()
+    {
+       if(_ctx.DataMan.currentHP>0)
+        {
+            _ctx.SwitchState(TypeState.ldle);
+        }
     }
 }
 public class OtherState : PlayerState

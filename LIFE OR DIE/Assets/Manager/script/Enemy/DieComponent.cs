@@ -31,12 +31,16 @@ public class DieComponent : MonoBehaviour
     {
         body.Die += SpecialDieEffect;
     }
-    public void SpecialDieEffect()
+    public void SpecialDieEffect(GameObject murderer)
     {
         //再次检测当前物体是否死亡 是否已经死亡
         if (!(body.CurrentHP <= 0)) return;
         if(FirstTime==false) return;
         FirstTime = false;
+
+
+
+
         //正常死亡逻辑处理
 
         //-----------------下面开启碎片死亡-----
@@ -46,6 +50,12 @@ public class DieComponent : MonoBehaviour
             
             explodable.explode(body.LastDamage,body.LastDir);
         }
+
+        //传递事件
+        传入杀戮委托的数据 temp = new 传入杀戮委托的数据();
+        temp.被杀生物的ID=body.BiologicalName;
+        temp.凶手 = murderer;
+        EventBus.Publish<传入杀戮委托的数据>(temp);
     }
 
     private void OnDisable()

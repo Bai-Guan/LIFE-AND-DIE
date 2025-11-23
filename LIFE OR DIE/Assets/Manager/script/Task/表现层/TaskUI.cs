@@ -285,7 +285,7 @@ public class TaskUI : BasePanel
         //描边宽度
         框材质.SetFloat("_LightWeight", 0.02f);
 
-     
+        分界线物体.SetActive(false);
         //计时器
         float scale;
         float timer = 0;
@@ -356,30 +356,41 @@ public class TaskUI : BasePanel
             {
                 //显示红字
                 启动所有物件();
-                设置所有字体全开();
+               
                 //播放音效
 
-                //等待0.5f
-                TimeManager.Instance.OneTime(1.3f,
+                //等待
+                TimeManager.Instance.OneTime(2f,
                     () =>
                     {
-                        完成杀人任务时候调用动画_屏幕切红();
+                        完成杀人任务时候调用动画_出现字体();
                     }
                     );
             }
             );
+    }
+    private void 完成杀人任务时候调用动画_出现字体()
+    {
+        设置所有字体全开();
+        TimeManager.Instance.OneTime(2f,
+                   () =>
+                   {
+                       完成杀人任务时候调用动画_屏幕切红();
+                   }
+                   );
+     
     }
     private void 完成杀人任务时候调用动画_屏幕切红()
     {
         float timer = 0;
         //计时器
         float scale;
-        TimeManager.Instance.FrameTime(1.5f,
+        TimeManager.Instance.FrameTime(2f,
 
             () =>
             {
                 timer += Time.deltaTime;
-                scale = timer / 1.5f;
+                scale = timer / 2f;
                 float weight = Mathf.Lerp(0, 1f, scale);
 
                 //描边宽度
@@ -400,12 +411,12 @@ public class TaskUI : BasePanel
         float timer = 0;
         //计时器
         float scale;
-        TimeManager.Instance.FrameTime(1.5f,
+        TimeManager.Instance.FrameTime(3f,
 
             () =>
             {
                 timer += Time.deltaTime;
-                scale = timer / 1.5f;
+                scale = timer / 3f;
                 float weight = Mathf.Lerp(1, 0f, scale);
                 float color = 1 - weight;
                 float 透明度=Mathf.Lerp(1, 0.97f, scale);

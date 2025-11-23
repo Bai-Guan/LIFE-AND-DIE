@@ -1,0 +1,149 @@
+using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.UIElements;
+
+//[RequireComponent(typeof(Player_checkGround))]
+public class PlayerDataManager :MonoBehaviour
+{
+    [Header("基础数据")]
+    public int currentHP=1;
+    //----
+
+    [Header("玩家速度/ 地面摩擦力")]
+    public readonly float moveSpeed = 6f;
+    public readonly float jumpSpeed = 10f;
+    public readonly float groundFriction = 40f;
+   
+    //----
+
+
+
+    [Header("地面检测")]
+    private Player_checkGround _checkGround;
+    public bool isGround { get { return _checkGround.IsGrounded; } }
+    //------------------------------------
+
+    [Header("坠落的最大速度")]
+  [SerializeField] float maxFallSpeed = 30f;         // 坠落速度上限
+  [SerializeField] float landingSizeFactor = 0.3f; // 速度→尺寸放大系数
+  [SerializeField] float _fallDamagePerSecon = 200;//根据时间坠落伤害
+    [SerializeField] public float flySpeed = 10f;
+   public const float MaxDamage = 3000;
+    [SerializeField] private AnimationCurve airTimeToDamage = AnimationCurve.EaseInOut(0f, 0f, 2f, 3000f);
+    public float EvaluateAirTimeDamage(float t) => airTimeToDamage.Evaluate(t);
+
+ 
+    public float LandingSizeFactor { get { return landingSizeFactor; } }
+     public float MaxFallSpeed {  get { return maxFallSpeed; } }
+    public float FallDamagePerSecon { get { return _fallDamagePerSecon; } }
+
+
+    //冲刺CD为1秒 同时冲刺所需要的时间为<=0.4s---------------
+    [Header("冲刺相关")]
+    [SerializeField] private readonly float sprintCD = 0.8f;
+    [SerializeField] public readonly float sprintSpeed = 20f;
+    [SerializeField] private float _LastpressSprintKey = 0;
+    
+
+    //冲刺条件判断 
+    public bool isDodgeTimeReady(float currentTime)
+    {
+        if (currentTime - _LastpressSprintKey >= sprintCD)
+        {
+            _LastpressSprintKey=currentTime;
+            return true;
+        }
+        else { return false; }
+    }
+    public float GetDodgeSpeed()
+    {
+        return sprintSpeed;
+    }
+    //--------------------------------------------
+
+    [Header("无敌帧相关")]
+    [SerializeField] private float InvincibleFrameTime = 1.2f;
+    [SerializeField] private bool isInvincible = false;
+    public bool IsInvincible {  get { return isInvincible; } }
+    public void StartInvincible()
+    {
+        isInvincible = true;
+        TimeManager.Instance.OneTime(InvincibleFrameTime, () => {isInvincible = false;});   
+    }
+    public void SetInvencibleAndStart(float timer)
+    {
+        isInvincible=true;
+        TimeManager.Instance.OneTime(timer, () => { isInvincible = false; });
+    }
+    public void SetInvencible(bool i)
+    {
+        isInvincible = i;
+    }
+    //----------------------------------------------------
+    //土狼跳跃相关参数
+    [Header("土狼相关")]
+    [SerializeField] private float lastGroundtime = 0;
+    //土狼允许的滞空时间
+    [SerializeField] public float coyoteTime = 0.15f;
+    public bool canJump
+    {
+        get
+        {
+            if(Time.time-lastGroundtime <= coyoteTime)return true;
+            else return false;
+        }
+    }
+    private void updateCoyoteData()
+    {
+        if (isGround)
+        {
+            lastGroundtime=Time.time;
+        }
+    }
+    //碰撞相关---------------------------
+    [Header("碰撞相关")]
+ [SerializeField]  private GameObject currentCollOBJ;
+    public GameObject CurrentObj {  get { return currentCollOBJ; } }
+   public void  isCollisionOBJ(GameObject obj)
+    {
+        currentCollOBJ = obj;
+    }
+
+
+    public void isExitOBJ(GameObject obj)
+    {
+        if(currentCollOBJ == obj) currentCollOBJ = null;
+    }
+
+    //死亡受伤相关-----------------------
+    private PlayerAddHPCondition hPCondition;
+    public void MinusHP() => currentHP -= 1;
+    public void AddHP() => currentHP += 1;
+
+
+
+
+
+
+
+
+    private void Awake()
+    {
+        _checkGround=this.transform.Find("checkGround").GetComponent<Player_checkGround>();
+        hPCondition = new PlayerAddHPCondition(this);
+        hPCondition.StartListen();
+    }
+    private void Update()
+    {
+        //土狼时间需要持续监听最后一次在地上的时间
+        updateCoyoteData();
+    }
+
+
+    private void OnDestroy()
+    {
+        hPCondition.StopListen();
+    }
+}

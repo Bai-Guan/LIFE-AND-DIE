@@ -21,11 +21,11 @@ public class Player_checkGround : MonoBehaviour
     public bool IsGrounded {  get { return isGrounded; } }
 
 
-    PlayerControl playerControl;
+    // PlayerControl playerControl;
    
     private void Start()
     {
-        playerControl = GetComponentInParent<PlayerControl>();
+       // playerControl = GetComponentInParent<PlayerControl>();
         checkpoint.Add(p1);
         checkpoint.Add(p2);
         checkpoint.Add(p3);
@@ -34,7 +34,7 @@ public class Player_checkGround : MonoBehaviour
     private void Update()
     {
         isGrounded=CheckIsGrounded();
-        playerControl.SetGrounded(isGrounded);
+       // playerControl.SetGrounded(isGrounded);
     }
 
     [SerializeField] private int groundedleg=0;
@@ -78,7 +78,7 @@ public class Player_checkGround : MonoBehaviour
                 groundedleg++;
             }
         }
-        if (groundedleg > 1) playerControl.SetSprintOneTimes();
+       
         return groundedleg > 1;
         //groundedleg = 0;
 

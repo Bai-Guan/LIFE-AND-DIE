@@ -11,25 +11,15 @@ using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 public class PlayerControl : MonoBehaviour
 {
     //编写 进入某个状态 某个状态update 离开某个状态  选择某个状态 这些方法
-    public enum PlayerStatus
-    {
-        ldle,
-        run,
-        jump,
-        fall,
-        hit,
-        sprint,
-        block,
-        attack,
-        died,
-        other
-    }
-    private PlayerStatus currentStatus;
+   
+    private TypeState currentStatus;
     private PlayerState playerState;
-    private Dictionary<PlayerStatus, PlayerState> _states = new Dictionary<PlayerStatus, PlayerState>();
+    private Dictionary<TypeState, PlayerState> _states = new Dictionary<TypeState, PlayerState>();
     private PlayerEvent playerEvent;
     private  SpriteRenderer spriteRenderer;
     private Material material;
+    private PlayerInput playerInput;
+    public PlayerInput PlayerInput {  get { return playerInput; } }
     public InitWeaponSystem weapon;
     public EdgeCheck Highcheck;
     public EdgeCheck Lowcheck;
@@ -37,20 +27,21 @@ public class PlayerControl : MonoBehaviour
     [HideInInspector] public PlayerAnimControl Anim;
     private void Awake()
     {
-        _states[PlayerStatus.ldle] = new IdleState(this);
-        _states[PlayerStatus.run] = new RunState(this);
-        _states[PlayerStatus.jump] = new JumpState(this);
-        _states[PlayerStatus.fall] = new FallState(this);
-        _states[PlayerStatus.other] = new OtherState(this);
-        _states[PlayerStatus.sprint] = new SprintState(this);
-        _states[PlayerStatus.hit] = new HitState(this);
-        _states[PlayerStatus.attack] = new AttackState(this);
-        _states[PlayerStatus.block] = new BlockState(this);
-        _states[PlayerStatus.died] = new DieState(this);
+        //_states[TypeState.ldle] = new IdleState(this);
+       // _states[TypeState.run] = new RunState(this);
+       // _states[TypeState.jump] = new JumpState(this);
+       // _states[TypeState.fall] = new FallState(this);
+        _states[TypeState.other] = new OtherState(this);
+      ////  _states[TypeState.sprint] = new SprintState(this);
+      //  _states[TypeState.Unexpected] = new UnexpectedState(this);
+      ////  _states[TypeState.attack] = new AttackState(this);
+      //  _states[TypeState.block] = new BlockState(this);
+      //  _states[TypeState.died] = new DieState(this);
         rb = GetComponent<Rigidbody2D>();
         playerEvent = GetComponent<PlayerEvent>();
         spriteRenderer=GetComponent<SpriteRenderer>();
         Anim=GetComponent<PlayerAnimControl>();
+        playerInput = GetComponent<PlayerInput>();
         weapon = transform.Find("Weapon").GetComponent<InitWeaponSystem>();
         material=spriteRenderer.material;
     }
@@ -60,8 +51,8 @@ public class PlayerControl : MonoBehaviour
         IsTouchingWall = false;
         isground = false;KeyDownJump=false;
         _LastpressSprintKey = Time.time-0.9f;
-        currentStatus = PlayerStatus.other;
-        SwitchStatus(PlayerStatus.ldle);
+        currentStatus = TypeState.other;
+        SwitchStatus(TypeState.ldle);
 
     }
     //-------------------改造计划------------------
@@ -108,19 +99,55 @@ public class PlayerControl : MonoBehaviour
     //打开背包
     public void OpenPackage(InputAction.CallbackContext context)
     {
+        UIManager.Instance.OpenPanel(UIManager.UIConst.BackPack);
+        playerInput.SwitchCurrentActionMap("Inventory");
 
+    }
+    public void ClosePackage(InputAction.CallbackContext context)
+    {
+        UIManager.Instance.ClosePanel(UIManager.UIConst.BackPack,true);
+        playerInput.SwitchCurrentActionMap("GamePlay");
     }
     //对话/交互
     public void Interaction(InputAction.CallbackContext context)
     {
+        //  UIManager.Instance.OpenPanel(UIManager.UIConst.)
+        if (currentCollOBJ!=null && StackInteraction.Instance.Peek() == currentCollOBJ)
+        {
 
+            StackInteraction.Instance.PopSomeOne(currentCollOBJ);
+            DialogueContainer temp = currentCollOBJ.GetComponent<ObjChat>().GetDialogue();
+            DialogManager.Instance.StartDialogue(temp);
+
+        }
+    }
+    //打开任务栏
+    public void OpenTask(InputAction.CallbackContext context)
+    {
+        TaskManager.Instance.NormalOpenTaskUI();
+        playerInput.SwitchCurrentActionMap("TaskUI");
+    }
+    public void CloseTask(InputAction.CallbackContext context)
+    {
+        TaskManager.Instance.QuitTaskUI();
+        playerInput.SwitchCurrentActionMap("GamePlay");
+    }
+    //--------------改造计划---------------
+    //
+  private  GameObject currentCollOBJ;
+    public void isCollisionOBJ(GameObject obj)
+    {
+        currentCollOBJ = obj;
+    }
+    public void isExitOBJ()
+    {
+        currentCollOBJ=null;
     }
 
-    //--------------改造计划---------------
-
+   //
     void Update()
     {
-        if(currentStatus==PlayerStatus.died)//todo
+        if(currentStatus==TypeState.died)//todo
             return;
 
 
@@ -139,7 +166,7 @@ public class PlayerControl : MonoBehaviour
         EdgeDetection();
         playerState?.FixedUpdate();
     }
-    public void SwitchStatus(PlayerStatus newStatus)
+    public void SwitchStatus(TypeState newStatus)
     {
         if (currentStatus == newStatus) return;
         playerState?.Exit();    // 先离开当前状态
@@ -409,32 +436,32 @@ public class PlayerControl : MonoBehaviour
         isInvincible = Invinvible;
     }
 
-    public void TakeHit(int hp,Transform where)
-    {
+    //public void TakeHit(int hp,Transform where)
+    //{
         
-        if (isInvincible == true ||isDead == true) return; //无敌帧情况下被攻击不被击退不会受伤  死亡情况下也不会
-        if(isBlock ==false)
-        {
-            HP = HP - hp;
-            UIManager.Instance.ChangeHPUI(HP,MAXHP);
-            if (HP > 0)
-            {
-                SwitchStatus(PlayerStatus.hit);
-                _states[PlayerStatus.hit].Other(where);
-                //无敌帧显示
-                InvincibleRendered(InvincibleFrameTime);
-            }
-            else
-            {
-                HP = 0;
-                SwitchStatus(PlayerStatus.died);
-            }
-        }
-        else
-        {
-            SwitchStatus(PlayerStatus.block);
-        }
-    }
+    //    if (isInvincible == true ||isDead == true) return; //无敌帧情况下被攻击不被击退不会受伤  死亡情况下也不会
+    //    if(isBlock ==false)
+    //    {
+    //        HP = HP - hp;
+    //        UIManager.Instance.ChangeHPUI(HP,MAXHP);
+    //        if (HP > 0)
+    //        {
+    //            SwitchStatus(TypeState.hit);
+    //            _states[TypeState.hit].Other(where);
+    //            //无敌帧显示
+    //            InvincibleRendered(InvincibleFrameTime);
+    //        }
+    //        else
+    //        {
+    //            HP = 0;
+    //            SwitchStatus(TypeState.died);
+    //        }
+    //    }
+    //    else
+    //    {
+    //        SwitchStatus(TypeState.block);
+    //    }
+    //}
     //用于无敌帧的闪烁显示
     public void InvincibleRendered(float t)
     {
@@ -470,10 +497,10 @@ public class PlayerControl : MonoBehaviour
     bool FinallyAttackCheck()
     {
         //之后的检测用状态机去检查 而非bool
-        if (isKeyDownAttack == true && isAttacking != true&&isSprint!=true &&currentStatus!=PlayerStatus.hit&&IsGrounded())
+        if (isKeyDownAttack == true && isAttacking != true&&isSprint!=true &&currentStatus!=TypeState.Unexpected&&IsGrounded())
         {
             canAttack = true;
-            SwitchStatus(PlayerStatus.attack);
+            SwitchStatus(TypeState.attack);
         }
         else
         {

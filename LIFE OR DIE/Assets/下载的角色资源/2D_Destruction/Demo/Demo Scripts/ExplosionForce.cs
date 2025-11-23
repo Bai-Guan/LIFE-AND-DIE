@@ -11,7 +11,7 @@ public class ExplosionForce : MonoBehaviour {
     /// <summary>
     /// create an explosion force
     /// </summary>
-    /// <param name="position">location of the explosion</param>
+    /// <param Name="position">location of the explosion</param>
 	public void doExplosion(Vector3 position){
 		transform.localPosition = position;
 		StartCoroutine(waitAndExplode());
@@ -36,11 +36,11 @@ public class ExplosionForce : MonoBehaviour {
     /// <summary>
     /// adds explosion force to given rigidbody
     /// </summary>
-    /// <param name="body">rigidbody to add force to</param>
-    /// <param name="explosionForce">base force of explosion</param>
-    /// <param name="explosionPosition">location of the explosion source</param>
-    /// <param name="explosionRadius">radius of explosion effect</param>
-    /// <param name="upliftModifier">factor of additional upward force</param>
+    /// <param Name="body">rigidbody to add force to</param>
+    /// <param Name="explosionForce">base force of explosion</param>
+    /// <param Name="explosionPosition">location of the explosion source</param>
+    /// <param Name="explosionRadius">radius of explosion effect</param>
+    /// <param Name="upliftModifier">factor of additional upward force</param>
     private void AddExplosionForce(Rigidbody2D body, float explosionForce, Vector3 explosionPosition, float explosionRadius, float upliftModifier = 0)
 	{
 		var dir = (body.transform.position - explosionPosition);	

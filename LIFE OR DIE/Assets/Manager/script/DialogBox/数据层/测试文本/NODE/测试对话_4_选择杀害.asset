@@ -15,4 +15,6 @@ MonoBehaviour:
   NodeId: Kill
   text: "*<color=purple><i><b>\u90AA\u795E</b></i></color>\u6CE8\u610F\u5230\u4E86\u4F60*"
   speaker: "\u65C1\u767D"
+  Taskso: {fileID: 11400000, guid: e4f791900cd2cfd4986f395cffe05de6, type: 2}
+  NextNodeId: 
   options: []

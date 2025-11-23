@@ -10,7 +10,7 @@ public class DiaglugueNode :ScriptableObject
     [SerializeField] public string NodeId;
     [SerializeField] public string text;
     [SerializeField] public string speaker;
-
+    [SerializeField] public TaskSO Taskso; 
     //[Header("文本特殊效果")]
     //[Header("特殊文本的字符下标范围")]
     //[SerializeField] public Vector2 range;

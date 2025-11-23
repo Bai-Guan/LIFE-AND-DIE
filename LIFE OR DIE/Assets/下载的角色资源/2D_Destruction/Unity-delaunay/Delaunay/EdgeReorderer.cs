@@ -7,7 +7,7 @@ heavily dependent upon it in undocumented ways.
 
 It's viciously complicated, and is used all over the library in odd places where it
 shouldn't be used, with no explanation - but with a hard dependency in that it
-doesn't merely "re-order" edges (as the name suggests!) but often "generates" them
+doesn't merely "re-order" edges (as the Name suggests!) but often "generates" them
 too.
 
 It feels like it was intended to be semi-optimized (in the original AS3? probably),
