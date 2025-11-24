@@ -33,6 +33,11 @@ public class TimeManager : MonoBehaviour
         var coroutine =  StartCoroutine(OneTimeCoroutine(delay, callback));
         activeCoroutines.Add(coroutine);
     }
+    public void ReallyOneTime(float delay,Action callback)
+    {
+        var coroutine = StartCoroutine(UnscaleOneTimer(delay, callback));
+        activeCoroutines.Add(coroutine);
+    }
     //延迟一帧触发
     public void LaterOneFrame(Action callback)
     {
@@ -58,7 +63,23 @@ public class TimeManager : MonoBehaviour
         activeCoroutines.Add(coroutine);
     }
 
+    public void ReallyFrameTime(float delay,Action callback)
+    {
+        var coroutine = StartCoroutine(UnscaleFrameTimer(delay, callback));
+        activeCoroutines.Add(coroutine);
+    }
+    public void ReallyFrameTime(float delay, Action callback,Action onComplete)
+    {
+        var coroutine = StartCoroutine(UnscaleFrameTimer(delay, callback,onComplete));
+        activeCoroutines.Add(coroutine);
+    }
+    private IEnumerator UnscaleOneTimer(float delay,Action callback)
+    {
+        yield return new WaitForSecondsRealtime(delay);   // ← 不受 timeScale 影响
+        callback?.Invoke();
+    }
 
+   
     private IEnumerator LaterOneFrameCoroutine(Action callback)
     {
         yield return null;
@@ -82,7 +103,29 @@ public class TimeManager : MonoBehaviour
             yield return null;
         }
     }
+    private IEnumerator UnscaleFrameTimer(float duration, Action callback)
+    {
+        float time = 0;
+        while(time<duration)
+        {
+            callback?.Invoke();
+            time += Time.unscaledDeltaTime;
+            yield return null;
+        }
+        
+    }
+    private IEnumerator UnscaleFrameTimer(float duration, Action callback,Action onComplete)
+    {
+        float time = 0;
+        while (time < duration)
+        {
+            callback?.Invoke();
+            time += Time.unscaledDeltaTime;
+            yield return null;
+        }
+        onComplete?.Invoke();
 
+    }
     private IEnumerator FrameTimeCoroutine(float duration, Action callback,Action OnComplete)
     {
         float time = 0;
@@ -101,6 +144,6 @@ public class TimeManager : MonoBehaviour
     {
         activeCoroutines.RemoveAll(c => c == null); 
     }
-
+  
 
 }

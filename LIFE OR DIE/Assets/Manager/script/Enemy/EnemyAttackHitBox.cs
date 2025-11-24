@@ -8,10 +8,11 @@ public class EnemyAttackHitBox : MonoBehaviour
 
     public bool isDebug = true;
     private Dictionary<string, EHBData> map;            // Ãû×Ö¡úÊý¾Ý
-
+    private InitEnemySystem body;
     private DamageData damage;
     private void Awake()
     {
+        body = GetComponent<InitEnemySystem>();   
         map = new Dictionary<string, EHBData>();
         foreach(var temp in allAttacks.hitBoxes)
         {
@@ -47,7 +48,8 @@ public class EnemyAttackHitBox : MonoBehaviour
     private void CheckHits(EHBData clip)
     {
         damage.type = clip.damageType;
-            Vector2 center = transform.position + new Vector3(clip.hitBoxes.x, clip.hitBoxes.y);
+        int filp=body.isFacingLeft ? -1 : 1;
+            Vector2 center = transform.position + new Vector3(clip.hitBoxes.x*filp, clip.hitBoxes.y);
             Collider2D[] cols = Physics2D.OverlapBoxAll(center, clip.hitBoxes.size, 0f, LayerMask.GetMask("Player"));
         foreach (var col in cols)
         {

@@ -10,8 +10,9 @@ public class PlayerDataManager :MonoBehaviour
     [Header("基础数据")]
     public int currentHP=1;
     //----
+  
 
-    [Header("玩家速度/ 地面摩擦力")]
+    [Tooltip("玩家速度/ 地面摩擦力")]
     public readonly float moveSpeed = 6f;
     public readonly float jumpSpeed = 10f;
     public readonly float groundFriction = 40f;
@@ -20,12 +21,12 @@ public class PlayerDataManager :MonoBehaviour
 
 
 
-    [Header("地面检测")]
+    [Tooltip("地面检测")]
     private Player_checkGround _checkGround;
     public bool isGround { get { return _checkGround.IsGrounded; } }
     //------------------------------------
 
-    [Header("坠落的最大速度")]
+    [Tooltip("坠落的最大速度")]
   [SerializeField] float maxFallSpeed = 30f;         // 坠落速度上限
   [SerializeField] float landingSizeFactor = 0.3f; // 速度→尺寸放大系数
   [SerializeField] float _fallDamagePerSecon = 200;//根据时间坠落伤害
@@ -41,7 +42,7 @@ public class PlayerDataManager :MonoBehaviour
 
 
     //冲刺CD为1秒 同时冲刺所需要的时间为<=0.4s---------------
-    [Header("冲刺相关")]
+    [Tooltip("冲刺相关")]
     [SerializeField] private readonly float sprintCD = 0.8f;
     [SerializeField] public readonly float sprintSpeed = 20f;
     [SerializeField] private float _LastpressSprintKey = 0;
@@ -63,7 +64,7 @@ public class PlayerDataManager :MonoBehaviour
     }
     //--------------------------------------------
 
-    [Header("无敌帧相关")]
+    [Tooltip("无敌帧相关")]
     [SerializeField] private float InvincibleFrameTime = 1.2f;
     [SerializeField] private bool isInvincible = false;
     public bool IsInvincible {  get { return isInvincible; } }
@@ -83,7 +84,7 @@ public class PlayerDataManager :MonoBehaviour
     }
     //----------------------------------------------------
     //土狼跳跃相关参数
-    [Header("土狼相关")]
+    [Tooltip("土狼相关")]
     [SerializeField] private float lastGroundtime = 0;
     //土狼允许的滞空时间
     [SerializeField] public float coyoteTime = 0.15f;
@@ -103,7 +104,7 @@ public class PlayerDataManager :MonoBehaviour
         }
     }
     //碰撞相关---------------------------
-    [Header("碰撞相关")]
+    [Tooltip("碰撞相关")]
  [SerializeField]  private GameObject currentCollOBJ;
     public GameObject CurrentObj {  get { return currentCollOBJ; } }
    public void  isCollisionOBJ(GameObject obj)

@@ -25,6 +25,27 @@ public class InitEnemySystem : MonoBehaviour
     public GameObject LastAttacker;
     public Vector2 LastDir;
 
+    private int facingleft=-1;
+    private bool temp;
+    public bool isFacingLeft
+    {
+        get
+        {
+            if (facingleft == -1)
+            {
+                temp = true;
+                return true;
+            }
+            else if (facingleft == 1)
+            { 
+            temp= false;
+            return false;
+             }
+            return temp;
+           
+        }
+    }
+
     private void Awake()
     {
         rb = this.GetComponent<Rigidbody2D>();

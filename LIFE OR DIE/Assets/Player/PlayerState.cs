@@ -108,7 +108,7 @@ public class IdleState:IPlayerState
 
     public void ContractPower()
     {
-        
+        _ctx.SwitchState(TypeState.Unexpected);
     }
 
     private void MoveX()
@@ -411,114 +411,8 @@ public class JumpState : IPlayerState
     }
 }
 
-//任意状态下，被攻击时进入此状态
-public class UnexpectedState : IPlayerState
-{
-    private NewPlayerControll _ctx;
-    public UnexpectedState(NewPlayerControll playerControll)
-    {
-        _ctx = playerControll;
-    }
-    public  void Enter()
-    {
-    //    Debug.Log("进入奇招状态 ");
-    //    //_ctx.Anim.TriggerHurt();
-        
-    //    IsFirst = true;
-    //    Timer = 0;
-    
-      
-    //     //增加事件的监听
-    //     _ctx.PlayerInput.currentActionMap
 
 
-
-
-
-    //    //Debug 
-    //    _spriteRenderer.color=Color.red;
-
-    //    //无敌帧1.2s
-    //    _ctx.SetInvincible(true);
-    //    TimeManager.Instance.OneTime(_ctx.InvincibleFrameTime,
-    //        () =>
-    //        {
-    //            Debug.Log("无敌帧结束！");
-    //            _ctx.SetInvincible(false);
-    //        });
-    }
-    public  void Update()
-    {
-        //监听是否按攻击键 
-
-
-        //if (IsFirst==true)
-        //{
-        //    Debug.DrawRay(_ctx.gameObject.transform.position, hitDir, Color.blue, 2f);
-        //    _ctx.SetRB_X(hitDir.x * hitX); _ctx.SetRB_Y(hitDir.y * hitY);
-        //    IsFirst = false;
-        //}
-
-
-
-        //Timer += Time.deltaTime;
-        //if (Timer > hitStun)
-        //{
-        //    _ctx.SwitchStatus(PlayerControl.PlayerStatus.ldle);
-        //}
-    }
-    public void FixedUpdate()
-    {
-        //_ctx.SetRB_X(_ctx.GetRigidbody2D().velocity.x);
-        //_ctx.SetRB_Y(_ctx.GetRigidbody2D().velocity.y);
-    }
-    public void Exit()
-    {
-        //Debug
-        //_spriteRenderer.color = Color.white;
-
-        //hitDir = Vector3.zero;
-        //Timer = 0;
-
-        //IsFirst = false;
-    }
-
-   
-    //public override void Other(Transform dir)
-    //{
-    //    Vector3 pos = this.gameObject.transform.position;
-    //   Vector3 Temp = new Vector3(
-    //       pos.x-dir.position.x,
-    //       pos.y-dir.position.y,
-    //       0   
-    //       );
-    //    hitDir = Vector3.Normalize(Temp);
-    //    Debug.Log("受伤向量"+ hitDir);
-    //}
-
-    public void Attack()
-    {
-       
-    }
-
-    public void Dodge()
-    {
-       
-    }
-
-    public void ContractPower()
-    {
-        
-    }
-
-    //Vector2 hitDir = Vector2.zero;
-    //private float Timer = 0;
-    //public float hitStun =0.3f;
-    //private float hitX = 5f;
-    //private float hitY = 5f;
-
-    //bool IsFirst = true;
-}
 
 public class SprintState : IPlayerState
 {

@@ -103,5 +103,8 @@ public class PlayerAnimControl : MonoBehaviour
         _anim.SetTrigger(ATTACK3_PARAM);
 
     }
-
+    public void SetAnimSpeed(float speed)
+    {
+        _anim.speed = speed;
+    }
 }

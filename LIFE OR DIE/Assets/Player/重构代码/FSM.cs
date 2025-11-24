@@ -11,7 +11,7 @@ public enum TypeState
     run,
     jump,
     fall,
-    Unexpected,
+    Unexpected,//Ææµã×´Ì¬
     sprint,
     block,
     attack,
