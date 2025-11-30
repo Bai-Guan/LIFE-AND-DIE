@@ -26,24 +26,15 @@ public class NewPlayerControll : MonoBehaviour, IBeDamaged
     private Vector2 _moveinputData;
     public float InputX { get { return _moveinputData.x; } }
     public float InputY { get { return _moveinputData.y; } }
-    private bool lastFacing = false;
+  [SerializeField]  private bool lastFacing = false;
     public bool isFacingLeft
     {
         get
         {
-            if (InputX < 0)
-            {
-                lastFacing = false;
-                return true;
-            }
-            else if (InputX > 0)
-            {
-                lastFacing = true;
-                return false;
-            }
-            else { return lastFacing; }
+         return lastFacing; 
         }
     }
+   
 
     public Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
@@ -65,9 +56,9 @@ public class NewPlayerControll : MonoBehaviour, IBeDamaged
     private void InitFSM()
     {
         fSM.AddState(TypeState.ldle, new IdleState(this));
-        //if (fSM._dicTypeState.TryGetValue(TypeState.ldle, out IPlayerState temp))
+        //if (fSM._dicTypeState.TryGetValue(TypeState.ldle, out IPlayerState _isfacingleft))
         // {
-        //     Debug.Log($"添加 IdleState: {temp}");
+        //     Debug.Log($"添加 IdleState: {_isfacingleft}");
         // }
         //else
         // {
@@ -82,17 +73,8 @@ public class NewPlayerControll : MonoBehaviour, IBeDamaged
         fSM.AddState(TypeState.jump, new JumpState(this));
         fSM.AddState(TypeState.sprint, new SprintState(this));
         fSM.AddState(TypeState.collision, new CollisionState(this));
+        fSM.AddState(TypeState.block, new BlockState(this));
 
-        //_states[TypeState.ldle] = new IdleState();
-        //_states[TypeState.run] = new RunState();
-        //_states[TypeState.jump] = new JumpState();
-        //_states[TypeState.fall] = new FallState(this);
-        //_states[TypeState.other] = new OtherState(this);
-        //_states[TypeState.sprint] = new SprintState(this);
-        //_states[TypeState.Unexpected] = new UnexpectedState(this);
-        //_states[TypeState.attack] = new AttackState(this);
-        //_states[TypeState.block] = new BlockState(this);
-        //_states[TypeState.died] = new DieState(this);
     }
 
     private void InitComponent()
@@ -133,6 +115,8 @@ public class NewPlayerControll : MonoBehaviour, IBeDamaged
     public void PressMove(InputAction.CallbackContext callback)
     {
         float h = callback.ReadValue<Vector2>().x;
+        if (h < 0) lastFacing = true;
+        if(h>0) lastFacing= false;
         _moveinputData.x = h;
     }
 
@@ -166,7 +150,19 @@ public class NewPlayerControll : MonoBehaviour, IBeDamaged
         playerInput.SwitchCurrentActionMap("GamePlay");
     }
 
+    public void PressBlock(InputAction.CallbackContext callback)
+    {
+        if (callback.performed)
+        {
+            dataMan.isPressBlock = true;
 
+        }
+        if (callback.canceled)
+        {
+            dataMan.isPressBlock = false;
+        }
+        fSM.Block();
+    }
     public void PressPackage(InputAction.CallbackContext callback)
     {
         UIManager.Instance.OpenPanel(UIManager.UIConst.BackPack);
@@ -217,39 +213,122 @@ public class NewPlayerControll : MonoBehaviour, IBeDamaged
         }
     }
 
+    public  void 改变玩家颜色(Color color)
+    {
+        spriteRenderer.color = color;
+    }
     public void OnHurt(DamageData damage, GameObject obj)
     {
-        //无敌状态,死亡状态,奇点状态 一律return
-        if (dataMan.IsInvincible == true && fSM.curState == TypeState.died && fSM.curState == TypeState.Unexpected)
+        //无敌状态,死亡状态, 一律return
+        if (dataMan.IsInvincible == true || fSM.curState == TypeState.died || fSM.curState == TypeState.Unexpected)
         {
             return;
         }
         //如果处于奇点状态 则切换为奇点模式
+        if(dataMan.IsInAmazingState)
+        {
+            SwitchState(TypeState.Unexpected);
+            return ;
+        }
 
+        //计算伤害源头是否在玩家正面
+        int vector = (obj.transform.position.x - this.transform.position.x) < 0 ? -1 : 1;
+        int temp = isFacingLeft ? -1 : 1;
+        bool isfront = vector==temp?true:false;
+       
+        //如果当前为格挡状态并且伤害为物理伤害时
+        if (fSM.curState==TypeState.block && damage.type==DamageType.physics&&isfront)
+        {
+            dataMan.SetInvencibleAndStart(0.3f);
+
+            //如果为完美弹反
+            if (dataMan.isPerfectBlock)
+            {
+                if (obj.TryGetComponent<EnemyRigidbar>(out EnemyRigidbar rigidbar))
+                {
+                    //播放特效 音效
+                    rigidbar.增加僵直条(0.25f);
+                }
+                AudioManager.Instance.PlaySFX("重弹刀");
+            }
+            else
+            {
+                //播放特效 音效
+                AudioManager.Instance.PlaySFX("正常格挡");
+            }
+
+
+
+            return;
+        }
+        
         SwitchState(TypeState.died);
+        dataMan.MinusHP();
+        
     }
 
+    public void 开启奇点时刻()
+    {
+        if(dataMan.IsInAmazingState==true) return;
+        if(dataMan.currentHP<=0)return;
+        dataMan.MinusHP();
+        dataMan.EnterAmazingTime();
+        改变玩家颜色(Color.red);
+        
+        if (dataMan.currentHP<1)
+        {
+            TimeManager.Instance.OneTime(dataMan.AgonalTime,
+                () =>
+                {
+                    if (dataMan.currentHP < 1)
+                        SwitchState(TypeState.died);
+                }
+                );
+        }
+    }
     public void 卡肉(float timer)
     {
+       
 
+       
+
+     
+
+
+       
 
         //创建限定攻击框()
         Rect temp = new Rect()
         {
             x = 0.19f,
-            y = 0f,
-            width = 2.59f,
+            y = 1f,
+            width = 5f,
             height = 2.2f
 
         };
         int flip = isFacingLeft ? -1 : 1;
-        Vector2 center = (Vector2)transform.position + new Vector2(temp.x * flip, temp.y);
-        Vector2 size = new Vector2(temp.width * flip, temp.height);   // ① 翻转宽度
+
+        // 1. 中心随朝向平移
+        Vector2 center = (Vector2)transform.position
+                          + new Vector2(temp.x * flip, temp.y);
+
+        // 2. 尺寸永远为正；OverlapBox 要的是“半尺寸”
+        Vector2 halfSize = new Vector2(temp.width, temp.height) * 0.5f;
+
         Vector2 farEnd = center + new Vector2(temp.width * flip * 0.5f, 0); // 只画 X 轴半边
-        Debug.DrawLine(center, farEnd, Color.red, 3f);
 
+        // 4. 调试：画整框，和 Physics2D 完全一致
+        Debug.DrawLine(center + new Vector2(-halfSize.x, -halfSize.y),
+                       center + new Vector2(-halfSize.x, halfSize.y), Color.red, 5f);
+        Debug.DrawLine(center + new Vector2(halfSize.x, -halfSize.y),
+                       center + new Vector2(halfSize.x, halfSize.y), Color.red, 5f);
+        Debug.DrawLine(center + new Vector2(-halfSize.x, halfSize.y),
+                       center + new Vector2(halfSize.x, halfSize.y), Color.red, 5f);
+        Debug.DrawLine(center + new Vector2(-halfSize.x, -halfSize.y),
+                       center + new Vector2(halfSize.x, -halfSize.y), Color.red, 5f);
 
-        Collider2D[] cols = Physics2D.OverlapBoxAll(center, size, 0f,
+       
+        Collider2D[] cols = Physics2D.OverlapBoxAll(center, halfSize * 2f, 0f,
                                                      LayerMask.GetMask("Enemy"));
 
         if (cols.Length > 0)
@@ -277,6 +356,10 @@ public class NewPlayerControll : MonoBehaviour, IBeDamaged
                     }
                 }
                 );
+        }
+        else
+        {
+            TimeManager.Instance.OneTime(0.3f, () => SwitchState(TypeState.ldle));
         }
     }
     private bool 特殊攻击是否打到人 = false;

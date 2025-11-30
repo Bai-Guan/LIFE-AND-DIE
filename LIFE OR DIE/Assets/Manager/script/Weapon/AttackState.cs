@@ -72,6 +72,11 @@ public class AttackState : IPlayerState
     {
        
     }
+
+    public void Block()
+    {
+        
+    }
 }
 //public class AttackState : PlayerState
 //{

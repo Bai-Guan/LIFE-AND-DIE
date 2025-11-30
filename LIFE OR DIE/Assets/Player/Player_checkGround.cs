@@ -92,8 +92,8 @@ public class Player_checkGround : MonoBehaviour
         //        Debug.LogWarning("空！");
         //        continue;
         //    }
-        //    Vector3 temp = new Vector3(t.position.x,t.position.y-0.1f,0);
-        //    Debug.DrawLine(t.position, temp);
+        //    Vector3 _isfacingleft = new Vector3(t.position.x,t.position.y-0.1f,0);
+        //    Debug.DrawLine(t.position, _isfacingleft);
         //    // 使用图层过滤，提高性能
         //    RaycastHit2D hit = Physics2D.Raycast(t.position, Vector2.down, 0.3f);
 

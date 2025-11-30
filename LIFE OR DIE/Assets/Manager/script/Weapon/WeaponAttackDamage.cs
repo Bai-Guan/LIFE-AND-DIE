@@ -96,9 +96,9 @@ public class WeaponAttackDamage : WeaponComponent
         }
 
 
-        //InitEnemySystem temp = go.GetComponent<InitEnemySystem>();
-        //if (temp == null) { continue; }
-        //temp.BeAttacked(Data.damageDatas[weapon.CurrentNum],this.gameObject);
+        //InitEnemySystem _isfacingleft = go.GetComponent<InitEnemySystem>();
+        //if (_isfacingleft == null) { continue; }
+        //_isfacingleft.BeAttacked(Data.damageDatas[weapon.CurrentNum],this.gameObject);
 
     }
 

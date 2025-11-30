@@ -108,7 +108,7 @@ public class IdleState:IPlayerState
 
     public void ContractPower()
     {
-        _ctx.SwitchState(TypeState.Unexpected);
+        _ctx.开启奇点时刻();
     }
 
     private void MoveX()
@@ -121,6 +121,11 @@ public class IdleState:IPlayerState
              Time.fixedDeltaTime * 10
         );
         _ctx.rb.velocity = new Vector2(newVelocityX, _ctx.rb.velocity.y);
+    }
+
+    public void Block()
+    {
+        _ctx.SwitchState(TypeState.block);
     }
 }
 
@@ -199,7 +204,7 @@ public class RunState : IPlayerState
 
     public void ContractPower()
     {
-        
+        _ctx.开启奇点时刻();
     }
     private void MoveX()
     {
@@ -221,6 +226,11 @@ public class RunState : IPlayerState
              scale
         );
         _ctx.rb.velocity = new Vector2(newVelocityX, _ctx.rb.velocity.y);
+    }
+
+    public void Block()
+    {
+        _ctx.SwitchState(TypeState.block);
     }
 }
 public class FallState : IPlayerState
@@ -265,7 +275,7 @@ public class FallState : IPlayerState
 
     public void Attack()
     {
-        throw new NotImplementedException();
+       
     }
 
     public void Dodge()
@@ -305,6 +315,11 @@ public class FallState : IPlayerState
              scale
         );
         _ctx.rb.velocity = new Vector2(newVelocityX, _ctx.rb.velocity.y);
+    }
+
+    public void Block()
+    {
+      
     }
 }
 //只要人在往上 就是上升状态
@@ -408,6 +423,11 @@ public class JumpState : IPlayerState
         float targetVelocityX = _ctx.InputX * _ctx.DataMan.moveSpeed;
     
         _ctx.rb.velocity = new Vector2(targetVelocityX, _ctx.rb.velocity.y);
+    }
+
+    public void Block()
+    {
+    
     }
 }
 
@@ -523,37 +543,76 @@ public class SprintState : IPlayerState
     {
        
     }
+
+    public void Block()
+    {
+        
+    }
 }
 
 
 
-public class BlockState : PlayerState
+public class BlockState : IPlayerState
 {
-    //弹反时候无击退 格挡时候击退分为弱击退 强击退 和自定义击退
-    public BlockState(PlayerControl ctx) : base(ctx)
+    private NewPlayerControll _ctx;
+    public BlockState(NewPlayerControll playerControll)
+    {
+        _ctx = playerControll;
+    }
+    float timer = 0;
+    public void Enter()
+    {
+        Debug.Log("进入格挡状态");
+        _ctx.Anim.TriggerBlock(true);
+        _ctx.rb.velocity = new Vector2(0, 0);
+        timer = 0;
+    }
+    public  void Update()
+    {
+        timer += Time.deltaTime;
+        if(timer<=_ctx.DataMan.PerfectBlock)_ctx.DataMan.isPerfectBlock=true;
+        else _ctx.DataMan.isPerfectBlock = false;
+
+        if (_ctx.DataMan.isPressBlock == false)
+        {
+            //切换要延迟切换
+            _ctx.Anim.TriggerBlock(false);
+            _ctx.SwitchState(TypeState.ldle);
+        }
+    }
+    public  void FixedUpdate()
     {
 
     }
-    public override void Enter()
+    public  void Exit()
     {
-
+        _ctx.Anim.TriggerBlock(false);
     }
-    public override void Update()
-    {
 
+    public void Attack()
+    {
+       
     }
-    public override void FixedUpdate()
-    {
 
+    public void Dodge()
+    {
+       
     }
-    public override void Exit()
-    {
 
+    public void ContractPower()
+    {
+      
+    }
+
+    public void Block()
+    {
+       
     }
 }
 public class DieState : IPlayerState
 {
     private NewPlayerControll _ctx;
+    private float timer=0f;
     public DieState(NewPlayerControll playerControll)
     {
         _ctx = playerControll;
@@ -561,13 +620,24 @@ public class DieState : IPlayerState
     public  void Enter()
     {
         Debug.Log("死了");
+        AudioManager.Instance.PlaySFX("玩家被杀");
         _ctx.Anim.TriggerDie();
-
+        _ctx.rb.velocity=new Vector2(0,_ctx.rb.velocity.y);
         //判断还有没有命 没命就真的死了
+        if (_ctx.DataMan.currentHP <= 0)
+        {
+            TimeManager.Instance.OneTime(3f, () =>
+            {
+                AudioManager.Instance.PlaySFX("死");
+            });
+            
+        }
+            
+        timer= 0f;
     }
     public  void Update()
     {
-
+        timer+= Time.deltaTime;
     }
     public  void FixedUpdate()
     {
@@ -590,10 +660,27 @@ public class DieState : IPlayerState
 
     public void ContractPower()
     {
-       if(_ctx.DataMan.currentHP>0)
+        if (timer >= 1.5f)
+        { 
+        if (_ctx.DataMan.currentHP > 0)
         {
-            _ctx.SwitchState(TypeState.ldle);
+            _ctx.Anim.TrigererResurgence(true);
+            AudioManager.Instance.PlaySFX("复活");
+            TimeManager.Instance.OneTime(1.1f, () =>
+            {
+                _ctx.Anim.TrigererResurgence(false);
+                _ctx.SwitchState(TypeState.ldle);
+
+
+
+            });
         }
+    }
+    }
+
+    public void Block()
+    {
+     
     }
 }
 public class OtherState : PlayerState

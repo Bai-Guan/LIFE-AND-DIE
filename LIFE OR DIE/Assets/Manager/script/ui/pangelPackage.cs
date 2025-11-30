@@ -287,9 +287,9 @@ public class pangelPackage :BasePanel
         if (PackageCell._current == null) return;
 
         PackageLocalItem temp = PackageInventoryService.Instance.由ID得到背包物品的引用(PackageCell._current.ID);
-        // temp.count=objNum;
+        // _isfacingleft.count=objNum;
         if(temp==null) return;
-       // Debug.Log("删除了物品" + temp.uid);
+       // Debug.Log("删除了物品" + _isfacingleft.uid);
         PackageInventoryService.Instance.RemoveItem(temp);
 
     }

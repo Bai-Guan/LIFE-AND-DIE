@@ -197,4 +197,9 @@ public class CollisionState :IPlayerState
         float time =Mathf.Clamp01(timer);
         CameraManager.Instance.CameraShake(time,time);
     }
+
+    public void Block()
+    {
+        throw new System.NotImplementedException();
+    }
 }

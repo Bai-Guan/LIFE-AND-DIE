@@ -178,7 +178,7 @@ public class PackageInventoryService
            
                 temp.count -= 1;
             PackagecellÊý×ÖË¢ÐÂ?.Invoke(temp.count);
-           // PackageCell.CurrentCellObjNumDecrementByOne(temp.count);
+           // PackageCell.CurrentCellObjNumDecrementByOne(_isfacingleft.count);
                 if (temp.count <= 0)
                 {
 

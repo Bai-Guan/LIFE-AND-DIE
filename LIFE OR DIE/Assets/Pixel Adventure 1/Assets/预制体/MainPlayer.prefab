@@ -119,7 +119,7 @@ Transform:
   m_GameObject: {fileID: 6403045139120953998}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.1, y: 0.82, z: 0}
+  m_LocalPosition: {x: 0.02, y: 0.84, z: 0}
   m_LocalScale: {x: 0.7757972, y: 0.756341, z: 0.7177674}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -186,7 +186,7 @@ GameObject:
   - component: {fileID: 8741677719792610539}
   - component: {fileID: 1910350729983428420}
   - component: {fileID: 7877363959752062396}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: checkGround
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -202,7 +202,7 @@ Transform:
   m_GameObject: {fileID: 6659531067450106408}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.151, y: 1.197, z: 0}
+  m_LocalPosition: {x: -0.25, y: 1.19, z: 0}
   m_LocalScale: {x: 7.2874, y: 7.2874, z: 7.2874}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -522,6 +522,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Anim: {fileID: 0}
   weapon: {fileID: 0}
+  lastFacing: 0
   rb: {fileID: 0}
 --- !u!114 &7146169647197746510
 MonoBehaviour:
@@ -535,15 +536,53 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a01155dd4901f3542b88baf51bcd78c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentHP: 1
+  currentHP: 5
   maxFallSpeed: 30
-  landingSizeFactor: 0.08
+  landingSizeFactor: 0.3
+  _fallDamagePerSecon: 200
+  flySpeed: 10
+  airTimeToDamage:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1.0012362
+      value: 1504.2595
+      inSlope: 2253.807
+      outSlope: 2253.807
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1.9924283
+      value: 3004.02
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _LastpressSprintKey: 0
   InvincibleFrameTime: 1.2
   isInvincible: 0
   lastGroundtime: 0
   coyoteTime: 0.15
   currentCollOBJ: {fileID: 0}
+  "\u5B8C\u7F8E\u683C\u6321\u65F6\u95F4": 0.2
+  isPressBlock: 0
+  isPerfectBlock: 0
 --- !u!114 &4074928056127929748
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -749,6 +788,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 72d21f7a-d7df-4a3e-b9dc-221b7d7ab56d
     m_ActionName: GamePlay/Lifeforce[/Keyboard/space]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8550520095622175374}
+        m_TargetAssemblyTypeName: NewPlayerControll, Assembly-CSharp
+        m_MethodName: PressBlock
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 26690018-09f2-4cd2-abb8-9f91bc5ed34c
+    m_ActionName: GamePlay/Block[/Keyboard/o]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: KeyBord
   m_DefaultActionMap: GamePlay
@@ -785,6 +840,10 @@ PrefabInstance:
     - target: {fileID: 1440297183913928192, guid: 8b7164fe209b7d74e8d959733afb5632, type: 3}
       propertyPath: m_Name
       value: Weapon
+      objectReference: {fileID: 0}
+    - target: {fileID: 1440297183913928192, guid: 8b7164fe209b7d74e8d959733afb5632, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2959456428252656131, guid: 8b7164fe209b7d74e8d959733afb5632, type: 3}
       propertyPath: m_Enabled

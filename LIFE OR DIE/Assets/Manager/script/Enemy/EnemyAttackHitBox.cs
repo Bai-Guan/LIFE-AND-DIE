@@ -10,10 +10,12 @@ public class EnemyAttackHitBox : MonoBehaviour
     private Dictionary<string, EHBData> map;            // 名字→数据
     private InitEnemySystem body;
     private DamageData damage;
+    
     private void Awake()
     {
         body = GetComponent<InitEnemySystem>();   
         map = new Dictionary<string, EHBData>();
+
         foreach(var temp in allAttacks.hitBoxes)
         {
             map.Add(temp.attackName, temp);
@@ -27,11 +29,12 @@ public class EnemyAttackHitBox : MonoBehaviour
     {
         if (map.TryGetValue(attackName, out var clip))
         {
+          //  Debug.Log("怪物攻击！");
            StartCoroutine(DoHitBoxes(clip));
         }
 
     }
-
+   
 
 
     private IEnumerator DoHitBoxes(EHBData clip)
@@ -47,15 +50,41 @@ public class EnemyAttackHitBox : MonoBehaviour
 
     private void CheckHits(EHBData clip)
     {
+        if (clip == null) return;
+
+        // 1. 检查 body
+        if (body == null)
+        {
+            Debug.LogError("body 未赋值", this);
+            return;
+        }
+
+        // 2. 初始化 damage（如果别处没 new）
+        if (damage == null)
+        {
+            damage = new DamageData();
+            damage.atk = 9999;
+        }
         damage.type = clip.damageType;
-        int filp=body.isFacingLeft ? -1 : 1;
-            Vector2 center = transform.position + new Vector3(clip.hitBoxes.x*filp, clip.hitBoxes.y);
-            Collider2D[] cols = Physics2D.OverlapBoxAll(center, clip.hitBoxes.size, 0f, LayerMask.GetMask("Player"));
+
+        int filp = body.isFacingLeft ? -1 : 1;
+        Vector2 center = transform.position + new Vector3(clip.hitBoxes.x * filp, clip.hitBoxes.y);
+        Collider2D[] cols = Physics2D.OverlapBoxAll(center, clip.hitBoxes.size, 0f, LayerMask.GetMask("Player"));
+
         foreach (var col in cols)
         {
-            col.GetComponent<IBeDamaged>().OnHurt(damage,this.gameObject);
+           // Debug.Log("攻击碰撞");
+            // 3. 安全获取接口
+            var target = col.GetComponent<IBeDamaged>();
+            if (target != null)
+            {
+                target.OnHurt(damage, gameObject);
+            
+            }
+            else
+                Debug.LogWarning($"{col.name} 没有 IBeDamaged 接口", col);
         }
-        
+
     }
 
 

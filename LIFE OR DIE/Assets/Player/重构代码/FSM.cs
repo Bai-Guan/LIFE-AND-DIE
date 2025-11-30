@@ -28,6 +28,7 @@ public interface IPlayerState
     public void Attack();
     public void Dodge();
 
+    public void Block();
     public void ContractPower();
     public void Exit();
 }
@@ -58,6 +59,11 @@ public class FSM
     public void ContractPower()
     {
         ICurrentState.ContractPower();
+    }
+
+    public void Block()
+    {
+        ICurrentState.Block();
     }
 
     public void Dodge()

@@ -386,7 +386,7 @@ public class PlayerControl : MonoBehaviour
         if (high != true && low == true&&isground==false)
         {
            rb.velocity.Set(rb.velocity.x, 0);
-           // var dir = transform.position-temp.position;
+           // var dir = transform.position-_isfacingleft.position;
             this.transform.position += new Vector3(0, UpSpeed, 0);
         }
      }

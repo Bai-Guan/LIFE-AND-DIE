@@ -15,21 +15,21 @@ MonoBehaviour:
   hitBoxes:
   - hitBoxes:
       serializedVersion: 2
-      x: 0.19
+      x: 0.26
       y: 0
-      width: 2.59
+      width: 4.26
       height: 2.2
     damageType: 0
     duration: 5
-    attackName: "\u65A9\u51FB"
+    attackName: attack
     isDebug: 0
   - hitBoxes:
       serializedVersion: 2
-      x: 0.53
-      y: 0
-      width: 8
-      height: 1.97
-    damageType: 0
-    duration: 2
-    attackName: "\u7A81\u523A"
-    isDebug: 0
+      x: 0.05
+      y: -0.07
+      width: 6.06
+      height: 1.08
+    damageType: 1
+    duration: 20
+    attackName: specialAttack
+    isDebug: 1

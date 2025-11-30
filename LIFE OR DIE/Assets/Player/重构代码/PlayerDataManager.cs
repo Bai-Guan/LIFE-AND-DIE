@@ -117,16 +117,42 @@ public class PlayerDataManager :MonoBehaviour
     {
         if(currentCollOBJ == obj) currentCollOBJ = null;
     }
+    //格挡弹反相关------------------
+    [Header("弹反相关")]
+    [SerializeField] private float 完美格挡时间 = 0.2f;
+    public bool isPressBlock = false;
+
+    public bool isPerfectBlock =false;
+    public float PerfectBlock { get { return 完美格挡时间; } }
+
 
     //死亡受伤相关-----------------------
     private PlayerAddHPCondition hPCondition;
     public void MinusHP() => currentHP -= 1;
     public void AddHP() => currentHP += 1;
 
+    [Header("奇点时间有关")]
 
+    [SerializeField] private bool isInAmazingState=false;
+   public bool IsInAmazingState { get { return isInAmazingState; } }
+        private float AmazingTime = 0.3f;
+     private float 濒死时间 = 10f;
+    [SerializeField] public float AgonalTime { get {  return 濒死时间; }  }
+    //严格不允许body用作其他地方了
+    private NewPlayerControll body;
+    public void EnterAmazingTime()
+    {
+        if (isInAmazingState==true) return;
+        isInAmazingState = true;
 
-
-
+        TimeManager.Instance.OneTime(AmazingTime,
+                () =>
+                {
+                    isInAmazingState=false;
+                    body.改变玩家颜色(Color.white);
+                }
+                );
+    }
 
 
 
@@ -134,6 +160,7 @@ public class PlayerDataManager :MonoBehaviour
     {
         _checkGround=this.transform.Find("checkGround").GetComponent<Player_checkGround>();
         hPCondition = new PlayerAddHPCondition(this);
+        body=GetComponent<NewPlayerControll>();
         hPCondition.StartListen();
     }
     private void Update()

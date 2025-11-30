@@ -367,11 +367,14 @@ GameObject:
   - component: {fileID: 2959583328909687107}
   - component: {fileID: 2775587965901383948}
   - component: {fileID: 7639301117511320929}
+  - component: {fileID: 2426421226235630858}
   - component: {fileID: 9125338996870612120}
   - component: {fileID: 8669119275030257321}
   - component: {fileID: 5668158155147518981}
+  - component: {fileID: 4456179040554225368}
   - component: {fileID: 6075610243537662853}
   - component: {fileID: 3699258363663456507}
+  - component: {fileID: 7068008311313600252}
   m_Layer: 8
   m_Name: "\u5C0F\u602A"
   m_TagString: EnemyOrPhyitems
@@ -427,7 +430,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -472,7 +475,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseData: {fileID: 11400000, guid: 85d3400ef6384494bbc2430c12b9f11f, type: 2}
-  currentHP: 1
+  currentHP: 100
   LastDamage:
     atk: 0
     type: 0
@@ -566,6 +569,25 @@ MonoBehaviour:
   - {fileID: 2297333926236905461}
   - {fileID: 8788518639279646969}
   - {fileID: 4464419934916748280}
+--- !u!114 &2426421226235630858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2033277251932823824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d85e4a4ea6d47d4fa99fad76b977b03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkInterval: 0.4
+  detectionRange: 10
+  fieldOfView: 60
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  "\u5C04\u7EBFY\u504F\u79FB\u91CF": 1
 --- !u!114 &9125338996870612120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -605,6 +627,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8b0d877f37c3044180b7c60f8fdf97b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  anim: {fileID: 3699258363663456507}
+--- !u!114 &4456179040554225368
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2033277251932823824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec69ff1712277584ab89da152400f2f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxRigid: 2
+  RigidTime: 1
+  currentRigidValue: 0
+  body: {fileID: 425922919916761577}
 --- !u!60 &6075610243537662853
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -676,6 +715,47 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &7068008311313600252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2033277251932823824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d7b55c7ecdb49a4a89fa5e6f9022861, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startWhenEnabled: 1
+  asynchronousLoad: 0
+  pauseWhenDisabled: 0
+  restartWhenComplete: 0
+  logTaskChanges: 0
+  group: 0
+  resetValuesOnRestart: 0
+  externalBehavior: {fileID: 11400000, guid: 6a6ee44c65869a44a91701c70561a0d6, type: 2}
+  mBehaviorSource:
+    behaviorName: Behavior
+    behaviorDescription: 
+    mTaskData:
+      types: []
+      parentIndex: 
+      startIndex: 
+      variableStartIndex: 
+      JSONSerialization: '{"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"\u73a9\u5bb6","IsShared":true,"GameObjectmValue":0},{"Type":"BehaviorDesigner.Runtime.SharedVector2","Name":"\u73a9\u5bb6\u4f4d\u7f6e","IsShared":true,"Vector2mValue":"(0,0)"},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"IsFacingLeft","IsShared":true,"BooleanmValue":false}]}'
+      fieldSerializationData:
+        typeName: []
+        fieldNameHash: 
+        startIndex: 
+        dataPosition: 
+        unityObjects:
+        - {fileID: 7421347909920614553, guid: c2213765706ad9143a191eced6d3d0fb, type: 3}
+        byteData: 
+        byteDataArray: 
+      Version: 1.7.12
+  gizmoViewMode: 2
+  showBehaviorDesignerGizmo: 1
 --- !u!1 &2297333926236905461
 GameObject:
   m_ObjectHideFlags: 0
@@ -1265,7 +1345,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.00020070374, y: -0.037974626}
+  m_Offset: {x: 0.0054056495, y: -0.003941864}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -1276,7 +1356,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.54104805, y: 0.6202559}
+  m_Size: {x: 0.28077284, y: 0.37446326}
   m_EdgeRadius: 0
 --- !u!1 &4464419934916748280
 GameObject:

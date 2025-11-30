@@ -11,11 +11,16 @@ public class playerSurprisedState : IPlayerState
         _ctx = playerControll;
     }
     bool ischose = false;
+   float timer = 0;
     public void Enter()
     {
+        //不负责减少生命
         Debug.Log("进入奇点状态");
         ischose = false;
-        //时间会放慢一下
+       timer = 0;
+        AudioManager.Instance.PlaySFX("处决");
+        EffectManager.Instance.VerticalBlur(1.5f, 0.6f);
+        EffectManager.Instance.ChromaticAberrationSet(1.5f, 0.6f);
     }
 
     public void Attack()
@@ -42,13 +47,15 @@ public class playerSurprisedState : IPlayerState
    
     public void FixedUpdate()
     {
-        
+        if (ischose) return;
+        timer += Time.fixedDeltaTime;
     }
 
   
    public void Update()
     {
         if (ischose) return;
+        if(timer > 1f) _ctx.SwitchState(TypeState.ldle);
         //如果按了跳 则跳的很高
     }
 
@@ -57,4 +64,8 @@ public class playerSurprisedState : IPlayerState
 
     }
 
+    public void Block()
+    {
+      
+    }
 }

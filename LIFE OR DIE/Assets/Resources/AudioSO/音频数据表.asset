@@ -23,3 +23,27 @@ MonoBehaviour:
     audioClip: {fileID: 8300000, guid: 47a3bb5139c587340868a9f74fb630dc, type: 3}
   - Name: HeavykillBlood_1
     audioClip: {fileID: 8300000, guid: 41f2f883621530649831217f0d3b0826, type: 3}
+  - Name: "\u91CD\u5F39\u5200"
+    audioClip: {fileID: 8300000, guid: 249e4e16b20ae6b489434e5d8ad22161, type: 3}
+  - Name: "\u6B63\u5E38\u683C\u6321"
+    audioClip: {fileID: 8300000, guid: 5496379607728634ab38c1f1826a880f, type: 3}
+  - Name: "\u5371"
+    audioClip: {fileID: 8300000, guid: 29f6077e7869bea489ac15076ad6f106, type: 3}
+  - Name: "\u6B7B"
+    audioClip: {fileID: 8300000, guid: 85d58ba988871f349b00f4602facf518, type: 3}
+  - Name: "\u590D\u6D3B"
+    audioClip: {fileID: 8300000, guid: 4f9af5fed40706041a30d148cd49f003, type: 3}
+  - Name: "\u53D1\u73B0\u73A9\u5BB6"
+    audioClip: {fileID: 8300000, guid: 81272eaf017360041adf73ca904f6193, type: 3}
+  - Name: "\u5904\u51B3"
+    audioClip: {fileID: 8300000, guid: 6fac04e3daff16a4d8c4e6035c7af6ba, type: 3}
+  - Name: "\u8F7B\u5F39\u5200"
+    audioClip: {fileID: 8300000, guid: 6421579e5c129054c92accb6e7161ad1, type: 3}
+  - Name: "\u6325\u51FB\u55D6_1"
+    audioClip: {fileID: 8300000, guid: b4772b1c167e3ad4183bcdcfd0679294, type: 3}
+  - Name: "\u6325\u51FB\u55D6_2"
+    audioClip: {fileID: 8300000, guid: c399eeeb5e602074b9adcd77756017bf, type: 3}
+  - Name: "\u6325\u51FB\u55D6_3"
+    audioClip: {fileID: 8300000, guid: b2550b5347c4da846b71154465191b6e, type: 3}
+  - Name: "\u73A9\u5BB6\u88AB\u6740"
+    audioClip: {fileID: 8300000, guid: a9a80f378349dd04f8ef2700968ff6cc, type: 3}

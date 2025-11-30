@@ -43,6 +43,8 @@ public class DamagedComponent : MonoBehaviour, IBeDamaged
             Debug.LogWarning("´«Èë¹¥»÷Îª¿Õ");
             return;
         }
+        
+
 
         // 1. ÉËº¦
         int damage = data.type switch

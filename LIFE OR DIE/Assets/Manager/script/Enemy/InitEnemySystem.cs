@@ -24,32 +24,32 @@ public class InitEnemySystem : MonoBehaviour
     public DamageData LastDamage = new DamageData();
     public GameObject LastAttacker;
     public Vector2 LastDir;
+    private SpriteRenderer spirteRenderer;
 
-    private int facingleft=-1;
-    private bool temp;
+   [SerializeField] private int facingleft=-1;
+    private bool _isfacingleft;
     public bool isFacingLeft
     {
         get
         {
             if (facingleft == -1)
             {
-                temp = true;
+                _isfacingleft = true;
                 return true;
             }
             else if (facingleft == 1)
             { 
-            temp= false;
+            _isfacingleft= false;
             return false;
              }
-            return temp;
+            return _isfacingleft;
            
         }
     }
 
     private void Awake()
     {
-        rb = this.GetComponent<Rigidbody2D>();
-        if(rb == null) {this.transform.AddComponent<Rigidbody2D>();}    
+        InitName();
     }
 
   private  void Start()
@@ -58,7 +58,10 @@ public class InitEnemySystem : MonoBehaviour
     }
     private void InitName()
     {
+        rb = this.GetComponent<Rigidbody2D>();
+        if (rb == null) { this.transform.AddComponent<Rigidbody2D>(); }
 
+        spirteRenderer =GetComponent<SpriteRenderer>();
     }
 
   private  void InitSOData()
@@ -111,9 +114,14 @@ public class InitEnemySystem : MonoBehaviour
     {
         LastAttacker=Object;
     }
+    public void SetFilp(bool tf)
+    {
+        facingleft = tf?-1:1;
+    }
    private void Update()
     {
         //¡Ÿ ±¥˙¬Î
+        spirteRenderer.flipX=isFacingLeft;
         if(currentHP <= 0)BeDied();
     }
 }

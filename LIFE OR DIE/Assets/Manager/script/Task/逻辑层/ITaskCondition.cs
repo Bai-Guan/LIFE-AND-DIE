@@ -73,7 +73,7 @@ public class KillCondition : ITaskCondition
     {
        EventBus.Add<传入杀戮委托的数据>(OnKill);
 
-      //  TaskManager.Instance.SaveTaskProcess(任务状态.激活, temp, TaskID);
+      //  TaskManager.Instance.SaveTaskProcess(任务状态.激活, _isfacingleft, TaskID);
     }
 
     public void StopListen()

@@ -107,4 +107,14 @@ public class PlayerAnimControl : MonoBehaviour
     {
         _anim.speed = speed;
     }
+
+    public void TrigererResurgence(bool tf)
+    {
+        _anim.SetBool("Resurgence",tf);
+    }
+
+    public void TriggerBlock(bool tf)
+    {
+        _anim.SetBool("Block",tf) ;
+    }
 }
