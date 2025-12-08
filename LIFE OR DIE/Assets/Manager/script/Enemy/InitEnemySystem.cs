@@ -47,6 +47,8 @@ public class InitEnemySystem : MonoBehaviour
         }
     }
 
+    private bool canBackstab = true;
+    public bool  «∑Òø…“‘±≥¥Ã { get { return canBackstab; } }
     private void Awake()
     {
         InitName();
@@ -114,9 +116,17 @@ public class InitEnemySystem : MonoBehaviour
     {
         LastAttacker=Object;
     }
-    public void SetFilp(bool tf)
+    //public void SetFilp(bool tf)
+    //{
+    //    facingleft = tf?-1:1;
+    //}
+    public void SetFilp(float dir)
     {
-        facingleft = tf?-1:1;
+        facingleft=(int)dir;
+    }
+    public void SetBackstab(bool tf)
+    {
+        canBackstab=tf;
     }
    private void Update()
     {

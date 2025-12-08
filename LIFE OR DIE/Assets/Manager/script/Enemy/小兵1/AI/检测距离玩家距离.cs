@@ -14,29 +14,45 @@ public class 检测距离玩家距离 : Conditional
     public SharedFloat randomFloat = 1f;
     public SharedFloat hysteresis = 0.5f;
     public SharedFloat lockedCD = 6f;
+    public SharedFloat 判断成功持续时间 = 3f;
     public SharedBool 是否带距离锁 = false;
     private BehaviorTree bt;
     private EnemyRadioGraphic erg;
     private bool islocked = false;
     private Vector2 targetPos;
-    
 
+    private float timer=0;
+    private bool istrue = false;
+    private bool 当前是否在攻击 = false;
+    private bool 是否看见了玩家 = false;
     public override void OnAwake()
     {
         bt = GetComponent<BehaviorTree>();
         erg = GetComponent<EnemyRadioGraphic>();
+        
     }
     public override void OnStart()
     {
-        targetPos = erg.PlayerPosition;
-        SharedVector2 temp = targetPos;
-        bt.SetVariable("玩家位置", temp);
+       
 
-
+        //if (timer >= 判断成功持续时间.Value)
+        //    timer = 0;
+      
     }
 
     public override TaskStatus OnUpdate()
     {
+        当前是否在攻击 = (bt.GetVariable("在攻击") as SharedBool).Value;
+        targetPos = erg.PlayerPosition;
+        是否看见了玩家 = erg.IsPlayerVisible;
+        if (当前是否在攻击 ==true)
+            return TaskStatus.Failure;
+
+        //if (istrue&&timer<判断成功持续时间.Value)
+        //{
+        //    timer += Time.deltaTime;
+        //    return TaskStatus.Success;
+        //}
 
         // 1. 取玩家位置
         targetPos = erg.PlayerPosition;
@@ -51,14 +67,18 @@ public class 检测距离玩家距离 : Conditional
        // Debug.Log(distanceX);
        
         //不带距离锁的情况
-        if (distanceX <= targetDistanceX.Value && 是否带距离锁.Value==false)
+        if (distanceX <= targetDistanceX.Value && 是否带距离锁.Value==false&&是否看见了玩家)
         {
             if (Random.Range(0f, 1f) <= randomFloat.Value)
+            {
+                istrue = true;
                 return TaskStatus.Success;
+            }
+               
         }
 
         //带距离锁
-        if ( distanceX <= targetDistanceX.Value && 是否带距离锁.Value == true && islocked==false)
+        if ( distanceX <= targetDistanceX.Value && 是否带距离锁.Value == true && islocked== false&&是否看见了玩家)
         {
            
             // 概率触发

@@ -12,7 +12,8 @@ public class EnemyRadioGraphic : MonoBehaviour
     public LayerMask obstacleLayer;       // 障碍物层级
     public float 射线Y偏移量 = 1f;
     // 对外公开的检测结果
-    public bool IsPlayerVisible { get; private set; }
+  [SerializeField] private bool 是否看见了玩家 = false;
+    public bool IsPlayerVisible { get => 是否看见了玩家; }
     public Vector2 PlayerPosition { get; private set; }
 
     private Transform player;
@@ -168,7 +169,7 @@ public class EnemyRadioGraphic : MonoBehaviour
 
     void UpdateDetection(bool detected, Vector2 position)
     {
-        IsPlayerVisible = detected;
+        是否看见了玩家 = detected;
         PlayerPosition = position;
     }
 
@@ -189,7 +190,7 @@ public class EnemyRadioGraphic : MonoBehaviour
     }
 
     // 设置怪物朝向
-    public void SetFlip(bool isFacingLeft)
+    public void SetFlip(float isFacingLeft)
     {
         body.SetFilp(isFacingLeft);
     }

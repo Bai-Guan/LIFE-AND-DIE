@@ -6,6 +6,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 
+
 public abstract class PlayerState
 {
 
@@ -26,7 +27,7 @@ public abstract class PlayerState
     public virtual void FixedUpdate() { }
     public virtual void Exit() { }
 
-    public virtual void Other(Transform t)
+    public virtual void Other(UnityEngine.Transform t)
     {
 
     }
@@ -52,14 +53,14 @@ public class IdleState:IPlayerState
     {
         _ctx= playerControll;
     }
-
+    int enemyLayer = LayerMask.GetMask("Enemy");
     public void Enter() 
     {
      
         //设置动画变量 重置状态 
         Debug.Log("进入待机状态");
-        _ctx.rb.velocity=new Vector2(0,0);  
-       
+        _ctx.rb.velocity=new Vector2(0,0);
+        enemyLayer = LayerMask.GetMask("Enemy");
     }
     public void Update() 
     {
@@ -95,7 +96,25 @@ public class IdleState:IPlayerState
 
     public void Attack()
     {
-       _ctx.SwitchState(TypeState.attack);
+        // 根据 lastFacing 决定射线方向
+        Vector3 pos = _ctx.transform.position;
+        pos.y += 1f;
+        Vector2 dir = _ctx.isFacingLeft ? Vector2.left : Vector2.right;
+        Debug.DrawRay(pos, dir * _ctx.DataMan.背刺射线长度, Color.white,5f);
+        RaycastHit2D hit = Physics2D.Raycast(pos, dir, _ctx.DataMan.背刺射线长度, enemyLayer);
+        if(hit.collider!=null)
+        {
+            Debug.Log("背刺射线找到目标!");
+            var enemy = hit.collider.GetComponent<InitEnemySystem>();
+            if (enemy != null && enemy.是否可以背刺)
+            {
+                _ctx.SwitchState(TypeState.backstab);
+                return;
+            }
+        }
+
+
+        _ctx.SwitchState(TypeState.attack);
     }
 
     public void Dodge()
@@ -127,6 +146,9 @@ public class IdleState:IPlayerState
     {
         _ctx.SwitchState(TypeState.block);
     }
+
+
+   
 }
 
 public class RunState : IPlayerState
@@ -140,15 +162,15 @@ public class RunState : IPlayerState
 
     public void Enter()
     {
-     
+
         Debug.Log("进入跑步状态");
         timer = 0;
 
 
     }
-    public  void Update()
+    public void Update()
     {
-    
+
         //检测下落状态
         if (_ctx.rb.velocity.y < -0.1f && _ctx.DataMan.isGround == false)
         {
@@ -162,7 +184,7 @@ public class RunState : IPlayerState
             return;
         }
         //进入跳跃状态的条件
-        if (_ctx.InputY>0 && _ctx.DataMan.canJump)
+        if (_ctx.InputY > 0 && _ctx.DataMan.canJump)
         {
             _ctx.SwitchState(TypeState.jump);
             return;
@@ -176,15 +198,15 @@ public class RunState : IPlayerState
 
 
     }
-    public  void FixedUpdate()
+    public void FixedUpdate()
     {
-       
+
         //进行了移动
 
         MoveX();
-       
+
     }
-    public  void Exit()
+    public void Exit()
     {
 
     }
@@ -209,15 +231,15 @@ public class RunState : IPlayerState
     private void MoveX()
     {
         float scale;
-        if(timer/0.25f>0)
+        if (timer / 0.25f > 0)
         {
-            scale=1;
+            scale = 1;
         }
         else
         {
             scale = timer / 0.25f;
         }
-       
+
         // 正常移动
         float targetVelocityX = _ctx.InputX * _ctx.DataMan.moveSpeed;
         float newVelocityX = Mathf.Lerp(
@@ -232,6 +254,66 @@ public class RunState : IPlayerState
     {
         _ctx.SwitchState(TypeState.block);
     }
+   }
+    public class BackstabState : IPlayerState
+    {
+        private NewPlayerControll _ctx;
+        private float timer = 0;
+    private float duringTime = 3f;
+        public BackstabState(NewPlayerControll playerControll)
+        {
+            _ctx = playerControll;
+        }
+
+        public void Enter()
+        {
+
+            Debug.Log("进入背刺状态");
+            timer = 0;
+        _ctx.Anim.TriggerAttack2();
+
+    }
+        public void Update()
+        {
+
+           if(timer>duringTime) 
+            _ctx.SwitchState(TypeState.ldle);
+
+
+
+        }
+        public void FixedUpdate()
+        {
+        timer += Time.fixedDeltaTime;
+
+        }
+        public void Exit()
+        {
+
+        }
+
+        public void Attack()
+        {
+           
+        }
+
+        public void Dodge()
+        {
+           
+        }
+
+        public void ContractPower()
+        {
+          
+        }
+        private void MoveX()
+        {
+          
+        }
+        public void Block()
+         {
+      
+         }
 }
 public class FallState : IPlayerState
 {
@@ -441,6 +523,8 @@ public class SprintState : IPlayerState
     {
         _ctx = playerControll;
     }
+    private Vector2 _originalColliderSize;
+    private Vector2 _originalColliderOffset;
     public  void Enter()
     {
         _ctx.Anim.TriggerSprint();
@@ -454,10 +538,24 @@ public class SprintState : IPlayerState
         sprintDir = _ctx.isFacingLeft ? -1 : 1;
         _currentSpeed = _ctx.DataMan.sprintSpeed;
 
-
+       
 
         //无敌帧
         _ctx.DataMan.SetInvencibleAndStart(0.2f);
+
+        //碰撞变小
+        // 保存原始碰撞箱设置
+        _originalColliderSize = _ctx.boxCollider2D.size;
+        _originalColliderOffset = _ctx.boxCollider2D.offset;
+
+        // 设置新的碰撞箱大小
+        _ctx.boxCollider2D.size = new Vector2(0.6f, 0.5f);
+
+        // 计算并设置新的偏移量，保持底部位置不变
+        float heightDifference = _originalColliderSize.y - 0.5f; // 高度差
+        float offsetY = _originalColliderOffset.y - (heightDifference / 2f); // 向下移动一半的高度差
+        _ctx.boxCollider2D.offset = new Vector2(_originalColliderOffset.x, offsetY);
+
     }
     public  void Update()
     {
@@ -503,8 +601,10 @@ public class SprintState : IPlayerState
     }
     public  void Exit()
     {
-        _currentSpeed = 0;
-       
+
+        // 恢复原始碰撞箱设置
+        _ctx.boxCollider2D.size = _originalColliderSize;
+        _ctx.boxCollider2D.offset = _originalColliderOffset;
     }
     //定义加速减速时间 0.08s内加速 0.1秒内完成减速 0.32s内恒速运动
     private int sprintDir;
@@ -513,7 +613,7 @@ public class SprintState : IPlayerState
     private float _currentTime = 0;
 
     private const float AccelerationTime = 0.08f;
-    private const float ConstantTime = 0.09f;
+    private const float ConstantTime = 0.15f;
     private const float DecelerationTime = 0.05f;
     
 
@@ -564,7 +664,8 @@ public class BlockState : IPlayerState
     {
         Debug.Log("进入格挡状态");
         _ctx.Anim.TriggerBlock(true);
-        _ctx.rb.velocity = new Vector2(0, 0);
+       
+        
         timer = 0;
     }
     public  void Update()
@@ -586,6 +687,7 @@ public class BlockState : IPlayerState
     }
     public  void Exit()
     {
+      
         _ctx.Anim.TriggerBlock(false);
     }
 
@@ -613,6 +715,7 @@ public class DieState : IPlayerState
 {
     private NewPlayerControll _ctx;
     private float timer=0f;
+    private bool clock=false;
     public DieState(NewPlayerControll playerControll)
     {
         _ctx = playerControll;
@@ -621,6 +724,7 @@ public class DieState : IPlayerState
     {
         Debug.Log("死了");
         AudioManager.Instance.PlaySFX("玩家被杀");
+        玩家的全局变量.玩家是否死亡 = true;
         _ctx.Anim.TriggerDie();
         _ctx.rb.velocity=new Vector2(0,_ctx.rb.velocity.y);
         //判断还有没有命 没命就真的死了
@@ -645,7 +749,7 @@ public class DieState : IPlayerState
     }
     public  void Exit()
     {
-
+        clock=false;
     }
 
     public void Attack()
@@ -660,8 +764,10 @@ public class DieState : IPlayerState
 
     public void ContractPower()
     {
-        if (timer >= 1.5f)
+      
+        if (timer >= 1.5f&&clock==false)
         { 
+            clock = true;
         if (_ctx.DataMan.currentHP > 0)
         {
             _ctx.Anim.TrigererResurgence(true);
@@ -669,6 +775,7 @@ public class DieState : IPlayerState
             TimeManager.Instance.OneTime(1.1f, () =>
             {
                 _ctx.Anim.TrigererResurgence(false);
+                玩家的全局变量.玩家是否死亡 = false;
                 _ctx.SwitchState(TypeState.ldle);
 
 
@@ -707,5 +814,6 @@ public class OtherState : PlayerState
     }
 
 }
+
 
 

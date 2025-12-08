@@ -17,7 +17,9 @@ public enum TypeState
     attack,
     died,
     hit,
+    stair,
     collision,
+    backstab,
     other
 }
 public interface IPlayerState
@@ -124,3 +126,8 @@ public class FSM
         ICurrentState.Enter();    // 再进入新状态
     }
 }
+
+
+
+
+

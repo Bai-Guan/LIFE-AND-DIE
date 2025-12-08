@@ -55,7 +55,7 @@ public class playerSurprisedState : IPlayerState
    public void Update()
     {
         if (ischose) return;
-        if(timer > 1f) _ctx.SwitchState(TypeState.ldle);
+        if(timer > 0.6f) _ctx.SwitchState(TypeState.ldle);
         //如果按了跳 则跳的很高
     }
 

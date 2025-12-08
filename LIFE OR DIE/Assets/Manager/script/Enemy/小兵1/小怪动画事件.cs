@@ -1,3 +1,4 @@
+using BehaviorDesigner.Runtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,8 +10,8 @@ public class 小怪动画事件 : MonoBehaviour
    
     private Animator animator;
     private EnemyAttackHitBox attackHitBox;
+  //  private BehaviorTree bt;
 
-   
     public bool IsAttacking { get; private set; }
     public bool IsAttackComplete { get; private set; }
     public string CurrentAttack { get; private set; }
@@ -19,6 +20,7 @@ public class 小怪动画事件 : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         attackHitBox=GetComponent<EnemyAttackHitBox>();
+        //bt = GetComponent<BehaviorTree>();
     }
 
     //要提供可以停止动画 重置动画的方法
@@ -34,22 +36,22 @@ public class 小怪动画事件 : MonoBehaviour
         }
     }
     // 这个方法可以由行为树调用
-    public void PlayAttackAnimation(string attackName)
-    {
-        if (anim != null)
-        {
-            anim.SetTrigger(attackName);
-        }
-    }
+    //public void PlayAttackAnimation(string attackName)
+    //{
+    //    if (anim != null)
+    //    {
+    //        anim.SetTrigger(attackName);
+    //    }
+    //}
     //这个方法由动画调用
-    
-    //这个方法由动画调用
-    public void OnAttackEnd()
+    public void 动画调用播放特效()
     {
-        IsAttacking = false;
-        IsAttackComplete = true;
-        CurrentAttack = "";
+        AudioManager.Instance.PlaySFX("轻弹刀");
+        EffectManager.Instance.Play("火花效果",this.transform);
+
+        EffectManager.Instance.全局慢动作(1f);
     }
+
 
     public void Play(string name)
     {
@@ -79,6 +81,10 @@ public class 小怪动画事件 : MonoBehaviour
     public void TriggerBlock()
     {
         anim.SetTrigger("block");
+    }
+    public void TriggerWillBlock()
+    {
+        anim.SetTrigger("willblock");
     }
 
 }

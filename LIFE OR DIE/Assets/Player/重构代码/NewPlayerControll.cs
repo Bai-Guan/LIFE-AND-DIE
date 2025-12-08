@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -22,6 +23,8 @@ public class NewPlayerControll : MonoBehaviour, IBeDamaged
     [HideInInspector] public PlayerAnimControl Anim;
 
     public InitWeaponSystem weapon;
+    public BoxCollider2D boxCollider2D;
+    public event Action OnInteractPressed;
     //输入处理
     private Vector2 _moveinputData;
     public float InputX { get { return _moveinputData.x; } }
@@ -74,16 +77,19 @@ public class NewPlayerControll : MonoBehaviour, IBeDamaged
         fSM.AddState(TypeState.sprint, new SprintState(this));
         fSM.AddState(TypeState.collision, new CollisionState(this));
         fSM.AddState(TypeState.block, new BlockState(this));
-
+        fSM.AddState(TypeState.backstab, new BackstabState(this));
+        fSM.AddState(TypeState.stair,new StairState(this));
     }
 
     private void InitComponent()
     {
+        
         spriteRenderer = this.GetComponent<SpriteRenderer>();
-        playerInput = this.GetComponent<PlayerInput>();
-        dataMan = this.GetComponent<PlayerDataManager>();
-        Anim = this.GetComponent<PlayerAnimControl>();
-        rb = this.GetComponent<Rigidbody2D>();
+        boxCollider2D = this.GetComponent<BoxCollider2D>();
+        playerInput =  this.GetComponent<PlayerInput>();
+        dataMan=this.GetComponent<PlayerDataManager>();
+        Anim =this.GetComponent<PlayerAnimControl>();
+        rb =  this.GetComponent<Rigidbody2D>();
 
         weapon = transform.Find("Weapon").GetComponent<InitWeaponSystem>();
     }
@@ -112,6 +118,18 @@ public class NewPlayerControll : MonoBehaviour, IBeDamaged
             _moveinputData.y = 0;
         }
     }
+    public void PressDown(InputAction.CallbackContext callback)
+    {
+        if (callback.performed)
+        {
+            _moveinputData.y = -1;
+
+        }
+        if (callback.canceled)
+        {
+            _moveinputData.y = 0;
+        }
+    }
     public void PressMove(InputAction.CallbackContext callback)
     {
         float h = callback.ReadValue<Vector2>().x;
@@ -122,8 +140,15 @@ public class NewPlayerControll : MonoBehaviour, IBeDamaged
 
     public void PressAttack(InputAction.CallbackContext callback)
     {
-        //if(fSM.curState != TypeState.died && fSM.curState != TypeState.Unexpected)
-        fSM.Attack();
+        if (callback.performed)            // 只触发一次
+        {
+            PlayerAttackTrigger.AttackPressed = true;
+            fSM.Attack();                 
+        }
+        if(callback.canceled)
+        {
+            PlayerAttackTrigger.AttackPressed = false;
+        }
     }
 
     public void PressDodge(InputAction.CallbackContext callback)
@@ -187,7 +212,7 @@ public class NewPlayerControll : MonoBehaviour, IBeDamaged
             DialogManager.Instance.StartDialogue(temp.GetDialogue());
 
         }
-
+        OnInteractPressed?.Invoke();
 
     }
 
@@ -247,7 +272,8 @@ public class NewPlayerControll : MonoBehaviour, IBeDamaged
                 if (obj.TryGetComponent<EnemyRigidbar>(out EnemyRigidbar rigidbar))
                 {
                     //播放特效 音效
-                    rigidbar.增加僵直条(0.25f);
+                    rigidbar.增加僵直条(0.5f);
+                    EffectManager.Instance.Play("火花效果", this.transform);
                 }
                 AudioManager.Instance.PlaySFX("重弹刀");
             }
@@ -423,6 +449,12 @@ public class NewPlayerControll : MonoBehaviour, IBeDamaged
         );
     }
 }
+
+public static class 玩家的全局变量
+{
+    public static bool 玩家是否死亡 = false;
+}
+
 //    public void 整体时间缓慢(float timer)
 //    {
 //        if (!特殊攻击是否打到人) return;

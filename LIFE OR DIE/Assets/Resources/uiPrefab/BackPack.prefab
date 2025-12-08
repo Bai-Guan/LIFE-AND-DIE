@@ -1559,7 +1559,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8841176569684852136}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2091805130296097685}
+        m_TargetAssemblyTypeName: pangelPackage, Assembly-CSharp
+        m_MethodName: OnClickSwitchWeapon
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &8841176569684852136
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2806,7 +2818,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7092159217660781766}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2091805130296097685}
+        m_TargetAssemblyTypeName: pangelPackage, Assembly-CSharp
+        m_MethodName: OnClickSwitchFood
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &7092159217660781766
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3549,7 +3573,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3829940792042352754}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2091805130296097685}
+        m_TargetAssemblyTypeName: pangelPackage, Assembly-CSharp
+        m_MethodName: OnClickSwitchArmor
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &3829940792042352754
 MonoBehaviour:
   m_ObjectHideFlags: 0

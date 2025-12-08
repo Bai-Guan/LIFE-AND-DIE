@@ -96,18 +96,21 @@ MonoBehaviour:
         damageDatas:
         - atk: 20
           type: 0
+          hitType: 0
           RepellingXDistance: 0.2
           RepellingYDistance: 0
           RepellingXSpeed: 2
           RepellingYSpeed: 0
         - atk: 20
           type: 0
+          hitType: 0
           RepellingXDistance: 0.2
           RepellingYDistance: 0
           RepellingXSpeed: 2
           RepellingYSpeed: 0
         - atk: 40
           type: 0
+          hitType: 1
           RepellingXDistance: 0.1
           RepellingYDistance: 2
           RepellingXSpeed: 1

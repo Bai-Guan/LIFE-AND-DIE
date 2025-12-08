@@ -120,6 +120,7 @@ public class pangelPackage :BasePanel
             TimeManager.Instance.FrameTime(0.8f,
                 () =>
                 {
+                    if (UseAndDelete == null) return;   // 判空
                     timer += Time.deltaTime;
                     float t = Mathf.Clamp01(timer / 0.8f);   // 0→1
 
@@ -138,20 +139,21 @@ public class pangelPackage :BasePanel
     }
     //
 
-    private void OnClickSwitchWeapon()
+    public void OnClickSwitchWeapon()
     {
+       
         SetAllIconActiveFalse();
         UISwiWeaponIcon.gameObject.SetActive(true);
         SwitchTab(itemType.Weapon);
     }
 
-    private void OnClickSwitchFood()
+    public void OnClickSwitchFood()
     {
         SetAllIconActiveFalse();
         UISwiFoodIcon.gameObject.SetActive(true);
         SwitchTab(itemType.Food);
     }
-    private void OnClickSwitchArmor()
+    public void OnClickSwitchArmor()
     {
         SetAllIconActiveFalse();
         UISwiArmorIcon.gameObject.SetActive(true);
@@ -194,23 +196,42 @@ public class pangelPackage :BasePanel
             //Debug.Log("实际清空" +a + "个");
 
         }
-       
-       
+
+
         // 添加新东西 或 转移已有物品
-        foreach (var item in PackageInventoryService.Instance.GetDicList(type))
+        if (PackageInventoryService.Instance == null)
+        {
+            Debug.LogError("PackageInventoryService 未初始化！");
+            return;
+        }
+
+        var list = PackageInventoryService.Instance?.GetDicList(type);
+        if (list == null)
+        {
+            Debug.LogError($"PackageInventoryService 返回 null，type={type}");
+            return;
+        }
+
+        foreach (var item in list)
         {
             if (item == null)
             {
-                Debug.Log("背包服务层中列表有空数据");
-                continue; // 使用 continue 而不是 return，避免中断整个循环
+                Debug.LogWarning("背包服务层中列表有空数据");
+                continue;
             }
 
             int id = item.id;
             int objNum = item.count;
-            string itemName = item.uid; // 修改变量名，避免与关键字冲突
-            Sprite image = PackageInventoryService.Instance._itemDataCache[item.id].itemImage;
+            string itemName = item.uid;
 
-            // 直接通过对象池创建
+            // 终极空保护
+            if (!PackageInventoryService.Instance._itemDataCache.TryGetValue(id, out var cache) || cache == null)
+            {
+                Debug.LogError($"配表缺失：type={type}  id={id}  无法找到对应itemData，已跳过该物品");
+                continue;
+            }
+
+            Sprite image = cache.itemImage;
             PoolManager.Instance.UISpanItem(id, objNum, itemName, image, UIPackageContent, type);
         }
 

@@ -9,8 +9,8 @@ public class DamagedComponent : MonoBehaviour, IBeDamaged
     private bool isMinusHP =true;
     private bool isCanRepel = true;
     private SpriteRenderer spriteRenderer;
- 
-
+    private bool isInvincible =false;
+    [SerializeField] private int damageMul = 1;
     private void Awake()
     {
         body = GetComponent<InitEnemySystem>();
@@ -33,9 +33,20 @@ public class DamagedComponent : MonoBehaviour, IBeDamaged
         OnHurt(data, attacker);
        
     }
+    public void SetInvincible(bool tf)
+    {
+        isInvincible = tf;
+    }
+    public void 设置伤害倍率(int mul)
+    {
 
+    }
     public void OnHurt(DamageData data, GameObject attacker)
     {
+        if (isInvincible == true)
+        {
+            return;
+        }
         if (data == null)
         {
             body.MinusHP(0);
@@ -53,7 +64,7 @@ public class DamagedComponent : MonoBehaviour, IBeDamaged
             DamageType.magic => data.atk,
             _ => data.atk
         };
-
+        damage =damage*damageMul;
         // 2. 击退强度
         float resist = Mathf.Clamp01(body.Knocked * 0.01f);
         float scale = 1f - resist;

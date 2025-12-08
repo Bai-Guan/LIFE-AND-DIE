@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 //, IComponentData<WeaponHitBoxData>
 public class WeaponHitBox : WeaponComponent
 {
@@ -82,6 +83,14 @@ public class WeaponHitBox : WeaponComponent
                     Enemylist.Add(target);
                   //  Debug.Log($"添加到敌人列表: {target.Name}");
                 }
+
+                if(col.CompareTag("Phyitem"))
+                {
+                   
+                        Enemylist.Add(col.gameObject);
+                    
+                }
+             
             }
 
          //   Debug.Log($"通过层级过滤的敌人数量: {layerMaskCount}");

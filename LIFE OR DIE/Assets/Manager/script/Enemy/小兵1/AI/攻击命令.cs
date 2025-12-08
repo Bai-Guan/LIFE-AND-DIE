@@ -8,62 +8,93 @@ public class 攻击命令 : Action
     private 小怪动画事件 animationManager;
     public SharedString 攻击名称;
     public SharedBool FacingLeft;
+    public SharedFloat 攻击持续时间 = 3f;
+
+    // 状态变量
     private bool attackStarted = false;
-    private bool attackCompleted = false;
+    private float attackStartTime;
+    private bool isAttackFinished = false;
+
+    private EnemyRigidbar EnemyRigidbar;
+    private BehaviorTree bt;
 
     public override void OnAwake()
     {
         animationManager = GetComponent<小怪动画事件>();
+        EnemyRigidbar = GetComponent<EnemyRigidbar>();
+        bt = GetComponent<BehaviorTree>();
     }
 
-    //怪物攻击可以被打断 需要引用变量判断 update中看看当前是否被攻击了，且是否僵直条满了，如果满了则立刻停止动画，跳转到受伤状态
     public override void OnStart()
     {
-      
-       
-        attackStarted = false;
-        attackCompleted = false;
+      //  Debug.Log("update前的start");
+        // 重置状态
+        attackStarted = true;
+        isAttackFinished = false;
+        attackStartTime = Time.time;
+
+        // 通知行为树正在攻击
+        bt.SetVariable("在攻击", (SharedBool)true);
+
+        // 播放攻击动画
+        if (animationManager != null)
+        {
+          //  animationManager.PlayAttackAnimation(攻击名称.Value);
+        }
     }
 
     public override TaskStatus OnUpdate()
     {
         if (animationManager == null)
+        {
+            Debug.Log("小怪动画事件捕获失败");
             return TaskStatus.Failure;
+        }
+   
 
-        // 触发攻击动画
-        if (!attackStarted)
+        // 检查是否被打断（僵直）
+        if (EnemyRigidbar != null && EnemyRigidbar.检测是否僵直())
         {
-            animationManager.PlayAttackAnimation(攻击名称.Value);
-            attackStarted = true;
-            return TaskStatus.Running;
+            Debug.Log("攻击被打断！");
+            // 被打断，结束攻击
+            OnAttackInterrupted();
+            return TaskStatus.Failure;
         }
 
-        // 第二步：等待攻击完成
-        // 这里需要根据你的动画系统来判断攻击是否完成
-        // 以下是几种可能的方法：
-
-
-        if(animationManager.IsAttackComplete)
+        // 检查攻击是否超时
+        if (Time.time - attackStartTime >= 攻击持续时间.Value)
         {
-            
-            attackCompleted = true;
+            isAttackFinished = true;
+            bt.SetVariable("在攻击", (SharedBool)false);
+            return TaskStatus.Success;
         }
-           
 
-        // 方法2：使用自定义的完成标志（需要在动画管理器中设置）
-        // if (animationManager.IsAttackComplete)
-        // {
-        //     attackCompleted = true;
-        // }
-
-        return attackCompleted ? TaskStatus.Success : TaskStatus.Running;
+        // 攻击仍在进行中
+        return TaskStatus.Running;
     }
 
     public override void OnEnd()
     {
-        // 重置状态
+        // 无论成功还是失败，都需要清理状态
+        if (isAttackFinished || !attackStarted)
+        {
+            // 正常结束攻击
+            bt.SetVariable("在攻击", (SharedBool)false);
+        }
+
         attackStarted = false;
-        attackCompleted = false;
+        isAttackFinished = false;
+    }
+
+    private void OnAttackInterrupted()
+    {
+        // 被打断时的清理
+        attackStarted = false;
+        isAttackFinished = false;
+        bt.SetVariable("在攻击", (SharedBool)false);
+
+        // 可以在这里添加被打断时的动画处理
+        // 例如：animationManager.StopAttackAnimation();
     }
 }
 

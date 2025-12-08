@@ -26,6 +26,15 @@ public class PlayerDataManager :MonoBehaviour
     public bool isGround { get { return _checkGround.IsGrounded; } }
     //------------------------------------
 
+
+
+    //-----------背刺相关
+    [SerializeField] private float rayLength = 1.5f;
+    public float 背刺射线长度 { get { return rayLength; } }
+  
+
+    //--------------------
+
     [Tooltip("坠落的最大速度")]
   [SerializeField] float maxFallSpeed = 30f;         // 坠落速度上限
   [SerializeField] float landingSizeFactor = 0.3f; // 速度→尺寸放大系数

@@ -85,6 +85,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Down",
+                    "type": "Button",
+                    "id": "40be1533-1e89-45e7-a46d-62a3a62bb9a2",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -230,6 +239,17 @@
                     "action": "Block",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d85cc73e-80f5-4a7c-aae5-6893ead2b8b4",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Down",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -305,7 +325,7 @@
                 {
                     "name": "click",
                     "type": "Button",
-                    "id": "b3ab79d7-e07a-47f6-b321-1718356a554e",
+                    "id": "22383447-78fb-4530-8b71-2959eccf70fe",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -326,7 +346,7 @@
                 },
                 {
                     "name": "",
-                    "id": "f6ed83b4-b0ec-45c7-bb57-a4102e19f1af",
+                    "id": "fe8a7cb5-9ae5-408b-8ffb-f2beafbaebf2",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",

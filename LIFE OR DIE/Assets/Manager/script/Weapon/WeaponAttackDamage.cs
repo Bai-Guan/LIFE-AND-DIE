@@ -91,6 +91,9 @@ public class WeaponAttackDamage : WeaponComponent
                 continue;
             }
 
+            
+
+
             rec.OnHurt(Data.damageDatas[weapon.CurrentNum], this.gameObject);
             Debug.Log($"∂‘ {go.name} ‘Ï≥……À∫¶");
         }

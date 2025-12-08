@@ -33,6 +33,9 @@ public class EffectManager : MonoBehaviour
 
     private const float InTime = 0.08f;   // µ­ÈëÕ¼ 8%
     private const float OutTime = 0.25f;   // µ­³öÕ¼ 25%
+
+   [SerializeField] private EffectSOData effectSO;
+
     private void Awake()
     {
         if(effectManager != null &&effectManager !=this)
@@ -43,7 +46,7 @@ public class EffectManager : MonoBehaviour
         {
             effectManager = this;
         }
-
+       
         InitName();
     }
 
@@ -161,5 +164,70 @@ public class EffectManager : MonoBehaviour
             );
     }
 
+    public void È«¾ÖÂý¶¯×÷(float durTime)
+    {
+
+            float startTimeScale = Time.timeScale;
+            float targetTimeScale = 0.1f;
+            float slowDuration = 0.3f;
+            float stayDuration = 0.3f;
+            float totalDuration = slowDuration * 2 + stayDuration;
+
+            float elapsedTime = 0f;
+
+            TimeManager.Instance.ReallyFrameTime(totalDuration,
+                () =>
+                {
+                    elapsedTime += Time.unscaledDeltaTime;
+                    Time.fixedDeltaTime = Mathf.Min(0.02f * Time.timeScale, 0.02f);
+                    float progress = elapsedTime / totalDuration;
+
+                    float currentScale;
+                    if (elapsedTime < slowDuration)
+                    {
+                        // ½µËÙ½×¶Î
+                        float t = elapsedTime / slowDuration;
+                        currentScale = Mathf.SmoothStep(startTimeScale, targetTimeScale, t);
+                    }
+                    else if (elapsedTime < slowDuration + stayDuration)
+                    {
+                        // Í£Áô½×¶Î
+                        currentScale = targetTimeScale;
+                    }
+                    else
+                    {
+                        // »Ö¸´½×¶Î
+                        float t = (elapsedTime - slowDuration - stayDuration) / slowDuration;
+                        currentScale = Mathf.SmoothStep(targetTimeScale, startTimeScale, t);
+                    }
+
+                    Time.timeScale = currentScale;
+                },
+                () =>
+                {
+                    Time.timeScale = startTimeScale;
+                    Time.fixedDeltaTime = 0.02f;
+                   
+                }
+            );
+        
+    }
+
+    public void Play(string name,Transform pos)
+    {
+        GameObject prefab = effectSO.GetPrefab(name);
+        if (prefab == null) return;
+        GameObject inst = Instantiate(prefab, pos.position, pos.rotation); 
+                                                                          
+        TimeManager.Instance.OneTime(3f, () => Destroy(inst));
+    }
+    public void Play(string name, Transform pos,Vector3 pos2,float timer)
+    {
+        GameObject prefab = effectSO.GetPrefab(name);
+        if (prefab == null) return;
+        GameObject inst = Instantiate(prefab, pos2, pos.rotation);
+
+        TimeManager.Instance.OneTime(timer, () => Destroy(inst));
+    }
 
 }

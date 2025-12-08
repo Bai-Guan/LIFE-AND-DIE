@@ -38,11 +38,11 @@ public class DieComponent : MonoBehaviour
         if(FirstTime==false) return;
         FirstTime = false;
 
-
-
+        Vector3 temp2 = this.transform.position;
+        temp2.y += 1f;
 
         //正常死亡逻辑处理
-
+        EffectManager.Instance.Play("爆血",  this.transform, temp2, 5f);
         //-----------------下面开启碎片死亡-----
         if (CanExploable)
         {

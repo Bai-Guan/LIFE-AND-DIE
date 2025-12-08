@@ -32,7 +32,7 @@ public class 追击玩家:  Action
 
 
     }
-  
+
     public override TaskStatus OnUpdate()
     {
         if (rg.IsPlayerVisible == false)
@@ -46,16 +46,20 @@ public class 追击玩家:  Action
         if (timer >= 追击时间.Value)
         {
             Debug.Log("爷我不追了");
-            return TaskStatus.Success;
+            return TaskStatus.Failure;
         }
+        float temp = Mathf.Abs(this.transform.position.x - player.position.x);
+        if (temp <= 离目标最近距离.Value)
+        {
+            rb.velocity = new Vector2(0, rb.velocity.y);
+            return TaskStatus.Success;
+         }
         bool filp = this.transform.position.x - player.position.x > 0 ? true : false;
         int filpi = filp ? -1 : 1;
         isFacingleft = filp;
-        body.SetFilp(filp);
+        body.SetFilp(filpi);
         rb.velocity = new Vector2(moveSpeed.Value*filpi, rb.velocity.y);
-        float temp = Mathf.Abs(this.transform.position.x - player.position.x);
-        if (temp <= 离目标最近距离.Value)
-            return TaskStatus.Success;
+       
         是否发现玩家 = (bt.GetVariable("是否看见了玩家") as SharedBool).Value;
 
 
