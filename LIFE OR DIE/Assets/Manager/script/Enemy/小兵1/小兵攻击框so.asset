@@ -32,4 +32,4 @@ MonoBehaviour:
     damageType: 1
     duration: 20
     attackName: specialAttack
-    isDebug: 1
+    isDebug: 0

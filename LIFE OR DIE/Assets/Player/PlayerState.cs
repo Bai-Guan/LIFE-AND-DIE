@@ -541,7 +541,7 @@ public class SprintState : IPlayerState
        
 
         //无敌帧
-        _ctx.DataMan.SetInvencibleAndStart(0.2f);
+       // _ctx.DataMan.SetInvencibleAndStart(0.2f);
 
         //碰撞变小
         // 保存原始碰撞箱设置
@@ -716,6 +716,14 @@ public class DieState : IPlayerState
     private NewPlayerControll _ctx;
     private float timer=0f;
     private bool clock=false;
+
+    private float dragTimer = 0f;          // 水平衰减计时器
+    private float noGravityTimer = 0f;     // 免重力计时器
+    private Vector2 enterVelocity;         // 进入时的速度快照
+
+
+    private Vector2 _originalColliderSize;
+    private Vector2 _originalColliderOffset;
     public DieState(NewPlayerControll playerControll)
     {
         _ctx = playerControll;
@@ -725,8 +733,29 @@ public class DieState : IPlayerState
         Debug.Log("死了");
         AudioManager.Instance.PlaySFX("玩家被杀");
         玩家的全局变量.玩家是否死亡 = true;
+
+
+        //碰撞变小
+        // 保存原始碰撞箱设置
+        _originalColliderSize = _ctx.boxCollider2D.size;
+        _originalColliderOffset = _ctx.boxCollider2D.offset;
+
+        // 设置新的碰撞箱大小
+        _ctx.boxCollider2D.size = new Vector2(0.6f, 0.5f);
+
+        // 计算并设置新的偏移量，保持底部位置不变
+        float heightDifference = _originalColliderSize.y - 0.5f; // 高度差
+        float offsetY = _originalColliderOffset.y - (heightDifference / 2f); // 向下移动一半的高度差
+        _ctx.boxCollider2D.offset = new Vector2(_originalColliderOffset.x, offsetY);
+
+
         _ctx.Anim.TriggerDie();
-        _ctx.rb.velocity=new Vector2(0,_ctx.rb.velocity.y);
+
+        //速度设置
+        _ctx.rb.velocity=new Vector2(_ctx.rb.velocity.x, _ctx.rb.velocity.y);
+        enterVelocity = _ctx.rb.velocity;     // 记录进入瞬间速度
+        dragTimer = 0f;
+        noGravityTimer = 0f;
         //判断还有没有命 没命就真的死了
         if (_ctx.DataMan.currentHP <= 0)
         {
@@ -743,13 +772,51 @@ public class DieState : IPlayerState
     {
         timer+= Time.deltaTime;
     }
-    public  void FixedUpdate()
+    public void FixedUpdate()
     {
+        float dt = Time.fixedDeltaTime;
+        Vector2 v = _ctx.rb.velocity;
 
+        /* -------- 1. 水平速度处理 -------- */
+        float vx;
+        dragTimer += dt;
+        if (dragTimer < 0.3f)
+        {
+            // 前 0.3 s 完全保留进入时的水平速度
+            vx = enterVelocity.x;
+        }
+        else
+        {
+            // 0.3 s 以后才做“高速阻力小”的衰减
+            float sign = Mathf.Sign(enterVelocity.x);   // 始终按初始方向
+            float speed = Mathf.Abs(v.x);                // 用当前速度做阻力计算
+
+            const float k = 2.0f;      // 整体刹车灵敏度，可调
+            const float eps = 0.01f;
+            float drag = k / (speed + eps);
+
+            float newSpeed = speed - drag * dt;
+            const float minSpeed = 0.05f;
+            vx = newSpeed < minSpeed ? 0 : sign * newSpeed;
+        }
+
+        /* -------- 2. 前 0.5 s 无视重力 -------- */
+        noGravityTimer += dt;
+        float vy = (noGravityTimer < 0.5f)
+                   ? enterVelocity.y
+                   : v.y + Physics2D.gravity.y * _ctx.rb.gravityScale * dt;
+
+        _ctx.rb.velocity = new Vector2(vx, vy);
+    
+    
+ 
     }
     public  void Exit()
     {
-        clock=false;
+        // 恢复原始碰撞箱设置
+        _ctx.boxCollider2D.size = _originalColliderSize;
+        _ctx.boxCollider2D.offset = _originalColliderOffset;
+        clock =false;
     }
 
     public void Attack()

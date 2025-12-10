@@ -107,6 +107,7 @@ public class 电梯 : MonoBehaviour
     }
     private void OnDestroy()
     {
+        if(_ctx==null)return;
         _ctx.OnInteractPressed -= Activate;
     }
     void OnDrawGizmos()

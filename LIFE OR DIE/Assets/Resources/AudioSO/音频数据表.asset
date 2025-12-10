@@ -47,3 +47,7 @@ MonoBehaviour:
     audioClip: {fileID: 8300000, guid: b2550b5347c4da846b71154465191b6e, type: 3}
   - Name: "\u73A9\u5BB6\u88AB\u6740"
     audioClip: {fileID: 8300000, guid: a9a80f378349dd04f8ef2700968ff6cc, type: 3}
+  - Name: "\u788E\u77F31"
+    audioClip: {fileID: 8300000, guid: e34b0aaef6ff1c54bae3ba9cae9d19d6, type: 3}
+  - Name: "\u7838\u94C11"
+    audioClip: {fileID: 8300000, guid: 5a44e417e5806614481deb06626f2b1f, type: 3}

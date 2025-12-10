@@ -76,7 +76,7 @@ public class WeaponHitBox : WeaponComponent
                 //Debug.Log($"碰撞体: {col.gameObject.Name}, 层级: {col.gameObject.layer}");
 
                 int mask = (1 << 9) | (1 << 10);
-                if ((mask & (1 << col.gameObject.layer)) != 0)
+                if ((mask & (1 << col.gameObject.layer)) != 0 )
                 {
                     layerMaskCount++;
                     GameObject target = col.attachedRigidbody ? col.attachedRigidbody.gameObject : col.gameObject;
@@ -84,12 +84,12 @@ public class WeaponHitBox : WeaponComponent
                   //  Debug.Log($"添加到敌人列表: {target.Name}");
                 }
 
-                if(col.CompareTag("Phyitem"))
-                {
+                //if(col.CompareTag("Phyitem"))
+                //{
                    
-                        Enemylist.Add(col.gameObject);
+                //        Enemylist.Add(col.gameObject);
                     
-                }
+                //}
              
             }
 

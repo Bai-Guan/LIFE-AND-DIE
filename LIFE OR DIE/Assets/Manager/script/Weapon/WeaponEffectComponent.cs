@@ -50,6 +50,8 @@ public class WeaponEffectComponent : WeaponComponent
         Debug.Log("特效事件");
         foreach (GameObject obj in objs)
         {
+            if (obj.CompareTag("Phyitem") == true) continue;
+
 
             //TODO 其他特效的适配
             WEffectData temp = effectData.ListEffectDatas[weapon.CurrentNum];

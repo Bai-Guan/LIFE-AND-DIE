@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: "\u5C0F\u602A"
   m_EditorClassIdentifier: 
   Name: "\u5C0F\u602A"
-  MaxHP: 100
+  MaxHP: 150
   Defense: 10
-  KnockBackResistance: 0
+  KnockBackResistance: 10
   ToughnessValue: 0

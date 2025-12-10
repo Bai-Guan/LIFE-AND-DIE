@@ -43,6 +43,9 @@ public class AfterComponent : WeaponComponent
 
     private void OnAfterEffect(GameObject[] objs)
     {
+        if (objs.Length > 0 && objs[0].CompareTag("Phyitem")) return;
+        
+
         int times = weapon.CurrentNum;
         AfterEffectType temp = AfterEffect._AfterEffectsdata[times];
         if (temp.ÊÇ·ñÕð¶¯) CameraManager.Instance.CameraShake(temp.shakeTime, temp.shakePow);
