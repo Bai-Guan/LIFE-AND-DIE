@@ -15,9 +15,10 @@ public class EnemyAttackHitBox : MonoBehaviour
     {
         body = GetComponent<InitEnemySystem>();   
         map = new Dictionary<string, EHBData>();
-
+        if(allAttacks==null)return;
         foreach(var temp in allAttacks.hitBoxes)
         {
+          
             map.Add(temp.attackName, temp);
         }
     damage = new DamageData();

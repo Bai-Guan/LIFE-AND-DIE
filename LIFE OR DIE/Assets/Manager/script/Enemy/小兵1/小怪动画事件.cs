@@ -60,31 +60,45 @@ public class 小怪动画事件 : MonoBehaviour
 
     public void TriggerAttack()
     {
-        anim.SetTrigger("attack");
+        SetBool("Attack");
     }
     public void TriggerSpecialAttack()
     {
-        anim.SetTrigger("specialAttack");
+        SetBool("SpecialAttack");
     }
     public void TriggerRun()
     {
-        anim.SetTrigger("run");
+        SetBool("Run");
     }
     public void TriggerHit()
     {
-        anim.SetTrigger("hit");
+        SetBool("Hit");
     }
     public void TriggerIdle()
     {
-        anim.SetTrigger("idle");
+        SetBool("Idle");
     }
     public void TriggerBlock()
     {
-        anim.SetTrigger("block");
+        SetBool("Block");
     }
     public void TriggerWillBlock()
     {
-        anim.SetTrigger("willblock");
+        SetBool("WillBlock");
     }
-
+    private void CloseAllBool()
+    {
+        anim.SetBool("Idle",false);
+        anim.SetBool("Block", false);
+        anim.SetBool("WillBlock", false);
+        anim.SetBool("Hit", false);
+        anim.SetBool("Run", false);
+        anim.SetBool("SpecialAttack", false);
+        anim.SetBool("Attack", false);
+    }
+    public void SetBool(string name)
+    {
+        CloseAllBool();
+        anim.SetBool(name,true);
+    }
 }

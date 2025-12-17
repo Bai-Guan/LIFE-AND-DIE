@@ -59,7 +59,11 @@ public class 骷髅杂兵待机 : 骷髅杂兵状态基类
 
 
 
-
+        if (AIFsm.是否为初见玩家 == false)
+        {
+            float dirToPlayer = AIFsm.MainPlayer.transform.position.x - AIFsm.transform.position.x;
+            AIFsm.SetFacing(Mathf.Sign(dirToPlayer));   // 正数朝右，负数朝左
+        }
 
 
         // 视野中若玩家死亡则转换
@@ -88,7 +92,7 @@ public class 骷髅杂兵待机 : 骷髅杂兵状态基类
             AIFsm.body.SetBackstab(false);
             AIFsm.脱战计时 = 0;
             AIFsm.是否追击 = true;
-
+            AIFsm.是否为初见玩家 = false;
             //如果玩家在近身斩击之外
             if (AIFsm.水平距离玩家距离 > AIFsm.靠近玩家最近距离 + BUFFER)
             {

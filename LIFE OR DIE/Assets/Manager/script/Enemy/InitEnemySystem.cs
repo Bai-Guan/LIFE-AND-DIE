@@ -10,6 +10,8 @@ public class InitEnemySystem : MonoBehaviour
     public string BiologicalName { get { return baseData.Name; } }
     private Rigidbody2D rb;
 
+   public int MaxHp { get { return baseData.MaxHP; } }
+   
     [SerializeField] private int currentHP=1;
   public int CurrentHP {  get { return currentHP; } private set { } }
     private int defense=0;
@@ -51,6 +53,7 @@ public class InitEnemySystem : MonoBehaviour
     public bool  «∑Òø…“‘±≥¥Ã { get { return canBackstab; } }
     private void Awake()
     {
+     
         InitName();
     }
 
@@ -98,7 +101,10 @@ public class InitEnemySystem : MonoBehaviour
         Die?.Invoke(LastAttacker);
     }
 
-
+    public void ResetHP()
+    {
+        currentHP=MaxHp;
+    }
     public void MinusHP(int hp)
     {
         currentHP-=hp;

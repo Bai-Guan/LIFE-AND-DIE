@@ -57,7 +57,10 @@ public class DieComponent : MonoBehaviour
         temp.凶手 = murderer;
         EventBus.Publish<传入杀戮委托的数据>(temp);
     }
-
+    private void OnEnable()
+    {
+        body.Die += SpecialDieEffect;
+    }
     private void OnDisable()
     {
         body.Die -= SpecialDieEffect;

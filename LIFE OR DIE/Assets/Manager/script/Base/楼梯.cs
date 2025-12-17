@@ -23,7 +23,7 @@ public class 楼梯 : MonoBehaviour
 
     void 切换状态为爬楼梯状态()
     {
-        if(StackInteraction.Instance.Peek()==this.gameObject&&inEnter==true)
+        if(StackInteraction.Instance.Peek()==this.gameObject&&inEnter==true&&玩家的全局变量.玩家是否死亡==false)
         {
             StackInteraction.Instance.PopSomeOne(this.gameObject);
             pc.SwitchState(TypeState.stair);
@@ -33,7 +33,7 @@ public class 楼梯 : MonoBehaviour
     void OnTriggerExit2D(Collider2D c)
     {
         if (!c.CompareTag("Player")) return;
-        pc.SwitchState(TypeState.run);
+
 
         pc.OnInteractPressed -= 切换状态为爬楼梯状态;
         inEnter = false;

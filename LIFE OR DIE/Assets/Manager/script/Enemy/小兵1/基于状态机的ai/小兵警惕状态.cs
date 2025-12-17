@@ -52,8 +52,9 @@ public class 小兵警惕状态 : 小兵状态基类
                     GotoTurn();
                 else
                 {
+                    AIFsm.动画事件中心.TriggerRun();
                     AIFsm.SetFacing(-DirToPlayer);
-                    AIFsm.rb.velocity = new Vector2(-DirToPlayer * AIFsm.跑步移动速度*2, AIFsm.rb.velocity.y);
+                    AIFsm.rb.velocity = new Vector2(-DirToPlayer * AIFsm.跑步移动速度*1.2f, AIFsm.rb.velocity.y);
                     
                 }
                 break;

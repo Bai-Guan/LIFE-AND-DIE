@@ -734,6 +734,8 @@ public class DieState : IPlayerState
         AudioManager.Instance.PlaySFX("玩家被杀");
         玩家的全局变量.玩家是否死亡 = true;
 
+        _ctx.rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+        _ctx.rb.interpolation = RigidbodyInterpolation2D.Interpolate; // 顺便补帧，更顺滑
 
         //碰撞变小
         // 保存原始碰撞箱设置
@@ -780,29 +782,24 @@ public class DieState : IPlayerState
         /* -------- 1. 水平速度处理 -------- */
         float vx;
         dragTimer += dt;
-        if (dragTimer < 0.3f)
+        if (dragTimer < 0.05f)
         {
-            // 前 0.3 s 完全保留进入时的水平速度
+            // 前 0.2 s 完全保留进入时的水平速度
             vx = enterVelocity.x;
         }
         else
         {
-            // 0.3 s 以后才做“高速阻力小”的衰减
-            float sign = Mathf.Sign(enterVelocity.x);   // 始终按初始方向
-            float speed = Mathf.Abs(v.x);                // 用当前速度做阻力计算
+            const float a = 3.0f;  // 恒定减速度，单位：速度单位/秒
+            float sign = Mathf.Sign(enterVelocity.x);
+            float newSpeed = Mathf.Abs(v.x) - a * dt;
 
-            const float k = 2.0f;      // 整体刹车灵敏度，可调
-            const float eps = 0.01f;
-            float drag = k / (speed + eps);
-
-            float newSpeed = speed - drag * dt;
             const float minSpeed = 0.05f;
             vx = newSpeed < minSpeed ? 0 : sign * newSpeed;
         }
 
         /* -------- 2. 前 0.5 s 无视重力 -------- */
         noGravityTimer += dt;
-        float vy = (noGravityTimer < 0.5f)
+        float vy = (noGravityTimer < 0.3f)
                    ? enterVelocity.y
                    : v.y + Physics2D.gravity.y * _ctx.rb.gravityScale * dt;
 
@@ -813,6 +810,8 @@ public class DieState : IPlayerState
     }
     public  void Exit()
     {
+        _ctx.rb.collisionDetectionMode = CollisionDetectionMode2D.Discrete;
+        _ctx.rb.interpolation = RigidbodyInterpolation2D.None;
         // 恢复原始碰撞箱设置
         _ctx.boxCollider2D.size = _originalColliderSize;
         _ctx.boxCollider2D.offset = _originalColliderOffset;

@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a01306e6b954cfe4eb0f0d67f5924262, type: 3}
+  m_Name: "\u732E\u796D\u623F"
+  m_EditorClassIdentifier: 
+  roomName: "\u732E\u796D\u623F"
+  roomID: 0
+  visibleRect:
+    serializedVersion: 2
+    x: -20.9
+    y: -15.27
+    width: 80
+    height: 11.2
+  showDebug: 1
+  debugColor: {r: 0.8, g: 0.2, b: 0.21765338, a: 0.3}
+  isDiscovered: 0

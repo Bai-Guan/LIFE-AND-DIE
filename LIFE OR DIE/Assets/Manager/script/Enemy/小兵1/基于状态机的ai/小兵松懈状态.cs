@@ -68,9 +68,9 @@ public class 小兵松懈状态 :小兵状态基类
                     {
 
                         AIFsm.是否为初见玩家 = false;
-
+                        AIFsm.body.SetBackstab(false);
                         AIFsm.是否追击 = true;
-                        AIFsm.SwitchState(AITypeState.ldle);
+                        AIFsm.SwitchState(AITypeState.run);
                     }
                 }
                 break;
@@ -91,13 +91,33 @@ public class 小兵松懈状态 :小兵状态基类
                   //  int dir = AIFsm.body.isFacingLeft ? -1 : 1;
                     AIFsm.rb.velocity = new Vector2(-DirToPlayer * AIFsm.跑步移动速度, AIFsm.rb.velocity.y);
                     AIFsm.动画事件中心.TriggerRun();
+
+                    if (AIFsm.射线检测.IsPlayerVisible && 玩家的全局变量.玩家是否死亡 == false)
+                    {
+
+                        AIFsm.是否为初见玩家 = false;
+                        AIFsm.body.SetBackstab(false);
+                        AIFsm.是否追击 = true;
+                        AIFsm.SwitchState(AITypeState.run);
+                    }
+
+
                 }
                 break;
 
             case 3: // 停留 10 秒
                 AIFsm.rb.velocity = Vector2.zero;
                 AIFsm.动画事件中心.TriggerIdle();
+                if (AIFsm.射线检测.IsPlayerVisible && 玩家的全局变量.玩家是否死亡 == false)
+                {
+
+                    AIFsm.是否为初见玩家 = false;
+                    AIFsm.body.SetBackstab(false);
+                    AIFsm.是否追击 = true;
+                    AIFsm.SwitchState(AITypeState.run);
+                }
                 if (timer >= StayTime) GotoTurn();
+
                 break;
 
             case 4: // 转身 0.3 秒

@@ -10,6 +10,7 @@ public class CollisionState :IPlayerState
     float fallingtimer = 0;
     float rememberATK =0f;
     int layerMask = LayerMask.GetMask("Enemy", "Breakable");
+    private float startFallY;   // 进入下落状态时的 Y
     // 最小矩形尺寸（固定）
     readonly Vector2 baseSize = new Vector2(1f, 0.3f);
    public CollisionState(NewPlayerControll ctx)
@@ -32,6 +33,9 @@ public class CollisionState :IPlayerState
         _ctx.rb.velocity=new Vector2(0,0);
        _ctx. rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
         _ctx.rb.interpolation = RigidbodyInterpolation2D.Interpolate; // 顺便补帧，更顺滑
+
+        //记录位置
+        startFallY = _ctx.transform.position.y;
         //先往上飞一会
 
         _ctx.rb.velocity = new Vector2(0, _ctx.DataMan.flySpeed);
@@ -149,8 +153,9 @@ public class CollisionState :IPlayerState
                                            groundY + size.y * 0.5f);
 
         //生成伤害
-        /* 2. 伤害：速度占比 + 曲线 + clamp */
-        int damageValue = Mathf.RoundToInt(_ctx.DataMan.EvaluateAirTimeDamage(fallingtimer));
+     
+        float fallDistance = startFallY - _ctx.transform.position.y;
+        int damageValue = Mathf.RoundToInt(_ctx.DataMan.EvaluateFallDistanceDamage(fallDistance));
         rememberATK = damageValue;
         DamageData damage = new DamageData
         {

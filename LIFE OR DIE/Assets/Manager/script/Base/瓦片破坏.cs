@@ -8,7 +8,7 @@ public class 瓦片破坏 : MonoBehaviour, IBeDamaged
     [SerializeField] private string 受击音效;
     [SerializeField] private string 被破坏音效;
   [SerializeField]  private int HP = 50;
-    public void OnHurt(DamageData damage, GameObject obj)
+    public float OnHurt(DamageData damage, GameObject obj)
     {
       if(damage.hitType==HitType.heavy)
         {
@@ -32,5 +32,6 @@ public class 瓦片破坏 : MonoBehaviour, IBeDamaged
             Destroy(this.gameObject);
           
         }
+      return HP;
     }
 }

@@ -607,7 +607,7 @@ MonoBehaviour:
   "\u8131\u6218\u6240\u9700\u8981\u7684\u65F6": 6
   "\u8FD1\u8EAB\u65A9\u51FB\u8DDD\u79BB": 2.5
   "\u9760\u8FD1\u73A9\u5BB6\u6700\u8FD1\u8DDD\u79BB": 1.2
-  "\u50F5\u76F4\u65F6\u95F4": 3
+  "\u50F5\u76F4\u65F6\u95F4": 1.5
   decisionInterval: 0.3
   _distanceXPlayer: 0
   "\u671D\u5411": 1
@@ -623,7 +623,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e27c74daf49f7db45b67cba85c96fb37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseData: {fileID: 11400000, guid: 85d3400ef6384494bbc2430c12b9f11f, type: 2}
+  baseData: {fileID: 11400000, guid: 9bb61d51508c966429b8125a6852d254, type: 2}
   currentHP: 100
   LastDamage:
     atk: 0
@@ -704,7 +704,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   checkInterval: 0.4
-  detectionRange: 10
+  detectionRange: 7
   fieldOfView: 60
   obstacleLayer:
     serializedVersion: 2
@@ -750,7 +750,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec69ff1712277584ab89da152400f2f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxRigid: 1
+  maxRigid: 1.5
   RigidTime: 1
   currentRigidValue: 0
   body: {fileID: 1221580018003664382}

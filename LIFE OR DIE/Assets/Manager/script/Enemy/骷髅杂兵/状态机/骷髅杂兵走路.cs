@@ -43,8 +43,8 @@ public class 骷髅杂兵走路 :骷髅杂兵状态基类
     {
         if (AIFsm.水平距离玩家距离 > AIFsm.靠近玩家最近距离)
         {
-
-            AIFsm.rb.velocity = new Vector2(AIFsm.跑步移动速度 * 朝向, AIFsm.rb.velocity.y);
+            int dir = AIFsm.body.isFacingLeft ? -1 : 1;
+            AIFsm.rb.velocity = new Vector2(AIFsm.跑步移动速度 * dir, AIFsm.rb.velocity.y);
 
         }
         if (AIFsm.水平距离玩家距离 < AIFsm.靠近玩家最近距离)
@@ -70,13 +70,13 @@ public class 骷髅杂兵走路 :骷髅杂兵状态基类
 
 
 
-        if (AIFsm.是否追击)
-        {
-            float temp = AIFsm.transform.position.x - AIFsm.MainPlayer.transform.position.x;
-            朝向 = temp > 0 ? -1 : 1;
-
-            AIFsm.SetFilp(朝向);
-        }
+      
+            if (AIFsm.是否为初见玩家 == false)
+            {
+                float dirToPlayer = AIFsm.射线检测.PlayerPosition.x - AIFsm.transform.position.x;
+                AIFsm.SetFacing(Mathf.Sign(dirToPlayer));   // 正数朝右，负数朝左
+            }
+        
 
 
         //检测

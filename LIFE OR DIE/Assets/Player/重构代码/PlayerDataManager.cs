@@ -41,10 +41,20 @@ public class PlayerDataManager :MonoBehaviour
   [SerializeField] float _fallDamagePerSecon = 200;//¸ù¾ÝÊ±¼ä×¹ÂäÉËº¦
     [SerializeField] public float flySpeed = 10f;
    public const float MaxDamage = 3000;
-    [SerializeField] private AnimationCurve airTimeToDamage = AnimationCurve.EaseInOut(0f, 0f, 2f, 3000f);
-    public float EvaluateAirTimeDamage(float t) => airTimeToDamage.Evaluate(t);
+    [Tooltip("ÏÂÂä¾àÀë¡úÉËº¦ÇúÏß  5 m=0  30 m=3000")]
+    [SerializeField]
+    private AnimationCurve fallDistanceToDamage = new AnimationCurve(
+     new Keyframe(5, 0),
+     new Keyframe(7, 100),
+     new Keyframe(10, 200),
+     new Keyframe(15, 800),
+     new Keyframe(25, 1000),
+     new Keyframe(30, 3000)
+ );
+    public float EvaluateFallDistanceDamage(float distance) =>
+        fallDistanceToDamage.Evaluate(Mathf.Clamp(distance, 5f, 30f));
 
- 
+
     public float LandingSizeFactor { get { return landingSizeFactor; } }
      public float MaxFallSpeed {  get { return maxFallSpeed; } }
     public float FallDamagePerSecon { get { return _fallDamagePerSecon; } }

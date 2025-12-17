@@ -41,18 +41,18 @@ public class DamagedComponent : MonoBehaviour, IBeDamaged
     {
 
     }
-    public void OnHurt(DamageData data, GameObject attacker)
+    public float OnHurt(DamageData data, GameObject attacker)
     {
         if (isInvincible == true)
         {
-            return;
+            return -1;
         }
         if (data == null)
         {
             body.MinusHP(0);
             body.SetRBvelcoity(new Vector2(0, 0));
             Debug.LogWarning("传入攻击为空");
-            return;
+            return -1;
         }
         
 
@@ -110,6 +110,7 @@ public class DamagedComponent : MonoBehaviour, IBeDamaged
         //  EffectManager.Instance.VerticalBlur(0.8f, 0.9f);
         //InvincibleRendered(0.8f);
         //CameraManager.Instance.CameraShake(2f, 1f);
+        return body.CurrentHP;
     }
     //被攻击白色闪烁
     public void InvincibleRendered(float t)

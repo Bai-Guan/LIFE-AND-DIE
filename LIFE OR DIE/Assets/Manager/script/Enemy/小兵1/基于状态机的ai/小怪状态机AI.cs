@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Windows;
 
-public class 小怪状态机AI : MonoBehaviour
+public class 小怪状态机AI : MonoBehaviour,IEnemyReset
 {
   private AIFSM fSM;
     private IEnemyState IcurrentState;
@@ -20,7 +20,7 @@ public class 小怪状态机AI : MonoBehaviour
   [SerializeField]  private AITypeState 当前状态;
 
     public float 跑步移动速度 = 4f;
-    public bool 是否为初见玩家 = false;
+    public bool 是否为初见玩家 =true;
     public bool 玩家是否死亡过一次=false;
    
     public bool 是否追击 = false;
@@ -114,6 +114,14 @@ public class 小怪状态机AI : MonoBehaviour
     }
     public void SetFacing(float dir) => SetFilp(dir);   // dir=-1 左，1 右
 
-
-
+    public void EnemyReset()
+    {
+        SwitchState(AITypeState.ldle);
+        body.ResetHP();
+        僵直条.清空僵直条();
+        是否追击 = false;
+        脱战计时 = 0;
+        是否为初见玩家 = true;
+        突刺是否在CD = false;
+    }
 }

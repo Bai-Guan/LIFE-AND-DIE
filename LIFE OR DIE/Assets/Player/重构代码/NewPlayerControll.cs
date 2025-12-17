@@ -242,18 +242,18 @@ public class NewPlayerControll : MonoBehaviour, IBeDamaged
     {
         spriteRenderer.color = color;
     }
-    public void OnHurt(DamageData damage, GameObject obj)
+    public float OnHurt(DamageData damage, GameObject obj)
     {
         //无敌状态,死亡状态, 一律return
         if (dataMan.IsInvincible == true || fSM.curState == TypeState.died || fSM.curState == TypeState.Unexpected)
         {
-            return;
+            return 999999;
         }
         //如果处于奇点状态 则切换为奇点模式
         if(dataMan.IsInAmazingState)
         {
             SwitchState(TypeState.Unexpected);
-            return ;
+            return 99999;
         }
 
         //计算伤害源头是否在玩家正面
@@ -276,21 +276,23 @@ public class NewPlayerControll : MonoBehaviour, IBeDamaged
                     EffectManager.Instance.Play("火花效果", this.transform);
                 }
                 AudioManager.Instance.PlaySFX("重弹刀");
+                return 1;
             }
             else
             {
                 //播放特效 音效
                 AudioManager.Instance.PlaySFX("正常格挡");
+                return 2;
             }
 
 
 
-            return;
+           
         }
         
         SwitchState(TypeState.died);
         dataMan.MinusHP();
-        
+        return -1;
     }
 
     public void 开启奇点时刻()

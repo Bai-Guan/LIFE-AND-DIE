@@ -60,6 +60,13 @@ public class 小兵跑步状态 : 小兵状态基类
 
         AIFsm.CheckRb();
 
+        if (AIFsm.是否追击)
+        {
+            float temp = AIFsm.transform.position.x - AIFsm.MainPlayer.transform.position.x;
+            朝向 = temp > 0 ? -1 : 1;
+
+            AIFsm.SetFilp(朝向);
+        }
         //此判断每个0点几秒检测一次
         if (Time.time - lastDecisionTime < AIFsm.决策间隔 )
             return;
@@ -69,18 +76,12 @@ public class 小兵跑步状态 : 小兵状态基类
 
 
 
-        if(AIFsm.是否追击)
-        {
-            float temp = AIFsm.transform.position.x - AIFsm.MainPlayer.transform.position.x;
-            朝向 = temp > 0 ? -1 : 1;
-           
-            AIFsm.SetFilp(朝向);
-        }
 
 
         //检测
         if (AIFsm.射线检测.IsPlayerVisible)
         {
+           // AIFsm.动画事件中心.TriggerRun();
             AIFsm.body.SetBackstab(false);
             AIFsm.脱战计时 = 0;
             AIFsm.是否追击 = true;

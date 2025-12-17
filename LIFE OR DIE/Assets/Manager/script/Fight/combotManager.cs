@@ -32,7 +32,7 @@ public class combotManager : IBeDamaged
     }
     //判断玩家是否预测成功
     //受伤时候调用
-    public void OnHurt(DamageData damage, GameObject obj)
+    public float OnHurt(DamageData damage, GameObject obj)
     {
         switch (damage.type)
         {
@@ -50,5 +50,7 @@ public class combotManager : IBeDamaged
 
                 break;
         }
+
+        return 999999;
     }
 }

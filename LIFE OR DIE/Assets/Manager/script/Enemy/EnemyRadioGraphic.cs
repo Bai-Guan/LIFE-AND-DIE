@@ -194,4 +194,30 @@ public class EnemyRadioGraphic : MonoBehaviour
     {
         body.SetFilp(isFacingLeft);
     }
+
+    private void OnEnable()
+    {
+     
+        if (player == null)
+        {
+            // 每次激活都重新找玩家（场景里可能暂时删过）
+            player = GameObject.FindGameObjectWithTag("Player")?.transform;
+            if (player == null)
+                return;
+        }
+
+        // 重新启动检测协程
+        if (detectionCoroutine != null) StopCoroutine(detectionCoroutine);
+        detectionCoroutine = StartCoroutine(DetectionLoop());
+    }
+
+    private void OnDisable()
+    {
+        // 失活时停掉协程
+        if (detectionCoroutine != null)
+        {
+            StopCoroutine(detectionCoroutine);
+            detectionCoroutine = null;
+        }
+    }
 }

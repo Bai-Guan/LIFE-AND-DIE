@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IBeDamaged 
 {
-    public void OnHurt(DamageData damage, GameObject obj);
+    public float OnHurt(DamageData damage, GameObject obj);
 }

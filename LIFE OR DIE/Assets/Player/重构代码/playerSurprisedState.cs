@@ -18,6 +18,7 @@ public class playerSurprisedState : IPlayerState
         Debug.Log("进入奇点状态");
         ischose = false;
        timer = 0;
+        _ctx.Anim.TriggerHurt();
         AudioManager.Instance.PlaySFX("处决");
         EffectManager.Instance.VerticalBlur(1.5f, 0.6f);
         EffectManager.Instance.ChromaticAberrationSet(1.5f, 0.6f);
