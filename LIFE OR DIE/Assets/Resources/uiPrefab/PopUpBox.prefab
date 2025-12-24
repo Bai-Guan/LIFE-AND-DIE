@@ -65,10 +65,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u62FE\u53D6\u697C\u68AF"
+  m_text: "\u62FE\u53D6"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 3dd21a86e886b61499ee5af11f8064b7, type: 2}
-  m_sharedMaterial: {fileID: -1235358358646002560, guid: 3dd21a86e886b61499ee5af11f8064b7, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 57bf421d73eb5a94a8bf380a5e0af104, type: 2}
+  m_sharedMaterial: {fileID: 5234653715823575817, guid: 57bf421d73eb5a94a8bf380a5e0af104, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

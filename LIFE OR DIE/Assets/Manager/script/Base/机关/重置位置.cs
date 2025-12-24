@@ -39,6 +39,11 @@ public class 重置位置 : MonoBehaviour, IEnemyReset
             // 3. 拉回出生点
             go.transform.position = pos;
             go.GetComponent<IEnemyReset>().EnemyReset();
+
+            if(玩家的全局变量.是否刷怪==false)
+            {
+                go.SetActive(false);
+            }
         }
     }
 }

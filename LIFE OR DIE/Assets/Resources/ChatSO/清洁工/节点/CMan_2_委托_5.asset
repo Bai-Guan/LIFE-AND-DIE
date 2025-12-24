@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a585998dfc9f6949aaa8249a64c17f6, type: 3}
+  m_Name: "CMan_2_\u59D4\u6258_5"
+  m_EditorClassIdentifier: 
+  NodeId: "CMan_2_\u59D4\u6258_5"
+  text: "\u56E0\u4E3A\u72B6\u51B5\u7A81\u53D1\uFF0C\u5821\u5185\u58EB\u5175\u4F1A\u503E\u5DE2\u51FA\u52A8\u63A7\u5236\u90A3\u4E2A\u602A\u7269\uFF0C\u6B64\u65F6\u5C31\u662F\u6551\u4EBA\u7684\u597D\u673A\u4F1A......"
+  speaker: "\u6E05\u6D01\u5DE5"
+  Taskso: {fileID: 0}
+  NextNodeId: "CMan_2_\u59D4\u6258_6"
+  options: []

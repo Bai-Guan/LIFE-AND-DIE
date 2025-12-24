@@ -73,7 +73,7 @@ public class 骷髅杂兵走路 :骷髅杂兵状态基类
       
             if (AIFsm.是否为初见玩家 == false)
             {
-                float dirToPlayer = AIFsm.射线检测.PlayerPosition.x - AIFsm.transform.position.x;
+                float dirToPlayer = AIFsm.MainPlayer.transform.position.x - AIFsm.transform.position.x;
                 AIFsm.SetFacing(Mathf.Sign(dirToPlayer));   // 正数朝右，负数朝左
             }
         

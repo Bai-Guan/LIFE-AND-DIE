@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a585998dfc9f6949aaa8249a64c17f6, type: 3}
+  m_Name: "Papaer_\u521D\u59CB\u5927\u5385\u544A\u793A\u724C"
+  m_EditorClassIdentifier: 
+  NodeId: "Paper_\u521D\u59CB\u5927\u5385\u544A\u793A\u724C"
+  text: "                           <b>\u2191</b>\u6D3B\u5C38\u623F<br>         <b>\u2190</b>\u6B7B\u5C38\u623F           
+    <b>\u2192</b>\u89C2\u8D4F\u5385<br>                           <b>\u2193</b>\u6295\u5582\u5BA4 "
+  speaker: "\u544A\u793A\u724C"
+  Taskso: {fileID: 0}
+  NextNodeId: 
+  options: []

@@ -51,8 +51,16 @@ public class PlayerDataManager :MonoBehaviour
      new Keyframe(25, 1000),
      new Keyframe(30, 3000)
  );
+  //"下落距离→相机震动强度"
+     private AnimationCurve fallDistanceToShake = new AnimationCurve(
+    new Keyframe(5, 0),
+    new Keyframe(15, 0.5f),
+    new Keyframe(20, 1f)
+);
     public float EvaluateFallDistanceDamage(float distance) =>
         fallDistanceToDamage.Evaluate(Mathf.Clamp(distance, 5f, 30f));
+    public float EvaluateFallDistanceShake(float distance)
+        => fallDistanceToShake.Evaluate(Mathf.Clamp(distance, 5f, 30f));
 
 
     public float LandingSizeFactor { get { return landingSizeFactor; } }

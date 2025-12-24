@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class 弓箭手状态机 : MonoBehaviour,IEnemyReset
+public class 弓箭手状态机 : MonoBehaviour,IEnemyReset,IEnemyAlert
 {
     private AIFSM fSM;
     private IEnemyState IcurrentState;
@@ -17,7 +17,7 @@ public class 弓箭手状态机 : MonoBehaviour,IEnemyReset
     [SerializeField] public InitEnemySystem body;
     [SerializeField] private DamagedComponent 受伤模块;
     [SerializeField] private AITypeState 当前状态;
-
+    [SerializeField] private EnemyAlertNotice notice;
     public float 闪避概率 { get { return 0.3f; } private set { } }
   [SerializeField]  private bool 闪避锁 = false;//射手只能闪避一次
     public bool clock { get { return 闪避锁; } }
@@ -28,6 +28,7 @@ public class 弓箭手状态机 : MonoBehaviour,IEnemyReset
     public GameObject 飞箭本体;
     public float 飞箭速度 = 12f;
 
+    private bool 警惕锁 = false;
 
     public float 僵直时间 = 0.4f;
     [Tooltip("决策间隔")]
@@ -69,6 +70,12 @@ public class 弓箭手状态机 : MonoBehaviour,IEnemyReset
     void Update()
     {
         fSM.Update();
+
+        if (警惕锁==false&&是否为初见玩家==false)
+        {
+            警惕锁 = true;
+            notice.OnSpotPlayer();
+        }
     }
     private void FixedUpdate()
     {
@@ -131,7 +138,15 @@ public class 弓箭手状态机 : MonoBehaviour,IEnemyReset
         SwitchState(AITypeState.ldle);
         是否为初见玩家 = true;
         body.ResetHP();
+        警惕锁 = false;
         僵直条.清空僵直条();
        
+    }
+    public void OnAlerted()
+    {
+       
+        是否为初见玩家 = false;
+        float dirToPlayer = MainPlayer.transform.position.x - transform.position.x;
+        SetFacing(Mathf.Sign(dirToPlayer));   // 正数朝右，负数朝左
     }
 }

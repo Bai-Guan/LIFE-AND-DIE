@@ -29,7 +29,11 @@ public class RoomTrigger : MonoBehaviour
         foreach (var m in enemies)
         {
             if (m == null) continue;
-             resettables.Add(m);
+            {
+                resettables.Add(m);
+                m.SetActive(false);
+            }
+            
         }
     }
 

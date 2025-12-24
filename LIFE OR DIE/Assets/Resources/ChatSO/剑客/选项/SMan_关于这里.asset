@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44ec020119253224c9c10d78f0cb4a98, type: 3}
+  m_Name: "SMan_\u5173\u4E8E\u8FD9\u91CC"
+  m_EditorClassIdentifier: 
+  OptionText: "\u5173\u4E8E\u8FD9\u91CC"
+  NextNodeID: "SMan_4_\u5173\u4E8E\u8FD9\u91CC_1"
+  bg: {fileID: 0}

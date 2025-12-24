@@ -664,7 +664,7 @@ public class BlockState : IPlayerState
     {
         Debug.Log("进入格挡状态");
         _ctx.Anim.TriggerBlock(true);
-       
+       _ctx.rb.velocity=new Vector2(0,_ctx.rb.velocity.y);
         
         timer = 0;
     }
@@ -799,11 +799,11 @@ public class DieState : IPlayerState
 
         /* -------- 2. 前 0.5 s 无视重力 -------- */
         noGravityTimer += dt;
-        float vy = (noGravityTimer < 0.3f)
-                   ? enterVelocity.y
-                   : v.y + Physics2D.gravity.y * _ctx.rb.gravityScale * dt;
+        //float vy = (noGravityTimer < 0.3f)
+        //           ? enterVelocity.y
+        //           : v.y + Physics2D.gravity.y * _ctx.rb.gravityScale * dt;
 
-        _ctx.rb.velocity = new Vector2(vx, vy);
+        _ctx.rb.velocity = new Vector2(vx, _ctx.rb.velocity.y);
     
     
  

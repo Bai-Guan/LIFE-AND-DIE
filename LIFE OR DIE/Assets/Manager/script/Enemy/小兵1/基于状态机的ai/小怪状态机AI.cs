@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Windows;
 
-public class 小怪状态机AI : MonoBehaviour,IEnemyReset
+public class 小怪状态机AI : MonoBehaviour,IEnemyReset,IEnemyAlert
 {
   private AIFSM fSM;
     private IEnemyState IcurrentState;
@@ -17,6 +17,7 @@ public class 小怪状态机AI : MonoBehaviour,IEnemyReset
     [SerializeField] public Rigidbody2D rb;
     [SerializeField] public InitEnemySystem body;
     [SerializeField] private DamagedComponent 受伤模块;
+    [SerializeField] private EnemyAlertNotice notice;
   [SerializeField]  private AITypeState 当前状态;
 
     public float 跑步移动速度 = 4f;
@@ -38,6 +39,8 @@ public class 小怪状态机AI : MonoBehaviour,IEnemyReset
 
     public float 格挡成功概率 = 0.3f;
     public float 僵直时间 = 0.4f;
+
+    private bool 警惕锁 = false;
     [Tooltip("决策间隔")]
  [SerializeField]   private float decisionInterval = 0.3f; // 每0.3秒才判一次
     public float 决策间隔 { get {  return decisionInterval; } }
@@ -78,6 +81,12 @@ public class 小怪状态机AI : MonoBehaviour,IEnemyReset
     void Update()
     {
         fSM.Update();
+
+        if (警惕锁 == false && 是否为初见玩家 == false)
+        {
+            警惕锁 = true;
+            notice.OnSpotPlayer();
+        }
     }
     private void FixedUpdate()
     {
@@ -123,5 +132,13 @@ public class 小怪状态机AI : MonoBehaviour,IEnemyReset
         脱战计时 = 0;
         是否为初见玩家 = true;
         突刺是否在CD = false;
+        警惕锁 = false;
+    }
+    public void OnAlerted()
+    {
+        是否追击 = true;
+        是否为初见玩家 = false;
+        float dirToPlayer = MainPlayer.transform.position.x - transform.position.x;
+        SetFacing(Mathf.Sign(dirToPlayer));   // 正数朝右，负数朝左
     }
 }

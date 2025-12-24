@@ -40,10 +40,12 @@ public class 小兵跑步状态 : 小兵状态基类
 
     public override void FixedUpdate()
     {
+
         if (AIFsm.水平距离玩家距离 > AIFsm.靠近玩家最近距离)
         {
-
-            AIFsm.rb.velocity = new Vector2(AIFsm.跑步移动速度 * 朝向, AIFsm.rb.velocity.y);
+            float temp = AIFsm.transform.position.x - AIFsm.MainPlayer.transform.position.x;
+            int dir = temp > 0 ? -1 : 1;
+            AIFsm.rb.velocity = new Vector2(AIFsm.跑步移动速度*dir , AIFsm.rb.velocity.y);
             
         }
      if(AIFsm.水平距离玩家距离 < AIFsm.靠近玩家最近距离)

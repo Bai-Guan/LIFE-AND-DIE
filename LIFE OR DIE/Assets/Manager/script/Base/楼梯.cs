@@ -34,7 +34,7 @@ public class 楼梯 : MonoBehaviour
     {
         if (!c.CompareTag("Player")) return;
 
-
+        pc.SwitchState(TypeState.run);
         pc.OnInteractPressed -= 切换状态为爬楼梯状态;
         inEnter = false;
         // if (pc.CurrentStair == this) pc.CurrentStair = null;

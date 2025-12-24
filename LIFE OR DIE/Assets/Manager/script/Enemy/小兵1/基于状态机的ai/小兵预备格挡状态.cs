@@ -31,8 +31,9 @@ public class 小兵预备格挡状态 : 小兵状态基类
         }
 
         // 3. 分支出口
-        if (playerHit)                       // 玩家出招 → 真正格挡
+        if (playerHit&&AIFsm.水平距离玩家距离<=AIFsm.近身斩击距离)                       // 玩家出招 → 真正格挡
         {
+
             AIFsm.SwitchState(AITypeState.block);
         }
         else if (waitTimer <= 0)             // 超时 → 回待机

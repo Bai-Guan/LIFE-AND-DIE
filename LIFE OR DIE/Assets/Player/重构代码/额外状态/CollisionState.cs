@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class CollisionState :IPlayerState
 {
@@ -30,39 +31,18 @@ public class CollisionState :IPlayerState
         //设置无敌
         _ctx.DataMan.SetInvencible(true);
         //设置速度
-        _ctx.rb.velocity=new Vector2(0,0);
-       _ctx. rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+        _ctx.rb.velocity = new Vector2(0, -_ctx.DataMan.flySpeed);
+        _ctx.rb.gravityScale = 6;
+        isfalling = true;
+        _ctx. rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
         _ctx.rb.interpolation = RigidbodyInterpolation2D.Interpolate; // 顺便补帧，更顺滑
 
         //记录位置
         startFallY = _ctx.transform.position.y;
-        //先往上飞一会
-
-        _ctx.rb.velocity = new Vector2(0, _ctx.DataMan.flySpeed);
-
-        TimeManager.Instance.OneTime(1f,
-            () =>
-            {
-                _ctx.rb.velocity = new Vector2(0, -6f);
-                _ctx.rb.gravityScale = 6;
-                isfalling = true;
-
-            }
-            );
-            //,
-            //() =>
-            //{
-                
-            //}
-            //);
 
 
 
     }
-
-   
-
-    
 
     public void Exit()
     {
@@ -84,15 +64,16 @@ public class CollisionState :IPlayerState
             Debug.Log("进行攻击判定");
             isfalling = false;
             _ctx.rb.gravityScale = 3;
-            //创建攻击框
-            SpawnLandingRect(fallSpeed);
-            //动画特效
 
 
-            if (fallingtimer > 0.3)
+
+            float temp = SpawnLandingRect(fallSpeed);
+            //创建攻击框 如果满足距离大于5
+            if (temp>5f)
             {
+                float ShakeValue = Mathf.RoundToInt(_ctx.DataMan.EvaluateFallDistanceShake(temp));
                 //屏幕震动
-                SetShake(fallingtimer);
+                SetShake(ShakeValue);
                 //切换状态
                 //再消耗一条命 如果速度足够快 
                 _ctx.DataMan.MinusHP();
@@ -139,14 +120,16 @@ public class CollisionState :IPlayerState
     }
 
   
-      private  void SpawnLandingRect(float speed)
+      private  float SpawnLandingRect(float speed)
         {
         Debug.Log("飞行时间为" + fallingtimer);
+        float fallDistance = startFallY - _ctx.transform.position.y;
+        int damageValue = Mathf.RoundToInt(_ctx.DataMan.EvaluateFallDistanceDamage(fallDistance));
 
-            float factor = _ctx.DataMan.LandingSizeFactor;          // <- 读数据类
-            Vector2 size = baseSize + Vector2.one * (speed * factor);
-            size.x = Mathf.Max(size.x, baseSize.x);
-            size.y = Mathf.Max(size.y, baseSize.y);
+        float factor = _ctx.DataMan.LandingSizeFactor;          // <- 读数据类
+            Vector2 size = baseSize + Vector2.one * (damageValue * 0.03f);
+            size.x = Mathf.Max(size.x*0.6f, baseSize.x);
+            size.y = Mathf.Max(size.y*0.3f, baseSize.y);
 
             float groundY = _ctx.transform.position.y;
             Vector2 spawnPos = new Vector2(_ctx.transform.position.x,
@@ -154,8 +137,8 @@ public class CollisionState :IPlayerState
 
         //生成伤害
      
-        float fallDistance = startFallY - _ctx.transform.position.y;
-        int damageValue = Mathf.RoundToInt(_ctx.DataMan.EvaluateFallDistanceDamage(fallDistance));
+   
+       
         rememberATK = damageValue;
         DamageData damage = new DamageData
         {
@@ -195,7 +178,7 @@ public class CollisionState :IPlayerState
 
             GameObject.Destroy(go, 10f);   // 1 秒后自动销毁
 
-       
+        return fallDistance;
         }
       private void SetShake(float timer)
     {
@@ -205,6 +188,6 @@ public class CollisionState :IPlayerState
 
     public void Block()
     {
-        throw new System.NotImplementedException();
+    
     }
 }

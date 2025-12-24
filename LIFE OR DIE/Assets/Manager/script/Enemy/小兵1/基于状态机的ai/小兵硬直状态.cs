@@ -27,6 +27,7 @@ public class 小兵硬直状态 : 小兵状态基类
 
     public override void Exit()
     {
+        AIFsm.僵直条.清空僵直条();
         timer = 0;
     }
 
@@ -37,6 +38,7 @@ public class 小兵硬直状态 : 小兵状态基类
 
     public override void Update()
     {
+        AIFsm.僵直条.清空僵直条();
         timer += Time.deltaTime;
         if (timer > AIFsm.僵直时间)
         {

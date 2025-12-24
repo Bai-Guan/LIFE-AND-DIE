@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class 骷髅杂兵状态机 : MonoBehaviour,IEnemyReset
+public class 骷髅杂兵状态机 : MonoBehaviour,IEnemyReset,IEnemyAlert
 {
     private AIFSM fSM;
     private IEnemyState IcurrentState;
@@ -112,5 +112,13 @@ public class 骷髅杂兵状态机 : MonoBehaviour,IEnemyReset
         是否追击 = false;
         是否为初见玩家=true;
         脱战计时 = 0;
+    }
+
+    public void OnAlerted()
+    {
+        是否追击 = true;
+        是否为初见玩家 = false;
+        float dirToPlayer = MainPlayer.transform.position.x - transform.position.x;
+        SetFacing(Mathf.Sign(dirToPlayer));   // 正数朝右，负数朝左
     }
 }

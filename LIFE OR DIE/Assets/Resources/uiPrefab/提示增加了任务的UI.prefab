@@ -81,6 +81,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44a01dcd352b47a448945c1d7ba0e089, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_TextMeshPro: {fileID: 6320884409134341229}
 --- !u!1 &2142151287008733297
 GameObject:
   m_ObjectHideFlags: 0
@@ -223,8 +224,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "<color=#9A2300>\u65B0</color>\u7684\u6267\u5FF5\u6D8C\u73B0\u4E86\u51FA\u6765"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 3dd21a86e886b61499ee5af11f8064b7, type: 2}
-  m_sharedMaterial: {fileID: -1235358358646002560, guid: 3dd21a86e886b61499ee5af11f8064b7, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 57bf421d73eb5a94a8bf380a5e0af104, type: 2}
+  m_sharedMaterial: {fileID: 5234653715823575817, guid: 57bf421d73eb5a94a8bf380a5e0af104, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

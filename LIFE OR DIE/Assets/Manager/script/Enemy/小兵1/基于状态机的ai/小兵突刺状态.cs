@@ -28,6 +28,7 @@ public class 小兵突刺状态 : 小兵状态基类
 
         TimeManager.Instance.OneTime(0.5f,() =>
         {
+            if (AIFsm.body == null) return;
             AIFsm.rb.velocity = new Vector2(AIFsm.突刺瞬时速度 * 朝向, 0);
               AudioManager.Instance.PlaySFX("挥击嗖_2");
 

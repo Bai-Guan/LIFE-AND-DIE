@@ -78,6 +78,14 @@ public class 小兵松懈状态 :小兵状态基类
             case 1: // 等 2 秒（待机动画）
                 AIFsm.rb.velocity = Vector2.zero;
                 AIFsm.动画事件中心.TriggerIdle();
+                if (AIFsm.射线检测.IsPlayerVisible && 玩家的全局变量.玩家是否死亡 == false)
+                {
+
+                    AIFsm.是否为初见玩家 = false;
+                    AIFsm.body.SetBackstab(false);
+                    AIFsm.是否追击 = true;
+                    AIFsm.SwitchState(AITypeState.run);
+                }
                 if (timer >= 2f) GotoBackWalk();
                 break;
 
