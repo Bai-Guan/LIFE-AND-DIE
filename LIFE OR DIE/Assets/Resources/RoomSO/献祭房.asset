@@ -16,9 +16,9 @@ MonoBehaviour:
   roomID: 0
   visibleRect:
     serializedVersion: 2
-    x: -20.9
+    x: -17
     y: -15.27
-    width: 80
+    width: 76
     height: 11.2
   showDebug: 1
   debugColor: {r: 0.8, g: 0.2, b: 0.21765338, a: 0.3}

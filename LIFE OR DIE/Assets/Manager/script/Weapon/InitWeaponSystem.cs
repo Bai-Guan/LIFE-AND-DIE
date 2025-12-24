@@ -34,6 +34,7 @@ public class InitWeaponSystem : MonoBehaviour
 
 
     private Transform MainPlayer;
+    public GameObject body { get { return MainPlayer.gameObject; } }
     public Rigidbody2D PlayerRB { get { return MainPlayer.GetComponent<Rigidbody2D>(); } private set { } }
     public SpriteRenderer PlayerSpriteRenderer { get { return MainPlayer.GetComponent<SpriteRenderer>(); } private set { } }
 

@@ -35,6 +35,7 @@ public class 小兵松懈状态 :小兵状态基类
         startPos = AIFsm.transform.position;
         AIFsm.是否追击=false;
         AIFsm.body.SetBackstab(true);
+        AIFsm.僵直条.清空僵直条();
     }
 
     public override void Exit()
@@ -108,7 +109,8 @@ public class 小兵松懈状态 :小兵状态基类
                         AIFsm.是否追击 = true;
                         AIFsm.SwitchState(AITypeState.run);
                     }
-
+                    timer += Time.deltaTime;
+                    if(timer >=3.5f) GotoStay();
 
                 }
                 break;

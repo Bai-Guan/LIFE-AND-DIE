@@ -17,9 +17,9 @@ MonoBehaviour:
   visibleRect:
     serializedVersion: 2
     x: -34
-    y: 8.02
-    width: 42.1
-    height: 11
+    y: 8.16
+    width: 16
+    height: 10.91
   showDebug: 1
   debugColor: {r: 0.7484276, g: 0.7484276, b: 0.7484276, a: 0.3}
   isDiscovered: 0

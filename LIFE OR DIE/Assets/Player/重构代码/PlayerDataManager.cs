@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 //[RequireComponent(typeof(Player_checkGround))]
@@ -9,9 +10,11 @@ public class PlayerDataManager :MonoBehaviour
 {
     [Header("基础数据")]
     public int currentHP=1;
-    //----
-  
+    public  UnityEvent<int> PlayerHPChange;
+    public void MinusHP() { currentHP -= 1;PlayerHPChange.Invoke(currentHP); }
+    public void AddHP() { currentHP += 1; PlayerHPChange.Invoke(currentHP); }
 
+    //------
     [Tooltip("玩家速度/ 地面摩擦力")]
     public readonly float moveSpeed = 6f;
     public readonly float jumpSpeed = 10f;
@@ -155,8 +158,7 @@ public class PlayerDataManager :MonoBehaviour
 
     //死亡受伤相关-----------------------
     private PlayerAddHPCondition hPCondition;
-    public void MinusHP() => currentHP -= 1;
-    public void AddHP() => currentHP += 1;
+   
 
     [Header("奇点时间有关")]
 

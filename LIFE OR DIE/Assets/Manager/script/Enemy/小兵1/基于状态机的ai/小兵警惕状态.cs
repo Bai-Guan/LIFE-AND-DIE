@@ -11,6 +11,7 @@ public class 小兵警惕状态 : 小兵状态基类
     private int phase = 0;   // 0-跑近 2m 1-等2s 2-背退5m 3-转身待机
     private float timer = 0f;
     private Vector3 startPos;
+    
     private const float RunRange = 3f;
     private const float BackDist = 5f;
 
@@ -20,6 +21,7 @@ public class 小兵警惕状态 : 小兵状态基类
     {
         phase = 0; timer = 0f;
         AIFsm.body.SetBackstab(false);
+        AIFsm.僵直条.清空僵直条();
     }
 
     public override void Update()
@@ -55,7 +57,8 @@ public class 小兵警惕状态 : 小兵状态基类
                     AIFsm.动画事件中心.TriggerRun();
                     AIFsm.SetFacing(-DirToPlayer);
                     AIFsm.rb.velocity = new Vector2(-DirToPlayer * AIFsm.跑步移动速度*1.2f, AIFsm.rb.velocity.y);
-                    
+                    timer += Time.deltaTime;
+                    if(timer >=2.5f) GotoTurn();
                 }
                 break;
 
