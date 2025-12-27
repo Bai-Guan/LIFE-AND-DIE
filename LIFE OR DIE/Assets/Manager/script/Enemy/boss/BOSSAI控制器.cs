@@ -14,10 +14,11 @@ public class BOSSAI控制器 : MonoBehaviour
     [SerializeField] public EnemyRigidbar 僵直条;
     [SerializeField] public Rigidbody2D rb;
     [SerializeField] public InitEnemySystem body;
-    [SerializeField] private DamagedComponent 受伤模块; 
+    [SerializeField] private DamagedComponent 受伤模块;
     [SerializeField] private BOSSAITypeState 当前状态;
     [SerializeField] private EnemyAlertNotice notice;
-
+    [SerializeField] private EnemyAttackHitBox hitComp;
+    [SerializeField] public BOSS事件中心 AnimtorEvent;
 
     public bool 是否为初见玩家 = true;
     public bool 玩家是否死亡过一次 = false;
@@ -35,7 +36,7 @@ public class BOSSAI控制器 : MonoBehaviour
             return _distanceXPlayer;
         }
     }
-   public int 朝向
+    public int 朝向
     {
         get
         {
@@ -48,12 +49,12 @@ public class BOSSAI控制器 : MonoBehaviour
     public BossHPUI BossUI;
 
     //是否为二阶段
-    public bool isTwoPhase=false;
+    public bool isTwoPhase = false;
 
     [Header("移动时参数")]
     [SerializeField] public float 最大移动速度 = 13f;
-    [SerializeField] public float 五连击距离 = 6f;
-    [SerializeField] public float 挤压距离 = 15f;
+    [SerializeField] public float 五连击距离 = 3.5f;
+    [SerializeField] public float 挤压距离 = 7f;
 
     [Header("下坠参数")]
     [SerializeField] public float 下坠速度 = 15f;
@@ -115,23 +116,23 @@ public class BOSSAI控制器 : MonoBehaviour
     //为ai状态机提供的方法
     public void 显示BossUI()
     {
-        if(BossUI == null)
-      BossUI =  UIManager.Instance.OpenPanel(UIManager.UIConst.Boss_1) as BossHPUI;
+        if (BossUI == null)
+            BossUI = UIManager.Instance.OpenPanel(UIManager.UIConst.Boss_1) as BossHPUI;
     }
 
     private void 受伤时更新UI()
     {
         if (BossUI != null)
         {
-            BossUI.改变血量(body.CurrentHP,body.MaxHp);
-            BossUI.改变僵直条数值(僵直条.currentRigidValue,僵直条.MaxRigid );
+            BossUI.改变血量(body.CurrentHP, body.MaxHp);
+            BossUI.改变僵直条数值(僵直条.currentRigidValue, 僵直条.MaxRigid);
         }
-    
-        
+
+
     }
     public float ReturnDirToPlayer()
     {
-      return  transform.position.x - MainPlayer.transform.position.x >= 0 ? -1 : 1;
+        return transform.position.x - MainPlayer.transform.position.x >= 0 ? -1 : 1;
     }
     public void CheckRb()
     {
@@ -150,6 +151,11 @@ public class BOSSAI控制器 : MonoBehaviour
         受伤模块.设置伤害倍率(mul);
     }
     public void SetFacing(float dir) => body.SetFilp(dir);   // dir=-1 左，1 右
+
+    public void 面朝玩家() 
+        {
+        SetFacing(ReturnDirToPlayer());
+        }
     public void EnemyReset()
     {
         SwitchState(BOSSAITypeState.waitPlayer);
@@ -167,6 +173,10 @@ public class BOSSAI控制器 : MonoBehaviour
         SetFacing(Mathf.Sign(dirToPlayer));   // 正数朝右，负数朝左
     }
 
+    public void CreateHitBox(string name)
+    {
+        hitComp.OnAnimEvent_FireAttack(name);
+    }
     private void OnDestroy()
     {
         body.BeAttack -= 受伤时更新UI;

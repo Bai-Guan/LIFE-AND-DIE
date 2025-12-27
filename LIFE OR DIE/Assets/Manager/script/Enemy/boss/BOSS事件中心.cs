@@ -5,7 +5,7 @@ using UnityEngine;
 public class BOSS事件中心 : MonoBehaviour
 {
     [SerializeField] private Animator anim;
-
+    private EnemyAttackHitBox hitbox;
 
     private Animator animator;
 
@@ -17,47 +17,54 @@ public class BOSS事件中心 : MonoBehaviour
     void Start()
     {
         anim = GetComponent<Animator>();
-
+        hitbox = GetComponent<EnemyAttackHitBox>();
         //bt = GetComponent<BehaviorTree>();
     }
 
     //要提供可以停止动画 重置动画的方法
 
-    public void OnAnimEventFireAttack()
+  
+
+
+
+    private void CloseAllBool()
     {
-        //if (attackHitBox != null)
-        //{
-        //    attackHitBox.OnAnimEvent_FireAttack(attackName);
-        //    AudioManager.Instance.PlaySFX("挥击嗖_1");
-        //    CurrentAttack = attackName;
-        //}
+        anim.SetBool("Idle", false);
+        anim.SetBool("FiveAttack", false);
+        anim.SetBool("hit", false);
+        anim.SetBool("run", false);
+        anim.SetBool("JumpAttack", false);
+    }
+    public void SetBool(string name)
+    {
+        CloseAllBool();
+        anim.SetBool(name, true);
     }
 
 
-    public void Play(string name)
+    public void Attack1()
     {
-        anim.SetTrigger(name);
+        hitbox.OnAnimEvent_FireAttack("attack1");
+        AudioManager.Instance.PlaySFX("挥击嗖_1");
     }
-
-    public void TriggerAttack()
+    public void Attack2()
     {
-        anim.SetTrigger("attack");
+        hitbox.OnAnimEvent_FireAttack("attack2");
+        AudioManager.Instance.PlaySFX("挥击嗖_2");
     }
-
-    public void TriggerRoll()
+    public void Attack3()
     {
-        anim.SetTrigger("roll");
+        hitbox.OnAnimEvent_FireAttack("attack3");
+        AudioManager.Instance.PlaySFX("挥击嗖_1");
     }
-    public void TriggerHit()
+    public void Attack4()
     {
-        anim.SetTrigger("hit");
+        hitbox.OnAnimEvent_FireAttack("attack4");
+        AudioManager.Instance.PlaySFX("挥击嗖_2");
     }
-    public void TriggerIdle()
+  public void Attack5()
     {
-        anim.SetTrigger("idle");
-    }
-    public void TriggerReady()
-    {
-        anim.SetTrigger("ready");
+        hitbox.OnAnimEvent_FireAttack("attack5");
+        AudioManager.Instance.PlaySFX("挥击嗖_3");
     }
 }

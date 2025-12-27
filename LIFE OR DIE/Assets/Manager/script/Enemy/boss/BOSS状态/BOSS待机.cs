@@ -12,6 +12,7 @@ public class BOSS待机 : BOSS状态基类
     {
         AIFsm.body.SetRBvelcoity(new Vector2(0,0));
         AIFsm.僵直条.清空僵直条();
+        AIFsm.AnimtorEvent.SetBool("Idle");
     }
 
     public override void Exit()
@@ -34,12 +35,13 @@ public class BOSS待机 : BOSS状态基类
         }
         AIFsm.CheckRb();
 
+        if(玩家的全局变量.玩家是否死亡==true)return;
 
       float random=  Random.Range(0f,1f);    
         //0.3概率砸地 0.7概率移动
         if(random<=0.3f)
         {
-            AIFsm.SwitchState(BOSSAITypeState.jumpAttack);
+           // AIFsm.SwitchState(BOSSAITypeState.jumpAttack);
             return;
         }
         else if(random>0.7f)

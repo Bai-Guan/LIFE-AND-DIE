@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class BOSS大屁股砸地 : BOSS状态基类
 {
@@ -10,32 +11,37 @@ public class BOSS大屁股砸地 : BOSS状态基类
     private const float 上升距离 = 8f;
     private float 目标位置X;
     private float 目标位置Y;
+    private float StartY;
 
-    private DamageData dropDamage = new DamageData()
-    {
-        atk = 400,
-        hitType = HitType.heavy,
+    //private DamageData dropDamage = new DamageData()
+    //{
+    //    atk = 400,
+    //    hitType = HitType.heavy,
 
-    };
+    //};
 
     private const float 上升时间 = 0.5f;
-    private const float 等待时间 = 0.7f;
-    private const float 下坠时间 = 0.3f;
+    private const float 等待时间 = 0.2f;
+    private const float 下坠时间 = 0.2f;
     private const float 后摇时间 = 2.5f;
     private float timer =0;
+    private float temp = 0;
     private enum 砸地阶段 {上升,等待,下坠,后摇 }
     private 砸地阶段 current=砸地阶段.上升;
     public override void Enter()
     {
         current = 砸地阶段.上升;
         目标位置Y =AIFsm.transform.position.y+上升距离;
+        StartY=AIFsm.transform.position.y;
+        temp = AIFsm.rb.gravityScale;
+        AIFsm.rb.gravityScale = 0;
     }
 
  
 
     public override void Exit()
     {
-      
+        AIFsm.rb.gravityScale = temp;
     }
 
    
@@ -45,17 +51,17 @@ public class BOSS大屁股砸地 : BOSS状态基类
         switch (current)
         {
             case 砸地阶段.上升:
-
+                上升();
                 break;
 
             case 砸地阶段.等待:
-
+                等待();
                 break;
             case 砸地阶段.下坠:
-
+                下坠();
                 break;
             case 砸地阶段.后摇:
-
+                后摇();
                 break;
 
         }
@@ -64,6 +70,7 @@ public class BOSS大屁股砸地 : BOSS状态基类
     public override void Update()
     {
         timer += Time.deltaTime;
+        AIFsm.面朝玩家();
     }
 
     private void 上升()
@@ -86,14 +93,27 @@ public class BOSS大屁股砸地 : BOSS状态基类
         {
             timer = 0;
             current = 砸地阶段.下坠;
+            AIFsm.CreateHitBox("下砸");
         }
     }
     private void 下坠()
     {
-
+        float scale = timer / 下坠时间;
+        float Y = Mathf.Lerp(目标位置Y, StartY, scale);
+        AIFsm.body.transform.position = new Vector2(AIFsm.body.transform.position.x, Y);
+        if (timer> 下坠时间)
+        {
+            timer = 0;
+            current = 砸地阶段.后摇;
+        }
+      
     }
     private void 后摇()
     {
-
+        if(timer>= 后摇时间)
+        {
+            timer = 0;
+            AIFsm.SwitchState(BOSSAITypeState.ldle);
+        }
     }
 }

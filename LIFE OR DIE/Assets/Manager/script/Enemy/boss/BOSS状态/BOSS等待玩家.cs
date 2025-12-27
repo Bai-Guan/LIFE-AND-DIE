@@ -40,7 +40,7 @@ public class BOSS等待玩家 :BOSS状态基类
         if(是否发现玩家)
         {
             timer += Time.deltaTime;
-            if (timer > 3f)
+            if (timer > 2f)
             {
                 AIFsm.SwitchState(BOSSAITypeState.ldle);
                 return;

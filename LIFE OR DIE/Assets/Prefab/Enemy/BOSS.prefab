@@ -64,7 +64,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.002080381, y: 0.0041915625}
+  m_Offset: {x: -0.01352787, y: 0.014017932}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -75,7 +75,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.48825765, y: 0.51492894}
+  m_Size: {x: 0.31514937, y: 0.43773472}
   m_EdgeRadius: 0
 --- !u!1 &2895891646670459535
 GameObject:
@@ -119,7 +119,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 20.406485, y: -30.920296, z: 0}
-  m_LocalScale: {x: 6.5142794, y: 5.1243196, z: 2.808}
+  m_LocalScale: {x: 8.510254, y: 6.694411, z: 3.6683712}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7813156901783164560}
@@ -168,15 +168,15 @@ SpriteRenderer:
   m_SortingLayerID: -250915853
   m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 33dccf83b7f7f294992c97ebe1990464, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.75, y: 0.42}
+  m_Size: {x: 0.85, y: 0.43}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &1519014696780245521
@@ -200,11 +200,14 @@ MonoBehaviour:
   "\u53D7\u4F24\u6A21\u5757": {fileID: 5537111941723341015}
   "\u5F53\u524D\u72B6\u6001": 0
   notice: {fileID: 2937648437978046647}
+  hitComp: {fileID: 5386173677399844244}
+  AnimtorEvent: {fileID: 2820174440069135510}
   "\u662F\u5426\u4E3A\u521D\u89C1\u73A9\u5BB6": 1
   "\u73A9\u5BB6\u662F\u5426\u6B7B\u4EA1\u8FC7\u4E00\u6B21": 0
   "\u50F5\u76F4\u65F6\u95F4": 0.4
   decisionInterval: 0.3
   _distanceXPlayer: 0
+  BossUI: {fileID: 0}
   isTwoPhase: 0
   "\u6700\u5927\u79FB\u52A8\u901F\u5EA6": 13
   "\u4E94\u8FDE\u51FB\u8DDD\u79BB": 6
@@ -222,7 +225,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c957581219f2244f878c7118cb190bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  anim: {fileID: 0}
+  anim: {fileID: 1625569519270600792}
 --- !u!114 &2937648437978046647
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -263,7 +266,7 @@ MonoBehaviour:
     RepellingYSpeed: 0
   LastAttacker: {fileID: 0}
   LastDir: {x: 0, y: 0}
-  facingleft: 1
+  facingleft: -1
 --- !u!114 &5386173677399844244
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -276,7 +279,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6b1281592c796a4d91c442d7a70f5b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allAttacks: {fileID: 11400000, guid: 70c49bae3760ff0489760641060c602e, type: 2}
+  allAttacks: {fileID: 11400000, guid: d7176324a9f25ff4d964c96718a910d0, type: 2}
   isDebug: 1
 --- !u!114 &5537111941723341015
 MonoBehaviour:
@@ -325,8 +328,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   checkInterval: 0.4
-  detectionRange: 7
-  fieldOfView: 60
+  detectionRange: 9
+  fieldOfView: 73.8
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -412,7 +415,7 @@ Animator:
   m_GameObject: {fileID: 2895891646670459535}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 3f23cce62b66b8b4aa8b7d67e567ed6a, type: 2}
+  m_Controller: {fileID: 9100000, guid: 608d1322bd4852740a7a4bf50cc07c39, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -489,7 +492,7 @@ PolygonCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.85, y: 0.43}
     newSize: {x: 0.75, y: 0.42}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -497,10 +500,11 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -0.25, y: 0.25}
-      - {x: -0.25, y: -0.25}
-      - {x: 0.25, y: -0.25}
-      - {x: 0.25, y: 0.25}
+    - - {x: -0.1338614, y: 0.19499657}
+      - {x: -0.15663384, y: 0.0012997789}
+      - {x: -0.16118789, y: -0.19789161}
+      - {x: 0.15663348, y: -0.20078635}
+      - {x: 0.13158408, y: 0.20368111}
   m_UseDelaunayMesh: 0
 --- !u!1 &6640690025173987615
 GameObject:

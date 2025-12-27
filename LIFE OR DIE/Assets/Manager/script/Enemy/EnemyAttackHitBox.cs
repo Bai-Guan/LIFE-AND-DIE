@@ -25,7 +25,7 @@ public class EnemyAttackHitBox : MonoBehaviour
         damage.atk = 9999;
     }
 
-    /* 动画事件只会调这一句话，完全复用 */
+   
     public void OnAnimEvent_FireAttack(string attackName)
     {
         if (map.TryGetValue(attackName, out var clip))
@@ -35,7 +35,11 @@ public class EnemyAttackHitBox : MonoBehaviour
         }
 
     }
-   
+    public void OnAnimEvent_FireAttack_FixedTime(string attackName)
+    {
+        if (map.TryGetValue(attackName, out var clip))
+            StartCoroutine(DoHitBoxes_FixedTime(clip));
+    }
 
 
     private IEnumerator DoHitBoxes(EHBData clip)
@@ -49,6 +53,18 @@ public class EnemyAttackHitBox : MonoBehaviour
         }
     }
 
+  
+
+    private IEnumerator DoHitBoxes_FixedTime(EHBData clip)
+    {
+        int counter = 0;
+        while (counter < clip.duration)
+        {
+            CheckHits(clip);                         // 复用原逻辑
+            yield return new WaitForFixedUpdate();   // 等一个物理帧
+            counter++;
+        }
+    }
     private void CheckHits(EHBData clip)
     {
         if (clip == null) return;

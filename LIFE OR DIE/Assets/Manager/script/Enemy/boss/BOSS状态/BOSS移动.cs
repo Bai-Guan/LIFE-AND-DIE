@@ -14,6 +14,7 @@ public class BOSS移动 : BOSS状态基类
     {
         _curSpeed = 0f;
         AIFsm.rb.velocity = Vector2.zero;
+        AIFsm.AnimtorEvent.SetBool("run");
     }
 
     public override void Exit() { }
@@ -25,6 +26,7 @@ public class BOSS移动 : BOSS状态基类
         {
             return;
         }
+        AIFsm.面朝玩家();
         timer1= 0f;
         if (!AIFsm.isTwoPhase)
         {
