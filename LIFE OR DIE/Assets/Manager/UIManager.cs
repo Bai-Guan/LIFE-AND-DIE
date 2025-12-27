@@ -57,7 +57,8 @@ public class UIManager : MonoBehaviour
            {UIConst.PopUpBox,"uiPrefab/PopUpBox" },
             {UIConst.DialogBox,"uiPrefab/DialogBox" },
             {UIConst.TaskBox,"uiPrefab/TaskInterface" },
-            {UIConst.addTask,"uiPrefab/提示增加了任务的UI" }
+            {UIConst.addTask,"uiPrefab/提示增加了任务的UI" },
+            {UIConst.Boss_1,"uiPrefab/Boss血条" }
         };
     }
 
@@ -85,6 +86,8 @@ public class UIManager : MonoBehaviour
         public const string TaskBox = "TaskInterface";
 
         public const string addTask = "提示增加了任务的UI";
+
+        public const string Boss_1 = "Boss_1";
     }
 
     public BasePanel OpenPanel(string name)

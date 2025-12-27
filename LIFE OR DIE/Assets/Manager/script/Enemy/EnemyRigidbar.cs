@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemyRigidbar : MonoBehaviour
 {
     [SerializeField] private float maxRigid = 2;
+    public float MaxRigid {  get { return maxRigid; } }
     [SerializeField] private float RigidTime = 1.0f;
     public float currentRigidValue = 0;
     [SerializeField] InitEnemySystem body;
