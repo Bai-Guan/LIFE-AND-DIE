@@ -34,6 +34,7 @@ public enum BOSSAITypeState
     jumpMid,
     jumpAttack,
     fiveAttack,
+    quickAttack,
     hit,
     throwStones,
     squeeze,

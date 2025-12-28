@@ -20,6 +20,8 @@ public class BOSSAI控制器 : MonoBehaviour
     [SerializeField] private EnemyAttackHitBox hitComp;
     [SerializeField] public BOSS事件中心 AnimtorEvent;
 
+    [SerializeField] public GameObject Boss扔出的石头;
+
     public bool 是否为初见玩家 = true;
     public bool 玩家是否死亡过一次 = false;
     private bool 警惕锁 = false;
@@ -80,6 +82,8 @@ public class BOSSAI控制器 : MonoBehaviour
         fSM.AddState(BOSSAITypeState.hit, new BOSS弱点状态(this));
         fSM.AddState(BOSSAITypeState.phaseTwoStandby, new Boss二阶段待机(this));
         fSM.AddState(BOSSAITypeState.jumpMid, new BOSS跳回中间(this));
+        fSM.AddState(BOSSAITypeState.throwStones, new BOSS扔石头(this));
+        fSM.AddState(BOSSAITypeState.quickAttack, new Boss冲刺攻击(this));
         fSM.ICurrentState = fSM._dicTypeState[fSM.curState];
 
         body.BeAttack += 受伤时更新UI;
@@ -95,7 +99,7 @@ public class BOSSAI控制器 : MonoBehaviour
     void Update()
     {
         fSM.Update();
-
+     
         if (警惕锁 == false && 是否为初见玩家 == false)
         {
             警惕锁 = true;
@@ -106,6 +110,8 @@ public class BOSSAI控制器 : MonoBehaviour
     {
         _distanceXPlayer = Mathf.Abs(transform.position.x - MainPlayer.transform.position.x);
         fSM.FixedUpdate();
+        if(BossUI!=null) 
+        BossUI.改变僵直条数值(僵直条.currentRigidValue, 僵直条.MaxRigid);
     }
 
     public void SwitchState(BOSSAITypeState state)
@@ -125,10 +131,19 @@ public class BOSSAI控制器 : MonoBehaviour
         if (BossUI != null)
         {
             BossUI.改变血量(body.CurrentHP, body.MaxHp);
-            BossUI.改变僵直条数值(僵直条.currentRigidValue, 僵直条.MaxRigid);
+       
         }
 
 
+    }
+    public void 改变僵直条颜色(Color color)
+    {
+        if (BossUI != null)
+            BossUI.改变僵直条颜色( color);
+    }
+    public void 只改变僵直条显示_不影响数值(float a)
+    {
+        BossUI.改变僵直条数值(a, 僵直条.MaxRigid);
     }
     public float ReturnDirToPlayer()
     {

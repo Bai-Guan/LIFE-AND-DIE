@@ -394,7 +394,7 @@ public class NewPlayerControll : MonoBehaviour, IBeDamaged
     DamageData speicalDamage = new DamageData()
     {
         type = DamageType.magic,
-        atk = 999,
+        atk = 400,
         RepellingXSpeed = 8,
         RepellingYSpeed = 1.5f,
         RepellingXDistance = 1,

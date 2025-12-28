@@ -39,8 +39,9 @@ public class DamagedComponent : MonoBehaviour, IBeDamaged
     }
     public void …Ë÷√…À∫¶±∂¬ (int mul)
     {
-
+        damageMul = mul;
     }
+
     public float OnHurt(DamageData data, GameObject attacker)
     {
         if (isInvincible == true)

@@ -16,8 +16,8 @@ public class InitEnemySystem : MonoBehaviour
   public int CurrentHP {  get { return currentHP; } private set { } }
     private int defense=0;
     public int Defenese { get { return defense; } private set { } }
-    private int knocked=0;
-    public int Knocked { get { return defense; } private set { } }
+   
+    public int Knocked { get { return baseData.KnockBackResistance; } private set { } }
     public event Action<DamageData,GameObject> beAttacked;
     public event Action BeAttack;
     public event Action AfterDamagedMath;
@@ -79,7 +79,7 @@ public class InitEnemySystem : MonoBehaviour
         }
         currentHP = baseData.MaxHP;
         defense = baseData.Defense;
-        knocked = baseData.KnockBackResistance;
+       
     }
 
     public void BeAttacked(DamageData damage,GameObject obj)

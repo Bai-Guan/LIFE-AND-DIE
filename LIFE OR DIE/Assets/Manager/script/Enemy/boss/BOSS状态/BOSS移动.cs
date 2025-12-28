@@ -8,13 +8,20 @@ public class BOSS移动 : BOSS状态基类
     private const float AccelPerSec = 2f;
 
     private float timer1=0f;
+
+
+    private float 冲刺概率=0.3f;
+    private bool 冲刺锁 = false;
+    private float random = 0f;
     public BOSS移动(BOSSAI控制器 fsm) : base(fsm) { }
 
     public override void Enter()
     {
-        _curSpeed = 0f;
+        _curSpeed = 3f;
         AIFsm.rb.velocity = Vector2.zero;
         AIFsm.AnimtorEvent.SetBool("run");
+        random = Random.Range(0f, 1f);
+        冲刺锁 = false;
     }
 
     public override void Exit() { }
@@ -30,6 +37,17 @@ public class BOSS移动 : BOSS状态基类
         timer1= 0f;
         if (!AIFsm.isTwoPhase)
         {
+            if(random<= 冲刺概率&&冲刺锁==false)
+            {
+                冲刺锁 = true;
+                AIFsm.SwitchState(BOSSAITypeState.quickAttack);
+                return;
+            }
+            else
+            {
+                冲刺锁 = true;
+            }
+
             //1阶段路线
             if(AIFsm.水平距离玩家距离<=AIFsm.五连击距离)
             {

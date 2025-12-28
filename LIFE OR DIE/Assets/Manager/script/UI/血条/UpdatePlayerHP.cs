@@ -38,6 +38,9 @@ public class UpdatePlayerHP : MonoBehaviour
     private void UpdateHealthBar(int currentHealth)
     {
         string temp = currentHealth.ToString();
+        if (currentHealth < 0)
+            temp = "0";
+        
       textUI.text =temp;
     }
 }

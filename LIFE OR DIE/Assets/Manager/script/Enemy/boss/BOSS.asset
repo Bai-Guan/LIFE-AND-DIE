@@ -37,7 +37,7 @@ MonoBehaviour:
       serializedVersion: 2
       x: 0.09
       y: -0.03
-      width: 4.64
+      width: 5.6
       height: 2.25
     damageType: 0
     duration: 1
@@ -47,7 +47,7 @@ MonoBehaviour:
       serializedVersion: 2
       x: 0.09
       y: 0.1
-      width: 4.64
+      width: 5.6
       height: 4.33
     damageType: 0
     duration: 1
@@ -57,7 +57,7 @@ MonoBehaviour:
       serializedVersion: 2
       x: 0.09
       y: -0.03
-      width: 4.64
+      width: 5.6
       height: 2.25
     damageType: 0
     duration: 4
@@ -72,4 +72,14 @@ MonoBehaviour:
     damageType: 0
     duration: 4
     attackName: attack5
-    isDebug: 1
+    isDebug: 0
+  - hitBoxes:
+      serializedVersion: 2
+      x: 0.09
+      y: -0.03
+      width: 5.88
+      height: 2.41
+    damageType: 0
+    duration: 4
+    attackName: specialAttack
+    isDebug: 0

@@ -34,6 +34,10 @@ public class BOSS事件中心 : MonoBehaviour
         anim.SetBool("hit", false);
         anim.SetBool("run", false);
         anim.SetBool("JumpAttack", false);
+        anim.SetBool("jump", false);
+        anim.SetBool("fall",false);
+        anim.SetBool("throw", false);
+        anim.SetBool("quick", false);
     }
     public void SetBool(string name)
     {
@@ -66,5 +70,12 @@ public class BOSS事件中心 : MonoBehaviour
     {
         hitbox.OnAnimEvent_FireAttack("attack5");
         AudioManager.Instance.PlaySFX("挥击嗖_3");
+    }
+    public void SpecialAttack()
+    {
+        hitbox.OnAnimEvent_FireAttack("specialAttack");
+        AudioManager.Instance.PlaySFX("HeavykillBlood_1");
+        CameraManager.Instance.CameraShake(0.5f, 0.8f);
+       
     }
 }

@@ -4,14 +4,21 @@ using UnityEngine;
 
 public class hitBox : MonoBehaviour
 {
-    //private void OnTriggerStay2D(Collider2D collision)
-    //{
-    //    if (collision.tag == "Player")
-    //    {
-    //        Debug.Log("Åö×²ÉËº¦!");
-    //       // collision.GetComponent<PlayerControl>().TakeHit(10, this.transform);
-    //    }
-    //}
+    private DamageData damageData = new DamageData()
+    {
+        atk = 300,
+        RepellingXSpeed = 0,
+        RepellingYSpeed = 0,
+        type = DamageType.magic,
+    };
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.TryGetComponent<IBeDamaged>(out IBeDamaged temp)&&collision.CompareTag("Player"))
+        {
+            temp.OnHurt(damageData, this.gameObject);
+        }
+    }
 
 }
 

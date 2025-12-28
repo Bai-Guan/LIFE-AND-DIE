@@ -35,6 +35,8 @@ public class BOSS大屁股砸地 : BOSS状态基类
         StartY=AIFsm.transform.position.y;
         temp = AIFsm.rb.gravityScale;
         AIFsm.rb.gravityScale = 0;
+        AIFsm.AnimtorEvent.SetBool("jump");
+        AudioManager.Instance.PlaySFX("挥击嗖_1");
     }
 
  
@@ -94,6 +96,7 @@ public class BOSS大屁股砸地 : BOSS状态基类
             timer = 0;
             current = 砸地阶段.下坠;
             AIFsm.CreateHitBox("下砸");
+            AIFsm.AnimtorEvent.SetBool("fall");
         }
     }
     private void 下坠()
@@ -105,6 +108,8 @@ public class BOSS大屁股砸地 : BOSS状态基类
         {
             timer = 0;
             current = 砸地阶段.后摇;
+            CameraManager.Instance.CameraShake(0.5f, 0.6f);
+            AudioManager.Instance.PlaySFX("锤击");
         }
       
     }
