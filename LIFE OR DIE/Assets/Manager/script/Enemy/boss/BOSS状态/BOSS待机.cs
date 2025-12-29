@@ -12,7 +12,7 @@ public class BOSS待机 : BOSS状态基类
     public override void Enter()
     {
         AIFsm.body.SetRBvelcoity(new Vector2(0,0));
-        AIFsm.僵直条.清空僵直条();
+        AIFsm.僵直条.加减僵直条(-0.5f);
         AIFsm.AnimtorEvent.SetBool("Idle");
      
     }
@@ -29,7 +29,7 @@ public class BOSS待机 : BOSS状态基类
 
     public override void Update()
     {
-        if(AIFsm.body.CurrentHP<=AIFsm.body.MaxHp*0.75)
+        if(AIFsm.body.CurrentHP<=AIFsm.body.MaxHp*0.7)
         {
             AIFsm.isTwoPhase = true;
             AIFsm.SwitchState(BOSSAITypeState.phaseTwoStandby);
@@ -45,14 +45,14 @@ public class BOSS待机 : BOSS状态基类
         //0.3概率砸地 0.7概率移动
         if(random<0.3f)
         {
-            AIFsm.SwitchState(BOSSAITypeState.jumpAttack);
+           AIFsm.SwitchState(BOSSAITypeState.jumpAttack);
            //测试
-           //AIFsm.SwitchState(BOSSAITypeState.quickAttack);
+            //AIFsm.SwitchState(BOSSAITypeState.jumpMid);
             return;
         }
-        else if(random>0.7f)
+        else if(random>0.3f)
         {
-            AIFsm.SwitchState(BOSSAITypeState.run);
+           AIFsm.SwitchState(BOSSAITypeState.run);
             return;
         }
     }

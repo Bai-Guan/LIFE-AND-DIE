@@ -6,7 +6,7 @@ public class 物体碰撞伤害 : MonoBehaviour
 {
     private DamageData damageData = new DamageData()
     {
-        atk = 300,
+        atk = 50,
         RepellingXSpeed = 0,
         RepellingYSpeed = 0,
         type=DamageType.magic,

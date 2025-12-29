@@ -253,13 +253,13 @@ public class CameraManager : MonoBehaviour
         float moveY = 0; float t_moveY;
         bool HaveOneTime = true;
 
-        private float edgeLeft;   // 相机可见区域左1/4世界坐标
-        private float edgeRight;  // 相机可见区域右3/4世界坐标
-        private float edgeBottom; // 相机可见区域下1/4世界坐标
-        private float edgeTop;    // 相机可见区域上3/4世界坐标
+        private float leftBoundary;   // 相机可见区域左0.4世界坐标
+        private float rightBoundary;  // 相机可见区域右0.6世界坐标
+        private float bottomBoundary; // 相机可见区域下0.4世界坐标
+        private float topBoundary;    // 相机可见区域上0.6世界坐标
 
-        private bool playerInEdgeX; // 玩家在X轴边缘
-        private bool playerInEdgeY; // 玩家在Y轴边缘
+        private bool playerBeyondCenterX; // 玩家超出X轴中央区域(在0.4或0.6边界外)
+        private bool playerBeyondCenterY; // 玩家超出Y轴中央区域(在0.4或0.6边界外)
 
         // 新增：记录玩家在边缘时的移动方向
         private bool playerMovingAwayFromCenterX = false;
@@ -287,21 +287,18 @@ public class CameraManager : MonoBehaviour
             HaveOneTime = true;
         }
 
-        void RecalcEdgeLines()
+        void RecalcBoundaries()
         {
             Rect cameraViewport = GetCameraViewportWorldBounds();
             float cameraWidth = cameraViewport.width;
             float cameraHeight = cameraViewport.height;
 
-            float quarterW = cameraWidth * 0.25f;
-            float quarterH = cameraHeight * 0.25f;
-
-            // 计算屏幕1/4和3/4的世界坐标
+            // 计算屏幕0.4和0.6的世界坐标
             Vector3 cameraPos = mainCamera.transform.position;
-            edgeLeft = cameraPos.x - quarterW;
-            edgeRight = cameraPos.x + quarterW;
-            edgeBottom = cameraPos.y - quarterH;
-            edgeTop = cameraPos.y + quarterH;
+            leftBoundary = cameraPos.x - (cameraWidth * 0.1f);   // 中心-0.1*width = 0.4位置
+            rightBoundary = cameraPos.x + (cameraWidth * 0.1f);  // 中心+0.1*width = 0.6位置
+            bottomBoundary = cameraPos.y - (cameraHeight * 0.1f); // 中心-0.1*height = 0.4位置
+            topBoundary = cameraPos.y + (cameraHeight * 0.1f);    // 中心+0.1*height = 0.6位置
         }
 
         public override void Update()
@@ -309,9 +306,10 @@ public class CameraManager : MonoBehaviour
             float px = PlayerTransform.position.x;
             float py = PlayerTransform.position.y;
 
-            RecalcEdgeLines();
-            playerInEdgeX = px <= edgeLeft || px >= edgeRight;
-            playerInEdgeY = py <= edgeBottom || py >= edgeTop;
+            RecalcBoundaries();
+            // 玩家是否超出中央区域 (在0.4或0.6边界外)
+            playerBeyondCenterX = px <= leftBoundary || px >= rightBoundary;
+            playerBeyondCenterY = py <= bottomBoundary || py >= topBoundary;
 
             // 基于死区 若超过框的范围则丝滑跟随
             float tempX = PlayerTransform.position.x - PlayerLastPos.x;
@@ -321,8 +319,8 @@ public class CameraManager : MonoBehaviour
             moveX += tempX;
             moveY += tempY;
 
-            // X轴：判断玩家在边缘时的移动方向
-            if (playerInEdgeX)
+            // X轴：只有当玩家超出中央0.4-0.6区域时才移动相机
+            if (playerBeyondCenterX)
             {
                 // 计算玩家相对于相机中心的位置
                 float cameraCenterX = mainCamera.transform.position.x;
@@ -331,12 +329,12 @@ public class CameraManager : MonoBehaviour
                 // 判断玩家是朝屏幕中心移动还是远离屏幕中心
                 if (Mathf.Abs(tempX) > 0.01f) // 确保有移动
                 {
-                    // 玩家在左边缘且向左移动 = 远离中心
-                    // 玩家在左边缘且向右移动 = 朝向中心
-                    // 玩家在右边缘且向右移动 = 远离中心
-                    // 玩家在右边缘且向左移动 = 朝向中心
+                    // 玩家在左边界(<= leftBoundary)且向左移动 = 远离中心
+                    // 玩家在左边界(<= leftBoundary)且向右移动 = 朝向中心
+                    // 玩家在右边界(>= rightBoundary)且向右移动 = 远离中心
+                    // 玩家在右边界(>= rightBoundary)且向左移动 = 朝向中心
 
-                    if ((px <= edgeLeft && tempX < 0) || (px >= edgeRight && tempX > 0))
+                    if ((px <= leftBoundary && tempX < 0) || (px >= rightBoundary && tempX > 0))
                     {
                         // 玩家朝远离中心方向移动，相机必须跟随
                         mainCamera.transform.position += new Vector3(tempX, 0, 0);
@@ -344,7 +342,7 @@ public class CameraManager : MonoBehaviour
                     }
                     else
                     {
-                        // 玩家朝中心方向移动，相机可以不动，等待玩家回到1/4~3/4区域
+                        // 玩家朝中心方向移动，相机可以不动，等待玩家回到0.4~0.6区域
                         mainCamera.transform.position += new Vector3(0, 0, 0);
                         playerMovingAwayFromCenterX = false;
                     }
@@ -354,21 +352,21 @@ public class CameraManager : MonoBehaviour
                 }
                 else
                 {
-                    // 玩家在边缘但没有移动
+                    // 玩家在边界但没有移动
                     mainCamera.transform.position += new Vector3(0, 0, 0);
                     playerMovingAwayFromCenterX = false;
                 }
             }
             else if (moveX > rangeX || moveX < -rangeX)
             {
-                // 正常死区逻辑
+                // 正常死区逻辑 - 当玩家在中央区域时，累积移动直到超过死区才移动相机
                 mainCamera.transform.position += new Vector3(tempX, 0, 0);
                 moveX = t_moveX;
                 playerMovingAwayFromCenterX = false;
             }
 
-            // Y轴：判断玩家在边缘时的移动方向
-            if (playerInEdgeY)
+            // Y轴：只有当玩家超出中央0.4-0.6区域时才移动相机
+            if (playerBeyondCenterY)
             {
                 // 计算玩家相对于相机中心的位置
                 float cameraCenterY = mainCamera.transform.position.y;
@@ -377,12 +375,12 @@ public class CameraManager : MonoBehaviour
                 // 判断玩家是朝屏幕中心移动还是远离屏幕中心
                 if (Mathf.Abs(tempY) > 0.01f) // 确保有移动
                 {
-                    // 玩家在下边缘且向下移动 = 远离中心
-                    // 玩家在下边缘且向上移动 = 朝向中心
-                    // 玩家在上边缘且向上移动 = 远离中心
-                    // 玩家在上边缘且向下移动 = 朝向中心
+                    // 玩家在下边界(<= bottomBoundary)且向下移动 = 远离中心
+                    // 玩家在下边界(<= bottomBoundary)且向上移动 = 朝向中心
+                    // 玩家在上边界(>= topBoundary)且向上移动 = 远离中心
+                    // 玩家在上边界(>= topBoundary)且向下移动 = 朝向中心
 
-                    if ((py <= edgeBottom && tempY < 0) || (py >= edgeTop && tempY > 0))
+                    if ((py <= bottomBoundary && tempY < 0) || (py >= topBoundary && tempY > 0))
                     {
                         // 玩家朝远离中心方向移动，相机必须跟随
                         mainCamera.transform.position += new Vector3(0, tempY, 0);
@@ -390,7 +388,7 @@ public class CameraManager : MonoBehaviour
                     }
                     else
                     {
-                        // 玩家朝中心方向移动，相机可以不动，等待玩家回到1/4~3/4区域
+                        // 玩家朝中心方向移动，相机可以不动，等待玩家回到0.4~0.6区域
                         mainCamera.transform.position += new Vector3(0, 0, 0);
                         playerMovingAwayFromCenterY = false;
                     }
@@ -400,14 +398,14 @@ public class CameraManager : MonoBehaviour
                 }
                 else
                 {
-                    // 玩家在边缘但没有移动
+                    // 玩家在边界但没有移动
                     mainCamera.transform.position += new Vector3(0, 0, 0);
                     playerMovingAwayFromCenterY = false;
                 }
             }
             else if (moveY > rangeY || moveY < -rangeY)
             {
-                // 正常死区逻辑
+                // 正常死区逻辑 - 当玩家在中央区域时，累积移动直到超过死区才移动相机
                 mainCamera.transform.position += new Vector3(0, tempY, 0);
                 moveY = t_moveY;
                 playerMovingAwayFromCenterY = false;
@@ -478,6 +476,10 @@ public class CameraManager : MonoBehaviour
             Debug.Log("退出跟随模式");
         }
     }
+
+
+
+
     class FixedCamera : StateCameraSwitch
     {
         public FixedCamera(Camera camera, GameObject player) : base(camera, player)

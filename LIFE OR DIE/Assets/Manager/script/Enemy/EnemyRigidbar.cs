@@ -24,9 +24,11 @@ public class EnemyRigidbar : MonoBehaviour
     {
         currentRigidValue = 0;
     }
-    public void 增加僵直条(float value)
+    public void 加减僵直条(float value)
     {
         currentRigidValue += value;
+        if(currentRigidValue > maxRigid) currentRigidValue = maxRigid;
+        if(currentRigidValue < 0) currentRigidValue=0;
     }
     public bool 检测是否僵直()
     {

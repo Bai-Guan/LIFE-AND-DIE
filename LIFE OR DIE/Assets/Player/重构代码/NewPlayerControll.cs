@@ -272,7 +272,7 @@ public class NewPlayerControll : MonoBehaviour, IBeDamaged
                 if (obj.TryGetComponent<EnemyRigidbar>(out EnemyRigidbar rigidbar))
                 {
                     //播放特效 音效
-                    rigidbar.增加僵直条(0.5f);
+                    rigidbar.加减僵直条(0.5f);
                     EffectManager.Instance.Play("火花效果", this.transform);
                 }
                 AudioManager.Instance.PlaySFX("重弹刀");

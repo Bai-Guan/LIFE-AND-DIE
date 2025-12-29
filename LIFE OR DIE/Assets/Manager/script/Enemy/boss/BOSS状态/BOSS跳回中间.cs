@@ -19,6 +19,8 @@ public class BOSS跳回中间 :BOSS状态基类
     private const float 后摇时间 = 2.5f;
     private float timer = 0;
     private float temp = 0;
+
+    private int 扔石头次数 = 0;
     private enum 砸地阶段 { 上升, 等待, 下坠, 后摇 }
     private 砸地阶段 current = 砸地阶段.上升;
     public override void Enter()
@@ -111,7 +113,26 @@ public class BOSS跳回中间 :BOSS状态基类
         if (timer >= 后摇时间)
         {
             timer = 0;
-            AIFsm.SwitchState(BOSSAITypeState.throwStones);
+
+            if(扔石头次数>=2)
+            {
+                扔石头次数 = 0;
+                AIFsm.SwitchState(BOSSAITypeState.squeeze);
+                return;
+            }
+
+            float random=Random.Range(0f,1f);
+            if (random > 0.5f)
+            {
+                AIFsm.SwitchState(BOSSAITypeState.squeeze);
+                return;
+            }
+            else
+            {
+                AIFsm.SwitchState(BOSSAITypeState.throwStones);
+                扔石头次数 += 1;
+                return;
+            }
         }
     }
 }

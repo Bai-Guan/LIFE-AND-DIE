@@ -15,5 +15,5 @@ MonoBehaviour:
   Name: "\u6218\u4E89\u5175\u5668"
   MaxHP: 2000
   Defense: 0
-  KnockBackResistance: 90
+  KnockBackResistance: 98
   ToughnessValue: 0

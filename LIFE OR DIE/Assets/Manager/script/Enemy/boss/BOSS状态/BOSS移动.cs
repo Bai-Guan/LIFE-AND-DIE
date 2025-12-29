@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BOSS移动 : BOSS状态基类
 {
-    private float _curSpeed = 0f;
+    private float _curSpeed = 3f;
     private const float AccelPerSec = 2f;
 
     private float timer1=0f;
@@ -33,11 +33,12 @@ public class BOSS移动 : BOSS状态基类
         {
             return;
         }
+        AIFsm.CheckRb();
         AIFsm.面朝玩家();
         timer1= 0f;
-        if (!AIFsm.isTwoPhase)
+      if(!AIFsm.isTwoPhase)
         {
-            if(random<= 冲刺概率&&冲刺锁==false)
+            if (random <= 冲刺概率 && 冲刺锁 == false)
             {
                 冲刺锁 = true;
                 AIFsm.SwitchState(BOSSAITypeState.quickAttack);
@@ -49,17 +50,36 @@ public class BOSS移动 : BOSS状态基类
             }
 
             //1阶段路线
-            if(AIFsm.水平距离玩家距离<=AIFsm.五连击距离)
+            if (AIFsm.水平距离玩家距离 <= AIFsm.五连击距离)
             {
                 AIFsm.SwitchState(BOSSAITypeState.fiveAttack);
                 return;
             }
-
         }
-        else
+      else
         {
+            if (random <= 冲刺概率+0.4f && 冲刺锁 == false)
+            {
+                冲刺锁 = true;
+                AIFsm.SwitchState(BOSSAITypeState.quickAttack);
+                return;
+            }
+            else
+            {
+                冲刺锁 = true;
+            }
+
             //2阶段路线
+            if (AIFsm.水平距离玩家距离 <= AIFsm.五连击距离)
+            {
+                AIFsm.SwitchState(BOSSAITypeState.fiveAttack);
+                return;
+            }
         }
+          
+
+        
+        
        
     }
 

@@ -8,7 +8,7 @@ public class BOSS事件中心 : MonoBehaviour
     private EnemyAttackHitBox hitbox;
 
     private Animator animator;
-
+    private string lastName;
     //  private BehaviorTree bt;
 
 
@@ -38,11 +38,17 @@ public class BOSS事件中心 : MonoBehaviour
         anim.SetBool("fall",false);
         anim.SetBool("throw", false);
         anim.SetBool("quick", false);
+        anim.SetBool("push",false);
     }
     public void SetBool(string name)
     {
-        CloseAllBool();
+        //CloseAllBool();
+        if(lastName!=null)
+        {
+            anim.SetBool(lastName, false);
+        }
         anim.SetBool(name, true);
+        lastName = name;
     }
 
 

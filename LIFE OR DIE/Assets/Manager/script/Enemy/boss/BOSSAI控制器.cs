@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class BOSSAI控制器 : MonoBehaviour
 {
@@ -21,7 +23,8 @@ public class BOSSAI控制器 : MonoBehaviour
     [SerializeField] public BOSS事件中心 AnimtorEvent;
 
     [SerializeField] public GameObject Boss扔出的石头;
-
+    [SerializeField] public GameObject Boss要推的石头;
+    public Action<bool> BossEvent;
     public bool 是否为初见玩家 = true;
     public bool 玩家是否死亡过一次 = false;
     private bool 警惕锁 = false;
@@ -87,6 +90,7 @@ public class BOSSAI控制器 : MonoBehaviour
         fSM.ICurrentState = fSM._dicTypeState[fSM.curState];
 
         body.BeAttack += 受伤时更新UI;
+        body.Die += Boss死亡时候逻辑;
     }
     void Start()
     {
@@ -125,7 +129,11 @@ public class BOSSAI控制器 : MonoBehaviour
         if (BossUI == null)
             BossUI = UIManager.Instance.OpenPanel(UIManager.UIConst.Boss_1) as BossHPUI;
     }
-
+    private void Boss死亡时候逻辑(GameObject mainPlayer)
+    {
+        if (BossUI != null)
+           UIManager.Instance.ClosePanel(UIManager.UIConst.Boss_1,true);
+    }
     private void 受伤时更新UI()
     {
         if (BossUI != null)

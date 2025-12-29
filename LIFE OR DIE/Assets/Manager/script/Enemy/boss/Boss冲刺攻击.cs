@@ -43,7 +43,7 @@ public class Boss冲刺攻击 :BOSS状态基类
 
     public override void Exit()
     {
-
+        AIFsm.僵直条.加减僵直条(-1);
     }
 
     public override void FixedUpdate()
