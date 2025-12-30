@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: "SMan_3_\u5173\u4E8E\u4F60_4"
   m_EditorClassIdentifier: 
   NodeId: "SMan_3_\u5173\u4E8E\u4F60_4"
-  text: "\u6211<color=red>\u4E0D\u53EF\u80FD</color>\u7B54\u5E94"
+  text: "\u6211\u4E0D\u53EF\u80FD\u7B54\u5E94"
   speaker: "\u6587\u83B1"
   Taskso: {fileID: 0}
   NextNodeId: "SMan_3_\u5173\u4E8E\u4F60_5"

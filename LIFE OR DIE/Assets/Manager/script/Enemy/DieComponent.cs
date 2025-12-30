@@ -34,7 +34,7 @@ public class DieComponent : MonoBehaviour
     public void SpecialDieEffect(GameObject murderer)
     {
         //再次检测当前物体是否死亡 是否已经死亡
-        if (!(body.CurrentHP <= 0)) return;
+        if (body.CurrentHP >0) return;
         if(FirstTime==false) return;
         FirstTime = false;
 
@@ -49,6 +49,10 @@ public class DieComponent : MonoBehaviour
            if(DieAudioName != null) AudioManager.Instance.PlaySFX(DieAudioName);
             
             explodable.explode(body.LastDamage,body.LastDir);
+        }
+        else
+        {
+            Destroy(body);
         }
 
         //传递事件

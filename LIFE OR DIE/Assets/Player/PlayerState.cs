@@ -763,6 +763,7 @@ public class DieState : IPlayerState
         {
             TimeManager.Instance.OneTime(3f, () =>
             {
+                玩家的全局变量.玩家是否真正死亡 = true;
                 AudioManager.Instance.PlaySFX("死");
             });
             

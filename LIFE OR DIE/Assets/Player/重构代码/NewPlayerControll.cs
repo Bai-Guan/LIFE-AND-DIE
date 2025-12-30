@@ -459,6 +459,7 @@ public class NewPlayerControll : MonoBehaviour, IBeDamaged
 public static class 玩家的全局变量
 {
     public static bool 玩家是否死亡 = false;
+    public static bool 玩家是否真正死亡 = false;
     public static bool 是否刷怪 = true;
     public static int 钥匙数量 = 0;
 }

@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   OptionText: "<color=red>\u5168\u6B7B\u4E86</color> "
   NextNodeID: "SMan_3_\u5173\u4E8E\u4F60_8"
-  bg: {fileID: 21300000, guid: 932f915148ae14147a3b02ee000fab8c, type: 3}
+  bg: {fileID: 0}
