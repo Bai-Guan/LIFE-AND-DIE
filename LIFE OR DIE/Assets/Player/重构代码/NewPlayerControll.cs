@@ -289,9 +289,9 @@ public class NewPlayerControll : MonoBehaviour, IBeDamaged
 
            
         }
-        
-        SwitchState(TypeState.died);
         dataMan.MinusHP();
+        SwitchState(TypeState.died);
+      
         return -1;
     }
 

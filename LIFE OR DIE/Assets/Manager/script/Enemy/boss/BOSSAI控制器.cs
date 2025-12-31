@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class BOSSAI控制器 : MonoBehaviour
+public class BOSSAI控制器 : MonoBehaviour,IEnemyReset
 {
     private BOSSAIFSM fSM;
     private IBossState IcurrentState;

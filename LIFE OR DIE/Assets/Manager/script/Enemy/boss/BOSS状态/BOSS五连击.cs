@@ -11,13 +11,13 @@ public class BOSS五连击 : BOSS状态基类
     public override void Enter()
     {
         AIFsm.AnimtorEvent.SetBool("FiveAttack");
-        AIFsm.僵直条.加减僵直条(-2);
+        AIFsm.僵直条.加减僵直条(-1);
     }
 
     public override void Exit()
     {
         timer = 0;
-        AIFsm.僵直条.清空僵直条();
+        AIFsm.僵直条.加减僵直条(-1);
     }
 
     public override void FixedUpdate()

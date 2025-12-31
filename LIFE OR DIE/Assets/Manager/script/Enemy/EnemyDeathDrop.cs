@@ -26,6 +26,7 @@ public class EnemyDeathDrop : MonoBehaviour
     }
     private void OnDestroy()
     {
+        if (body != null) 
         body.Die -= ±¬×°±¸;
     }
 

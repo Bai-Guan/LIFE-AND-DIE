@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
@@ -19,7 +20,7 @@ public class 死亡界面 :BasePanel
     }
     public void 重新开始()
     {
-
+        GameSceneManager.Reload();
     }
     private void Start()
     {

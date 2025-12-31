@@ -57,6 +57,8 @@ public class ObjInteraction : MonoBehaviour
 
     private void OnDestroy()
     {
+        if (ctx!=null)
+      
         ctx.OnInteractPressed -= PickUpItem;
     }
 }

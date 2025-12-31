@@ -33,6 +33,7 @@ public class BOSS扔石头 : BOSS状态基类
     public override void Update()
     {
         timer += Time.deltaTime;
+        AIFsm.CheckRb();
         if (timer>=前摇&&timer<总共)
         {
             ThrowRoll();

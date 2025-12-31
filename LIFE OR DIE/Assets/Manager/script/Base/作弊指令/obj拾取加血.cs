@@ -44,6 +44,7 @@ public class obj拾取加血 : MonoBehaviour
 
     private void OnDestroy()
     {
+        if (ctx != null) 
         ctx.OnInteractPressed -= AddHP;
     }
 }
