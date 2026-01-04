@@ -162,21 +162,21 @@ public class CollisionState :IPlayerState
 
         }
 
-            GameObject go = new GameObject("LandingRect");
-            go.transform.position = spawnPos;
+        //    GameObject go = new GameObject("LandingRect");
+        //    go.transform.position = spawnPos;
 
-            // 仅用于可视化，可调试用 SpriteRenderer
-            SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
-            Texture2D tex = Texture2D.whiteTexture;
-            Sprite sp = Sprite.Create(tex, new Rect(0, 0, 1, 1), Vector2.one * 0.5f, 1f);
-            sr.sprite = sp;
-            sr.color = new Color(1f, 0.3f, 0f, 0.7f);
-        sr.sortingLayerName = "Game";
-        go.transform.localScale = size;
+        //    // 仅用于可视化，可调试用 SpriteRenderer
+        //    SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
+        //    Texture2D tex = Texture2D.whiteTexture;
+        //    Sprite sp = Sprite.Create(tex, new Rect(0, 0, 1, 1), Vector2.one * 0.5f, 1f);
+        //    sr.sprite = sp;
+        //    sr.color = new Color(1f, 0.3f, 0f, 0.7f);
+        //sr.sortingLayerName = "Game";
+        //go.transform.localScale = size;
 
            
 
-            GameObject.Destroy(go, 10f);   // 1 秒后自动销毁
+        //    GameObject.Destroy(go, 10f);   // 1 秒后自动销毁
 
         return fallDistance;
         }

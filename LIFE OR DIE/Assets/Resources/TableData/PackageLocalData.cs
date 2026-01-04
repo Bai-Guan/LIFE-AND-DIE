@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using UnityEditor;
 using UnityEngine;
 
 public class PackageLocalData
@@ -15,7 +14,7 @@ public class PackageLocalData
     public PackageSaveData saveData = new PackageSaveData();
 
 
-    [MenuItem("CMCmd/创建背包测试数据")]
+   // [MenuItem("CMCmd/创建背包测试数据")]
     public void savePackage()
     {
         if (saveData.localAllItems == null)
@@ -31,7 +30,7 @@ public class PackageLocalData
         Debug.Log("存档成功");
      }
 
-    [MenuItem("CMCmd/读取背包测试数据")]
+    //[MenuItem("CMCmd/读取背包测试数据")]
     public List<PackageLocalItem> LoadPackage()
     {
 

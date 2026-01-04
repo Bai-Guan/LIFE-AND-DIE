@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -35,6 +36,8 @@ public class GameManager : MonoBehaviour
     }
     private void OnEnable()
     {
+        int index = SceneManager.GetActiveScene().buildIndex; // ’‚æÕ «°∞±‡∫≈°±
+        if (index==1)
         AudioManager.Instance.PlayMusic(AudioManager._1999±≥æ∞“Ù¿÷);
     }
 

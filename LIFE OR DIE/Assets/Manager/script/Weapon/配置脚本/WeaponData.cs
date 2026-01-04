@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.Animations;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "装备静态数据/武器", fileName = "武器数据")]
