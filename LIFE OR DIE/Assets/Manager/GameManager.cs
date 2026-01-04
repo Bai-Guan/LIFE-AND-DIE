@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -8,7 +9,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     private 游戏状态 currentGameState = 游戏状态.游玩中玩家控制;
-  public  enum 游戏状态
+    public enum 游戏状态
     {
         选择界面,
         游玩中玩家控制,
@@ -18,7 +19,7 @@ public class GameManager : MonoBehaviour
     }
     private void Awake()
     {
-        if(instance != null&&instance !=this)
+        if (instance != null && instance != this)
             Destroy(instance);
         instance = this;
         InitData();
@@ -32,9 +33,13 @@ public class GameManager : MonoBehaviour
     {
         currentGameState = 状态;
     }
-
-    private void Start()
+    private void OnEnable()
     {
         AudioManager.Instance.PlayMusic(AudioManager._1999背景音乐);
     }
+
+
+
+
+
 }

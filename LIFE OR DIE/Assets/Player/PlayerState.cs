@@ -556,6 +556,8 @@ public class SprintState : IPlayerState
         float offsetY = _originalColliderOffset.y - (heightDifference / 2f); // 向下移动一半的高度差
         _ctx.boxCollider2D.offset = new Vector2(_originalColliderOffset.x, offsetY);
 
+        AudioManager.Instance.PlaySFX("翻滚");
+
     }
     public  void Update()
     {
@@ -759,18 +761,23 @@ public class DieState : IPlayerState
         dragTimer = 0f;
         noGravityTimer = 0f;
         //判断还有没有命 没命就真的死了
-        if (_ctx.DataMan.currentHP <= 0)
+        TimeManager.Instance.OneTime(0.2f, () =>
         {
-            TimeManager.Instance.OneTime(3f, () =>
+            if (_ctx.DataMan.currentHP <= 0)
             {
-                Debug.Log("死透透的");
-                玩家的全局变量.玩家是否真正死亡 = true;
-                AudioManager.Instance.PlaySFX("死");
-                _ctx.PlayerInput.SwitchCurrentActionMap("Inventory");
-                UIManager.Instance.OpenPanel(UIManager.UIConst.AgainGame);
-            });
-            
+                TimeManager.Instance.OneTime(3f, () =>
+                {
+                    Debug.Log("死透透的");
+                    玩家的全局变量.玩家是否真正死亡 = true;
+                    AudioManager.Instance.PlaySFX("死");
+                    _ctx.PlayerInput.SwitchCurrentActionMap("Inventory");
+                    UIManager.Instance.OpenPanel(UIManager.UIConst.AgainGame);
+                });
+
+            }
         }
+        );
+        
             
         timer= 0f;
     }

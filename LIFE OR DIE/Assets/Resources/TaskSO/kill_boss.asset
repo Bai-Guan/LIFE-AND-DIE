@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b983023fdda9bb40ae950c15340ad66, type: 3}
+  m_Name: kill_boss
+  m_EditorClassIdentifier: 
+  TaskID: kill_boss
+  TaskName: "\u8E29\u6B7B\u5BB3\u866B"
+  TaskDescription: "\u6211\u53D7\u4EBA\u59D4\u6258\uFF0C\u8981\u6740\u6389\u90A3\u4E2A\u602A\u7269...\u4E0D\u62E9\u624B\u6BB5"
+  "\u4EFB\u52A1\u9ED8\u8BA4\u72B6\u6001": "\u6740\u622E\u8FD8\u672A\u5B8C\u6210"
+  targetName: "\u5175\u5668"

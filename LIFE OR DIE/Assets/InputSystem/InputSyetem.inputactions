@@ -100,6 +100,17 @@
                 {
                     "name": "",
                     "id": "41f45328-4167-4c2a-89dd-454b15954d62",
+                    "path": "<Keyboard>/k",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keybord",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "419d4953-412d-4e99-95dd-85b6e50c5e2d",
                     "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
@@ -221,7 +232,7 @@
                 {
                     "name": "",
                     "id": "46d450d2-cb19-4ae7-90ec-1ea7a4040548",
-                    "path": "<Keyboard>/space",
+                    "path": "<Keyboard>/u",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keybord",

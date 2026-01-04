@@ -87,13 +87,14 @@ public class KillCondition : ITaskCondition
         if (e.被杀生物的ID == targetName)
         {
             Debug.Log("杀1！！！！");
-            string temp = "已完成<color=#BE0000>杀戮</color>";
+            string temp = "已完成<color=#BE0000>杀害</color>";
                 StopListen();
                TaskManager.Instance.SaveTaskProcess(任务状态.成功, temp, TaskID);
             TimeManager.Instance.OneTime(5f, () =>
             {
                 TaskManager.Instance.KillFinishTask(TaskID);
-                InputManager.Instance.ChangeInputMap("TaskUI");
+                
+              InputManager.Instance.ChangeInputMap("TaskUI");
             }
             );
             

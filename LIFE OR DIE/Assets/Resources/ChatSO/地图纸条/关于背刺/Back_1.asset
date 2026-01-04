@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a585998dfc9f6949aaa8249a64c17f6, type: 3}
+  m_Name: Back_1
+  m_EditorClassIdentifier: 
+  NodeId: Back_1
+  text: "\u770B\u6837\u5B50\u4F60\u88AB\u642C\u5230\u505C\u5C38\u623F\uFF1F\u8FD9\u91CC\u53EF\u771F\u662F\u591F\u81ED\u7684"
+  speaker: "<color=#A315F7><i>*\u90AA\u795E*</i></color>"
+  Taskso: {fileID: 0}
+  NextNodeId: Back_2
+  options: []

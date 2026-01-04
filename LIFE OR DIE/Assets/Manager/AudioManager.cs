@@ -19,7 +19,7 @@ public class AudioManager : MonoBehaviour
     public const string _Õ¶É±±¬ÑªÉù = "HeavykillBlood_1";
     public const string _»Ó½£à²à²Éù = "SwingSword_1";
 
-    private AudioSource musicSource;
+    private AudioSource  musicSource = new AudioSource();
 
     private List<AudioSource> ListClipSource;
     private const int INITIAL_POOL_SIZE = 10;
@@ -27,16 +27,15 @@ public class AudioManager : MonoBehaviour
 
     private void Awake()
     {
+       
         if (_audioManager != null && _audioManager != this)
         {
-            Destroy(gameObject);
+            Destroy(_audioManager.gameObject);
         }
-        else
-        {
-            _audioManager = this;
-            DontDestroyOnLoad(gameObject); // ¿ç³¡¾°²»Ïú»Ù
-        }
-     
+
+        _audioManager = this;
+        DontDestroyOnLoad(gameObject);
+
         InitAudioManager();
         InitSODic();
     }
@@ -144,12 +143,13 @@ public class AudioManager : MonoBehaviour
             Debug.LogWarning($"ÒôÀÖÎ´ÕÒµ½: {MusicName}");
             return;
         }
+        if (musicSource == null) return;
         if (musicSource.isPlaying) {musicSource.Stop(); }
         musicSource.clip=_DicAudioData[MusicName];
         musicSource.Play();
         musicSource.loop=true;
     }
-    // ÐÂÔö£ºÍ£Ö¹ËùÓÐÒôÐ§
+ 
     public void StopAllSFX()
     {
         foreach (AudioSource source in ListClipSource)

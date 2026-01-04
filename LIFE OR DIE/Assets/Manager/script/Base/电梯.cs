@@ -45,7 +45,8 @@ public class 电梯 : MonoBehaviour
         // 必须站在电梯里且是交互栈顶
         if (!isEnter || StackInteraction.Instance.Peek() != gameObject) return;
 
-        StackInteraction.Instance.PopSomeOne(gameObject);
+   
+       //StackInteraction.Instance.PopSomeOne(gameObject);
 
         // 决定真正目标
         bool atA = Vector3.Distance(platform.transform.position, pointA.position) < 0.01f;

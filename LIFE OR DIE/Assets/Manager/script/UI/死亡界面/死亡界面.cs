@@ -22,6 +22,11 @@ public class 死亡界面 :BasePanel
     {
         GameSceneManager.Reload();
     }
+    public void 切换关卡(int id)
+    {
+        GameSceneManager.Load(id);
+    }
+
     private void Start()
     {
         背景.color = new Color(背景.color.r, 背景.color.g, 背景.color.b, 0);

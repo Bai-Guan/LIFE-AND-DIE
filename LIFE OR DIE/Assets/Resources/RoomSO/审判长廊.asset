@@ -18,7 +18,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: -18.9
     y: 8.03
-    width: 25.9
+    width: 26.9
     height: 6
   showDebug: 1
   debugColor: {r: 1, g: 0.65213454, b: 0, a: 0.3}

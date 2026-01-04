@@ -69,7 +69,7 @@ public class CollisionState :IPlayerState
 
             float temp = SpawnLandingRect(fallSpeed);
             //创建攻击框 如果满足距离大于5
-            if (temp>5f)
+            if (temp>7f)
             {
                 float ShakeValue = Mathf.RoundToInt(_ctx.DataMan.EvaluateFallDistanceShake(temp));
                 //屏幕震动

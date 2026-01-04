@@ -60,7 +60,8 @@ public class UIManager : MonoBehaviour
             {UIConst.addTask,"uiPrefab/提示增加了任务的UI" },
             {UIConst.Boss_1,"uiPrefab/Boss血条" },
             {UIConst.AgainGame,"uiPrefab/死亡界面" },
-            {UIConst.PassLevel,"uiPrefab/通关界面" }
+            {UIConst.PassLevel,"uiPrefab/通关界面" },
+            {UIConst.FallAmbush,"uiPrefab/遭到埋伏" }
         };
     }
 
@@ -94,6 +95,8 @@ public class UIManager : MonoBehaviour
         public const string AgainGame = "AgainGame";
 
         public const string PassLevel = "PassLevel";
+
+        public const string FallAmbush = "FallAmbush";
     }
 
     public BasePanel OpenPanel(string name)

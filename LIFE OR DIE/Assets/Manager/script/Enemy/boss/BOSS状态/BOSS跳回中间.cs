@@ -16,7 +16,7 @@ public class BOSS跳回中间 :BOSS状态基类
     private const float 上升时间 = 0.5f;
     private const float 等待时间 = 0.2f;
     private const float 下坠时间 = 0.2f;
-    private const float 后摇时间 = 2.5f;
+    private const float 后摇时间 = 1f;
     private float timer = 0;
     private float temp = 0;
 

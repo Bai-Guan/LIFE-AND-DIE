@@ -20,7 +20,7 @@ public class BOSS等待玩家 :BOSS状态基类
 
     public override void Exit()
     {
- 
+        AudioManager.Instance.PlayMusic("冰汽时代");
     }
 
     public override void FixedUpdate()

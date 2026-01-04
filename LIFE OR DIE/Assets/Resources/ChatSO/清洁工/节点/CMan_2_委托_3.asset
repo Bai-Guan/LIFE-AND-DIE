@@ -15,6 +15,6 @@ MonoBehaviour:
   NodeId: "CMan_2_\u59D4\u6258_3"
   text: "\u6211\u6073\u8BF7\u4F60<color=#B90348>\u6740</color>\u4E86\u5B83\uFF0C\u9664\u6389\u8FD9\u4E16\u754C\u7684\u5BB3\u866B"
   speaker: "\u6E05\u6D01\u5DE5"
-  Taskso: {fileID: 0}
+  Taskso: {fileID: 11400000, guid: d946cb9ebb34c0b4e859bcc226fc8578, type: 2}
   NextNodeId: "CMan_2_\u59D4\u6258_4"
   options: []

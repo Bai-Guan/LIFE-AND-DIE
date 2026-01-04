@@ -25,39 +25,43 @@ public class TaskManager
     private List<TaskSaveData> _saveData;   // 身份证列表
     private bool _running = false;
     //这个方法用于读取任务的进度数据 并且根据这些数据初始化
-   public void InitData()
+    public void InitData()
     {
-        _saveData = TaskSaveSystem.Instance.LoadTaskData();
+        //    _saveData = TaskSaveSystem.Instance.LoadTaskData();
 
-      //  if (_saveData.Count != 0) { Debug.Log("数据加载成功了！！"); }
+        //  //  if (_saveData.Count != 0) { Debug.Log("数据加载成功了！！"); }
 
 
-        //根据保存的数据 完善字典
-        foreach (var task in _saveData)
-        {
-            Debug.Log("TaskSO/" + task.TaskSOID);
-            TaskSO temp = Resources.Load<TaskSO>("TaskSO/" + task.TaskSOID);
-            if (temp != null)
-            {
-                TaskRuntime RUNtime = new TaskRuntime();
-                RUNtime.taskSO = temp;
-                RUNtime.saveData = task;
-                _runtimeDict.Add(task.TaskSOID, RUNtime);
+        //    //根据保存的数据 完善字典
+        //    foreach (var task in _saveData)
+        //    {
+        //        Debug.Log("TaskSO/" + task.TaskSOID);
+        //        TaskSO temp = Resources.Load<TaskSO>("TaskSO/" + task.TaskSOID);
+        //        if (temp != null)
+        //        {
+        //            TaskRuntime RUNtime = new TaskRuntime();
+        //            RUNtime.taskSO = temp;
+        //            RUNtime.saveData = task;
+        //            _runtimeDict.Add(task.TaskSOID, RUNtime);
 
-                //查看激活状态，添加监听事件
-                if (task.当前状态 == 任务状态.激活)
-                {
-                    //添加监听事件
-                    var condition= temp.CreateCondition();
-                  
-                    condition.StartListen();
-                }
-            }
-            else
-            {
-                Debug.LogWarning("任务字典SO读取失败");
-            }
-        }
+        //            //查看激活状态，添加监听事件
+        //            if (task.当前状态 == 任务状态.激活)
+        //            {
+        //                //添加监听事件
+        //                var condition= temp.CreateCondition();
+
+        //                condition.StartListen();
+        //            }
+        //        }
+        //        else
+        //        {
+        //            Debug.LogWarning("任务字典SO读取失败");
+        //        }
+        //    }
+        //}
+        // 清零：不管以前存了什么，直接新建空列表
+        _saveData = new List<TaskSaveData>();
+        _runtimeDict.Clear();          // 运行时字典也清空
     }
 
 
